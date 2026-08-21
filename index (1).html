@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Studieboard · Dataanalyse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- SKRIFT-ERSTATNINGER: Framna Serif og Framna Sans er ikke tilgængelige her.
+     Playfair Display står i stedet for Framna Serif (højkontrast, redaktionel).
+     Figtree står i stedet for Framna Sans (neutral geometrisk-humanistisk).
+     Har du licens til de rigtige, byttes de i --d og --b herunder. -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══ FRAMNA-PALETTEN — kun disse otte farver findes ══ */
+:root{
+  --gn:#1BC866;   /* Green — ledende farve */
+  --gns:#0EB355;  /* Green shade */
+  --ap:#FFB55D;   /* Apricot */
+  --aps:#FF9D29;  /* Apricot shade */
+  --bl:#E4EFF1;   /* Blue — det rolige lærred */
+  --bls:#CFE2E5;  /* Blue shade */
+  --bk:#000000;
+  --wh:#FFFFFF;
+  /* aliaser, så de samme navne bruges konsekvent */
+  --cv:var(--wh); --pl:var(--bl); --pl2:var(--bl); --pl3:var(--bls);
+  --ink:var(--bk); --i2:var(--bk); --i3:var(--bk);
+  --gnd:var(--gns); --gnl:var(--gn); --gnl2:var(--bl); --or:var(--ap); --orl:var(--ap);
+  --d:'Playfair Display',Georgia,serif;   /* erstatning for Framna Serif */
+  --b:'Figtree',system-ui,-apple-system,sans-serif;  /* erstatning for Framna Sans */
+  --rl:28px; --rm:18px; --rs:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--wh);color:var(--bk);font:400 15px/1.5 var(--b);-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:2.5px solid var(--bk);outline-offset:2px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+mark{background:var(--ap);color:var(--bk);padding:1px 3px}
+.num,.tm,.dt,.hero-time,.st b,.stp .sd{font-variant-numeric:tabular-nums}
+
+/* ══ TOP ══ */
+.app{min-height:100vh}
+.rail{background:var(--wh);position:sticky;top:0;z-index:40}
+.rail-in{max-width:1120px;margin:0 auto;padding:0 30px}
+.logo{display:flex;align-items:center;gap:16px;padding:22px 0 8px}
+.logo h1{font:700 23px/1.1 var(--d);letter-spacing:-.015em}
+.logo p{font:400 14px var(--b)}
+.logo .rt{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:14px 0 18px}
+.nav::-webkit-scrollbar{display:none}
+.nav a{padding:9px 18px;border-radius:100px;color:var(--bk);text-decoration:none;font:400 15px var(--b);
+  white-space:nowrap;flex:0 0 auto;transition:background .15s;display:flex;align-items:center;gap:9px;background:var(--bl)}
+.nav a:hover{background:var(--bls)}
+.nav a.on{background:var(--bk);color:var(--wh);font-weight:500}
+.nav a .ic{display:none}
+.nav a .bd{font:500 12px var(--b);padding:0 8px;border-radius:100px;background:var(--wh);color:var(--bk);min-width:21px;text-align:center}
+.nav a.on .bd{background:var(--wh);color:var(--bk)}
+.nav a .bd.hot{background:var(--ap);color:var(--bk)}
+.drv a{display:flex;align-items:center;gap:9px;padding:9px 16px;border-radius:100px;color:var(--bk);
+  text-decoration:none;font:400 14px var(--b);background:var(--bl);transition:background .15s}
+.drv a:hover{background:var(--gn)}
+.drv a .ar{font-size:12px}
+.sy{display:flex;align-items:center;gap:9px;font:400 13.5px var(--b);color:var(--bk);white-space:nowrap;
+  background:var(--bl);padding:8px 15px;border-radius:100px}
+.sy .led{width:9px;height:9px;border-radius:50%;background:var(--gn);flex:0 0 9px}
+.sy .led.w{background:var(--ap)}.sy .led.b{background:var(--aps)}
+#syn{display:none}
+
+main{max-width:1120px;margin:0 auto}
+.wrap{padding:14px 30px 130px}
+
+.ph{margin-bottom:30px}
+.ph h2{font:700 44px/1.1 var(--d);letter-spacing:-.022em}
+.ph .sub{font:400 20px/1.4 var(--b);margin-top:12px}
+
+.sec{margin-bottom:34px}
+/* små pille-tags, sentence case, Sans Regular — som i brandets egne slides */
+.sech{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sech h3{font:400 14px var(--b);background:var(--bl);padding:5px 14px;border-radius:100px}
+.sech .sp{flex:1}
+.sech .ct{font:400 14px var(--b)}
+.card{background:var(--bl);border-radius:var(--rl);overflow:hidden;padding:10px}
+.card.pad{padding:30px 34px}
+
+/* ══ FORSIDE ══ */
+.top{display:grid;grid-template-columns:1fr 1.25fr;gap:14px;margin-bottom:14px}
+/* grøn leder: det største farveområde på siden */
+.big{background:var(--gn);border-radius:var(--rl);padding:36px 38px;position:relative;overflow:hidden}
+.big::after{content:'eksamen';position:absolute;right:-4px;bottom:-40px;font:700 140px/1 var(--d);
+  color:var(--gns);letter-spacing:-.05em;pointer-events:none;z-index:0}
+.big>*{position:relative;z-index:1}
+.big.grp::after{content:'gruppe'}
+.big .lbl{font:400 15px var(--b);position:relative}
+.big .num{font:700 96px/1.1 var(--d);letter-spacing:-.045em;margin:14px 0 10px;position:relative}
+.big .capt{font:400 20px/1.4 var(--b);position:relative}
+.big .bar{height:14px;background:var(--wh);margin-top:28px;border-radius:100px;overflow:hidden;position:relative}
+.big .bar i{display:block;height:100%;background:var(--gns);border-radius:100px}
+.big .prog{display:flex;justify-content:space-between;font:400 14px var(--b);margin-top:11px;position:relative}
+
+.nxt{background:var(--bl);border-radius:var(--rl);padding:10px;display:flex;flex-direction:column}
+.nxt>*{padding-left:28px;padding-right:28px}
+.nxt .lbl{font:400 15px var(--b);padding-top:26px}
+.nxt .tm{font:700 52px/1.1 var(--d);letter-spacing:-.035em;margin:14px 0 10px}
+.nxt .em{font:700 26px/1.2 var(--d);margin-bottom:8px;letter-spacing:-.015em}
+.nxt .mt{font:400 16px/1.4 var(--b)}
+.nxt .go{margin-top:auto;padding-top:26px;padding-bottom:26px}
+
+.wkstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.ds{background:var(--wh);border-radius:var(--rm);padding:19px 20px;text-align:left;min-height:136px;
+  box-sizing:border-box;border:1px solid var(--bl)}
+.ds.free{background:var(--bl);border-color:var(--bl)}
+.ds.now,.ds.now.free{background:var(--bk);color:var(--wh);border-color:var(--bk)}
+.ds .dn{font:400 13px var(--b);display:flex;justify-content:space-between}
+.ds .dt{font:700 30px/1 var(--d);margin:16px 0 6px;letter-spacing:-.03em}
+.ds .dr{font:400 14px var(--b)}
+.ds .de{font:400 14px/1.35 var(--b);margin-top:11px}
+.ds .dz{font:400 15px var(--b);margin-top:16px}
+
+/* nummererede markører ① ② ③ */
+.f3{background:var(--wh);border-radius:var(--rm);padding:8px 28px}
+.f3 .sl{display:flex;align-items:center;gap:22px;padding:17px 0}
+.f3 .sl+.sl{border-top:1px solid var(--bl)}
+.f3 .n{width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:var(--bl);color:var(--bk);
+  display:grid;place-items:center;font:700 20px var(--d);transition:background .18s}
+.f3 .sl.f .n{background:var(--ap)}
+.f3 input{flex:1;background:none;border:0;padding:6px 0;font:400 18px var(--b)}
+.f3 input:focus{outline:none}
+
+/* ══ LISTER ══ */
+.li{display:flex;gap:16px;align-items:flex-start;padding:18px 26px;background:var(--wh)}
+.li:first-child{border-radius:var(--rm) var(--rm) 0 0}
+.li:last-child{border-radius:0 0 var(--rm) var(--rm)}
+.li:only-child{border-radius:var(--rm)}
+.li+.li{border-top:1px solid var(--bl)}
+.li:hover{background:var(--bl)}
+.li.done{background:var(--bl)}
+.chk{width:25px;height:25px;flex:0 0 25px;border-radius:50%;background:var(--bl);
+  display:grid;place-items:center;font-size:13px;line-height:1;margin-top:1px;color:var(--bk);transition:background .15s}
+.chk:hover{background:var(--bls)}
+.chk.on{background:var(--gn)}
+.li .bd{flex:1;min-width:0}
+.li .tt{font:400 16px/1.45 var(--b);word-break:break-word}
+.li.done .tt{text-decoration:line-through;text-decoration-thickness:1.5px}
+.li .mt{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px;align-items:center}
+.tag{font:400 13px var(--b);padding:3px 13px;border-radius:100px;background:var(--bl);color:var(--bk);white-space:nowrap}
+.tag.cr{background:var(--aps)}
+.tag.yl{background:var(--ap)}
+.tag.ac{background:var(--gn)}
+.tag.sc{background:var(--bls)}
+.tag.so{background:var(--bk);color:var(--wh)}
+.x{color:var(--bk);padding:5px 10px;border-radius:100px;font-size:18px;line-height:1;flex:0 0 auto;visibility:hidden}
+.li:hover .x,.frow .x,.li .x:focus-visible{visibility:visible}
+.x:hover{background:var(--aps)}
+
+/* ══ FELTER ══ */
+.qa{display:flex;gap:10px;padding:24px 26px;background:var(--wh);flex-wrap:wrap;
+  border-radius:var(--rm) var(--rm) 0 0;border-bottom:1px solid var(--bl)}
+.qa input,.qa select{background:var(--bl);border:0;border-radius:100px;padding:12px 20px;min-width:0;font:400 15px var(--b)}
+.qa input.g{flex:1 1 200px}.qa input.s{flex:0 0 150px}.qa select{flex:0 0 auto;padding-right:16px}
+.qa input:focus,.qa select:focus{outline:none;box-shadow:inset 0 0 0 2px var(--bk)}
+.btn{background:var(--bk);color:var(--wh);border-radius:100px;padding:12px 26px;font:400 15px var(--b);flex:0 0 auto;transition:background .15s}
+.btn:hover{background:var(--ap);color:var(--bk)}
+.btn.gh{background:var(--wh);color:var(--bk);border:1.5px solid var(--bk)}
+.btn.gh:hover{background:var(--ap)}
+.btn.sm{padding:7px 16px;font-size:14px}
+
+.fil{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.fil button{padding:8px 17px;border-radius:100px;font:400 15px var(--b);background:var(--bl)}
+.fil button:hover{background:var(--bls)}
+.fil button.on{background:var(--bk);color:var(--wh)}
+.fil .n{font-size:13px;margin-left:7px}
+
+/* venstrestillet — brandet centrerer aldrig brødtekst */
+.emp{text-align:left;padding:40px 34px;background:var(--wh);border-radius:var(--rm)}
+.emp .ei{display:none}
+.emp b{display:block;font:700 28px/1.15 var(--d);margin-bottom:12px;letter-spacing:-.02em}
+.emp p{font:400 17px/1.45 var(--b);max-width:52ch}
+
+.fld{margin-bottom:26px}
+.fld:last-child{margin-bottom:0}
+.fld label{display:flex;align-items:center;gap:12px;font:400 14px var(--b);margin-bottom:10px}
+.fld label .h{font:400 14px var(--b);margin-left:auto}
+.fld input,.fld textarea{width:100%;background:var(--bl);border:0;border-radius:var(--rm);
+  padding:17px 20px;font:400 16px/1.5 var(--b)}
+.fld textarea{resize:vertical;min-height:170px}
+.fld textarea.sm{min-height:100px}
+.fld input:focus,.fld textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--bk);background:var(--wh)}
+.fld input.emne{font:700 28px var(--d);padding:18px 20px;letter-spacing:-.02em}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+/* ══ I DAG ══ */
+.hero{background:var(--bl);border-radius:var(--rl);padding:10px}
+.hero.no{background:var(--bl)}
+.hero-t{display:flex;align-items:center;gap:14px;padding:24px 28px 0;flex-wrap:wrap}
+.hero-t .w{font:400 15px var(--b)}
+.hero-t .r{margin-left:auto;display:flex;gap:9px}
+.hero-b{padding:16px 28px 28px}
+.hero-time{font:700 62px/1.1 var(--d);letter-spacing:-.04em}
+.hero-time small{font:400 16px var(--b);margin-left:18px;letter-spacing:0}
+.hero-b>div:has(.fld){background:var(--wh);border-radius:var(--rm);padding:28px;margin-top:24px}
+
+/* ══ SØG ══ */
+.srch{position:relative;margin-bottom:22px}
+.srch input{width:100%;background:var(--bl);border:0;border-radius:100px;padding:20px 26px 20px 60px;font:400 18px var(--b)}
+.srch input:focus{outline:none;box-shadow:inset 0 0 0 2px var(--bk);background:var(--wh)}
+.srch .mg{position:absolute;left:28px;top:50%;transform:translateY(-50%);font-size:20px;pointer-events:none}
+.srch .cl{position:absolute;right:13px;top:50%;transform:translateY(-50%);border-radius:100px;
+  padding:9px 18px;font:400 14px var(--b);background:var(--wh)}
+.srch .cl:hover{background:var(--bk);color:var(--wh)}
+
+.emnes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.emnes button{border-radius:100px;padding:10px 19px;font:400 15px var(--b);
+  display:flex;align-items:center;gap:10px;background:var(--bl)}
+.emnes button:hover{background:var(--bls)}
+.emnes button.on{background:var(--bk);color:var(--wh)}
+.emnes button .c{font-size:13px}
+
+/* ══ NOTEKORT ══ */
+.nrow{display:block;width:100%;text-align:left;padding:26px;position:relative;background:var(--wh)}
+.nrow:first-child{border-radius:var(--rm) var(--rm) 0 0}
+.nrow:last-child{border-radius:0 0 var(--rm) var(--rm)}
+.nrow:only-child{border-radius:var(--rm)}
+.nrow+.nrow{border-top:1px solid var(--bl)}
+.nrow:hover{background:var(--bl)}
+.nrow .r1{display:flex;align-items:baseline;gap:18px;margin-bottom:9px}
+.nrow .em{font:700 26px/1.2 var(--d);letter-spacing:-.022em;flex:1;min-width:0}
+.nrow .em.q{font:400 20px var(--d);font-style:italic}
+.nrow .dt{font:400 14px var(--b);flex:0 0 auto}
+.nrow .sn{font:400 16px/1.5 var(--b);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nrow .r3{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.nrow.today{background:var(--gn)}
+.nrow.fut{background:var(--bl)}
+.dots{display:flex;gap:7px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--bls);display:inline-block}
+.dots i.n{background:var(--gn)}.dots i.f{background:var(--bk)}.dots i.h{background:var(--ap)}
+
+/* ══ PANEL ══
+   Baggrunden bag panelet er den eneste gennemsigtighed i systemet.
+   Den er funktionel, ikke dekorativ: uden den forsvinder laget bagved. */
+.det{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;display:flex;justify-content:flex-end}
+.det-p{width:min(720px,100%);background:var(--wh);height:100%;overflow-y:auto}
+.det-h{position:sticky;top:0;background:var(--wh);padding:28px 32px 20px;z-index:2}
+.det-h .r1{display:flex;align-items:flex-start;gap:20px}
+.det-h h4{font:700 36px/1.1 var(--d);letter-spacing:-.028em;flex:1;min-width:0}
+.det-h .cl{border-radius:50%;width:42px;height:42px;font-size:20px;flex:0 0 42px;background:var(--bl)}
+.det-h .cl:hover{background:var(--bk);color:var(--wh)}
+.det-h .r2{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+.det-b{padding:6px 32px 100px}
+.det-b .fld{background:var(--bl);border-radius:var(--rl);padding:10px;margin-bottom:12px}
+.det-b .fld label{padding:18px 22px 0;margin-bottom:9px}
+.det-b .fld>input,.det-b .fld>textarea{background:var(--wh);border-radius:var(--rm)}
+.det-b .fld>div{padding:0 10px 10px}
+.det-b .fld .hint{padding:0 22px 16px;margin-top:0}
+.flist{display:grid;gap:8px;padding:0 10px 10px}
+.frow{display:flex;align-items:center;gap:13px;background:var(--wh);border-radius:100px;padding:13px 22px}
+.frow .fn{flex:1;min-width:0;font:400 15px var(--b);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.frow a{color:var(--bk);font:500 14px var(--b);flex:0 0 auto;text-decoration:underline}
+
+/* ══ SEMESTERBÅND ══ */
+.band{padding:30px 34px;background:var(--bl)}
+.bandh{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.bandh h3{font:400 14px var(--b);background:var(--wh);padding:5px 14px;border-radius:100px}
+.lgd{display:flex;gap:8px;flex-wrap:wrap}
+.lgd span{display:flex;align-items:center;background:var(--wh);padding:6px 14px;border-radius:100px;font:400 13.5px var(--b)}
+.lgd i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:9px}
+.strip{display:flex;gap:2.5px;align-items:flex-end;height:84px;background:var(--wh);
+  border-radius:var(--rm) var(--rm) 0 0;padding:16px 16px 0}
+.strip i{flex:1;min-width:2px;border-radius:3px 3px 0 0;background:var(--bl);height:14%}
+.strip i.am{background:var(--gn);height:52%}
+.strip i.pm{background:var(--gns);height:100%}
+.strip i.so{background:var(--bls);height:30%}
+.strip i.ex{background:var(--ap);height:100%}
+.strip i.we{background:var(--wh);height:6%}
+.strip i.nw{background:var(--bk)}
+.mrow{display:flex;font:400 13px var(--b);background:var(--wh);border-radius:0 0 var(--rm) var(--rm);padding:10px 16px 16px}
+
+.lrow{display:flex;align-items:center;gap:20px;padding:18px 26px;width:100%;text-align:left;background:var(--wh)}
+.lrow:first-child{border-radius:var(--rm) var(--rm) 0 0}
+.lrow:last-child{border-radius:0 0 var(--rm) var(--rm)}
+.lrow+.lrow{border-top:1px solid var(--bl)}
+.lrow:hover{background:var(--bl)}
+.lrow.past{background:var(--bl)}
+.lrow.today{background:var(--gn)}
+.lrow .dt{font:400 14.5px var(--b);flex:0 0 108px}
+.lrow .tw2{font:400 14.5px var(--b);flex:0 0 114px}
+.lrow .nm{flex:1;min-width:0;font:400 16px var(--b);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lrow .rm{font:400 14px var(--b);flex:0 0 auto}
+.lrow .cv{font-size:19px;flex:0 0 14px;text-align:right}
+
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(116px,1fr));gap:12px;margin-bottom:30px}
+.st>div{background:var(--bl);border-radius:var(--rm);padding:24px 26px}
+.st b{display:block;font:700 40px/1 var(--d);letter-spacing:-.035em}
+.st span{display:block;font:400 14px var(--b);margin-top:13px}
+
+.exb{background:var(--bl);border-radius:var(--rl);padding:10px}
+.stp{display:flex;align-items:center;gap:22px;padding:24px 26px;font:400 16px var(--b);background:var(--wh)}
+.stp:first-child{border-radius:var(--rm) var(--rm) 0 0}
+.stp:last-child{border-radius:0 0 var(--rm) var(--rm)}
+.stp+.stp{border-top:1px solid var(--bl)}
+.stp .sd{font:500 15px var(--b);flex:0 0 136px}
+.stp .sk{flex:1}
+.stp .sn{font:400 14px var(--b);flex:0 0 auto}
+.stp.hot{background:var(--ap)}
+.stp.hot .sd,.stp.hot .sk{font-weight:600}
+
+.nt{border-radius:var(--rl);padding:30px 34px;margin-bottom:28px;font:400 16px/1.5 var(--b);background:var(--bl)}
+.nt.w{background:var(--ap)}
+.nt b{display:block;font:700 28px/1.2 var(--d);margin-bottom:14px;letter-spacing:-.02em}
+.nt p{font:400 17px/1.45 var(--b);max-width:64ch}
+.nt code{background:var(--ap);padding:2px 11px;border-radius:100px;font:500 15px var(--b)}
+.nt.w code{background:var(--wh)}
+
+.tw{overflow-x:auto;background:var(--wh);border-radius:var(--rm)}
+table{width:100%;border-collapse:collapse;font:400 16px var(--b)}
+th{text-align:left;font:400 14px var(--b);padding:22px 24px 14px;white-space:nowrap}
+td{padding:17px 24px;border-top:1px solid var(--bl)}
+td.m{font:400 14.5px var(--b);white-space:nowrap}
+tbody tr:hover{background:var(--bl)}
+
+/* ══ HURTIGNOTE ══ */
+.fab{position:fixed;bottom:34px;right:34px;z-index:60;width:62px;height:62px;border-radius:50%;
+  background:var(--bk);color:var(--wh);font-size:30px;display:grid;place-items:center;transition:background .15s}
+.fab:hover{background:var(--gn);color:var(--bk)}
+.cap{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:90;display:grid;place-items:start center;padding:14vh 20px 0}
+.cap-b{width:min(640px,100%);background:var(--bl);border-radius:var(--rl);padding:10px}
+.cap-b input{width:100%;padding:28px 30px;font:400 20px var(--b);border:0;background:var(--wh);border-radius:var(--rm)}
+.cap-b input:focus{outline:none}
+.cap-f{display:flex;gap:10px;padding:16px 20px 10px;align-items:center;flex-wrap:wrap}
+.cap-f .kb{margin-left:auto;font:400 13.5px var(--b)}
+kbd{font:400 13px var(--b);background:var(--wh);border-radius:6px;padding:3px 9px}
+
+.toast{position:fixed;bottom:34px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--bk);
+  border-radius:100px;padding:15px 30px;font:400 15px var(--b);color:var(--wh);
+  opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:120}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.toast.bad{background:var(--aps);color:var(--bk)}
+.hint{font:400 14.5px/1.5 var(--b);margin-top:16px;max-width:64ch}
+textarea.raw{width:100%;background:var(--wh);border:0;border-radius:var(--rm);padding:20px;
+  font:400 13.5px/1.6 ui-monospace,Menlo,monospace;min-height:130px;resize:vertical}
+
+@media(max-width:900px){
+  .rail-in{padding:0 16px}
+  .logo{padding:16px 0 2px;gap:10px}
+  .logo h1{font-size:20px}
+  .logo p{display:none}
+  .sy{display:none}
+  .nav{padding:10px 0 12px}
+  .nav a{padding:8px 15px;font-size:14.5px}
+  .wrap{padding:8px 16px 130px}
+  .ph h2{font-size:32px}
+  .ph .sub{font-size:17px}
+  .top{grid-template-columns:1fr;gap:12px}
+  .big{padding:28px}
+  .big::after{font-size:100px;bottom:-24px}
+  .big .num{font-size:76px}
+  .nxt>*{padding-left:22px;padding-right:22px}
+  .nxt .tm{font-size:44px}
+  .hero-time{font-size:46px}
+  .hero-t{padding:22px 20px 0}.hero-b{padding:14px 20px 20px}
+  .hero-b>div:has(.fld){padding:20px}
+  .card.pad,.li,.qa,.nrow,.lrow,.stp{padding-left:22px;padding-right:22px}
+  .band,.nt{padding:24px}
+  .emp{padding:30px 22px}
+  .emp b{font-size:24px}
+  .wkstrip{grid-template-columns:1fr 1fr}
+  .fr2{grid-template-columns:1fr}
+  .det-p{width:100%}
+  .det-h,.det-b{padding-left:20px;padding-right:20px}
+  .det-h h4{font-size:28px}
+  .lrow{flex-wrap:wrap;gap:6px 16px}
+  .lrow .dt,.lrow .tw2{flex:0 0 auto}
+  .lrow .nm{flex:1 1 100%;order:5;white-space:normal}
+  .x{visibility:visible}
+  .fab{bottom:18px;right:18px;width:56px;height:56px;font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="rail"><div class="rail-in">
+    <div class="logo">
+      <h1>Studieboard</h1>
+      <p>Dataanalyse · 1. semester</p>
+      <div class="rt"><div class="drv" id="drv"></div><div class="sy" id="sy"></div></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </div></header>
+  <main><div class="wrap" id="main"></div></main>
+</div>
+<small id="syn"></small>
+<button class="fab" id="fab" title="Hurtig note (⌘K)">+</button>
+<div class="toast" id="toast"></div>
+<script>
+
+/* ═══ SKEMA — TimeEdit ═══ */
+const RAW=[['08-24','09:00','12:30','FIR.307'],['08-25','12:30','16:00','FIR.310'],['08-26','09:00','12:30','FIR.310'],
+['08-27','09:00','12:30','FIR.310'],['08-28','09:00','12:30','FIR.310'],['08-31','09:00','12:30','FIR.307'],
+['09-01','12:30','15:55','FIR.307'],['09-03','12:30','16:00','FIR.307'],['09-04','09:00','12:30','FIR.307'],
+['09-07','09:00','12:30','FIR.307'],['09-08','12:30','16:00','FIR.307'],['09-10','12:30','16:00','FIR.304'],
+['09-11','09:00','12:25','FIR.307'],['09-14','09:00','12:30','FIR.307'],['09-15','12:30','16:00','FIR.307'],
+['09-17','12:30','16:00','FIR.304'],['09-18','09:00','12:30','FIR.307'],['09-21','09:00','12:30','FIR.307'],
+['09-22','12:30','16:00','FIR.307'],['09-24','12:30','16:00','FIR.304'],['09-25','09:00','12:30','FIR.307'],
+['09-28','09:00','12:30','FIR.307'],['09-29','12:30','16:00','FIR.307'],['10-01','12:30','16:00','FIR.304'],
+['10-02','09:00','12:30','FIR.307'],['10-05','09:00','12:30','FIR.307'],['10-08','12:30','16:00','FIR.304'],
+['10-09','09:00','12:30','FIR.307'],['10-12','09:00','12:30','FIR.307'],['10-13','12:30','16:00','FIR.307'],
+['10-15','12:30','16:00','FIR.304'],['10-16','09:00','12:30','FIR.307'],['10-19','09:00','12:30','FIR.304'],
+['10-20','12:30','16:00','FIR.307'],['10-22','12:30','16:00','FIR.304'],['10-23','09:00','12:30','FIR.307'],
+['10-26','09:00','12:30','FIR.307'],['10-27','12:30','16:00','FIR.307'],['10-29','09:00','12:30','Online'],
+['10-30','09:00','12:30','FIR.307'],['11-02','09:00','12:30','FIR.307'],['11-03','12:30','16:00','FIR.304'],
+['11-05','12:30','16:00','FIR.304'],['11-06','09:00','12:30','FIR.307'],['11-09','09:00','12:30','FIR.307'],
+['11-10','12:30','16:00','FIR.304'],['11-12','09:00','12:30','FIR.304'],['11-13','09:00','12:30','FIR.307'],
+['11-16','09:00','12:30','FIR.401+402'],['11-17','12:30','16:00','FIR.307'],['11-20','09:00','12:30','FIR.307'],
+['11-23','09:00','12:30','FIR.307'],['11-24','12:30','16:00','FIR.307'],['11-27','09:00','12:30','FIR.307']];
+let LESSONS=RAW.map((r,i)=>({id:'L'+String(i+1).padStart(2,'0'),date:'2026-'+r[0],start:r[1],end:r[2],
+  room:r[3],kind:'lesson',title:'Undervisning',teach:'Baum / Wulf',no:i+1}));
+let SOCIAL=[['08-27','14:00','18:00','Introcafé'],['10-01','14:00','18:00','BarFirs'],
+ ['10-29','14:00','19:00','BarFirs'],['11-19','14:00','19:00','BarFirs']]
+ .map((s,i)=>({id:'S'+i,date:'2026-'+s[0],start:s[1],end:s[2],room:'FIR.Kantinen',kind:'social',title:s[3],teach:'Frivilligt'}));
+const EXAM={n:'1. semesterprøve',f:'Skriftlig aflevering med mundtlig eksamen · 30 minutter',
+  s:[['2026-12-07','12:00','Aflevering af skriftlig opgave',1],
+     ['2026-12-14','','Udlevering af eksamensopgave',0],
+     ['2026-12-15','','Mundtlig prøve · 15.–16. december',0]]};
+const DL='2026-12-07',START='2026-08-24',LAST='2026-11-27';
+const DRIVE_DEF='https://drive.google.com/drive/folders/16C6MqBW8WPv1fzcYq-l8dEWkY80Hi9_v';
+const GDRIVE_DEF='https://drive.google.com/drive/folders/1mQMS803OrUGcnCdsnnHppv_6c7xCYcT0';
+const DN=['søn','man','tir','ons','tor','fre','lør'],DF=['Søndag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag'];
+const MO=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+
+/* ═══ HELPERS ═══ */
+const $=s=>document.querySelector(s);
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const P=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const T=new Date();T.setHours(0,0,0,0);const TS=iso(T);
+const dd=s=>Math.round((P(s)-T)/864e5);
+const fD=s=>{const d=P(s);return`${d.getDate()}. ${MO[d.getMonth()]}`};
+const fL=s=>{const d=P(s);return`${DN[d.getDay()]} ${d.getDate()}. ${MO[d.getMonth()]}`};
+const fF=s=>{const d=P(s);return`${DF[d.getDay()]} ${d.getDate()}. ${MO[d.getMonth()]}`};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const mon=(o=0)=>{const d=new Date(T);d.setDate(d.getDate()-((d.getDay()+6)%7)+o*7);return d};
+const rel=n=>n===0?'i dag':n===1?'i morgen':n===-1?'i går':n<0?Math.abs(n)+' dage siden':'om '+n+' dage';
+
+
+const K='studieboard:v3';
+let S={lessons:{},tasks:[],reading:[],files:[],inbox:[],pins:[],rep:[],drive:'',gdrive:'',
+  grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}};
+let MODE='none',DIRTY=0;
+const drive=()=>(S.drive||DRIVE_DEF).trim();
+const gdrive=()=>(S.gdrive||GDRIVE_DEF).trim();
+const G=()=>{S.grp=S.grp||{};S.grp.meets=S.grp.meets||[];S.grp.tasks=S.grp.tasks||[];S.grp.members=S.grp.members||[];return S.grp};
+const DEV=(()=>{try{return navigator.userAgent.includes('Mac')?'Mac':'PC'}catch(e){return'?'}})();
+
+/* ═══ GITHUB-SYNK — tokenet gemmes KUN lokalt i browseren, aldrig i repoet ═══ */
+const GK='studieboard:github';
+let GHSHA=null,GHERR='';
+const ghCfg=()=>{try{return JSON.parse(localStorage.getItem(GK)||'null')}catch(e){return null}};
+const ghSave=c=>{c?localStorage.setItem(GK,JSON.stringify(c)):localStorage.removeItem(GK)};
+function b64(str){const b=new TextEncoder().encode(str);let o='';
+  for(let i=0;i<b.length;i+=8192)o+=String.fromCharCode.apply(null,b.subarray(i,i+8192));return btoa(o)}
+function unb64(t){const bin=atob(t.replace(/\s/g,''));const u=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u)}
+const ghUrl=c=>'https://api.github.com/repos/'+c.owner+'/'+c.repo+'/contents/'+(c.path||'data.json');
+const ghHead=c=>({Authorization:'Bearer '+c.token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'});
+async function ghPull(){
+  const c=ghCfg();if(!c)return null;
+  const r=await fetch(ghUrl(c)+'?ref='+(c.branch||'main')+'&t='+Date.now(),{headers:ghHead(c),cache:'no-store'});
+  if(r.status===404){GHSHA=null;return{sha:null,text:null}}
+  if(r.status===401||r.status===403)throw new Error('Tokenet blev afvist eller er udløbet');
+  if(!r.ok)throw new Error('GitHub svarede '+r.status);
+  const j=await r.json();GHSHA=j.sha;return{sha:j.sha,text:unb64(j.content||'')};
+}
+async function ghPush(text){
+  const c=ghCfg();if(!c)throw new Error('ikke forbundet');
+  const mk=sha=>{const b={message:'Studieboard '+new Date().toLocaleString('da-DK'),content:b64(text),branch:c.branch||'main'};
+    if(sha)b.sha=sha;return b};
+  let r=await fetch(ghUrl(c),{method:'PUT',headers:{...ghHead(c),'Content-Type':'application/json'},body:JSON.stringify(mk(GHSHA))});
+  if(r.status===409||r.status===422){
+    const rem=await ghPull();
+    let remAt=0;try{remAt=(JSON.parse(rem.text||'{}').meta||{}).at||0}catch(e){}
+    if(remAt>((S.meta&&S.meta.at)||0)){
+      localStorage.setItem(K+':konflikt',text);
+      S={...S,...JSON.parse(rem.text)};DIRTY=0;draw();
+      throw new Error('Den anden computer var nyere. Hentet ind — dine sidste ændringer ligger som kopi');
+    }
+    r=await fetch(ghUrl(c),{method:'PUT',headers:{...ghHead(c),'Content-Type':'application/json'},body:JSON.stringify(mk(rem.sha))});
+  }
+  if(!r.ok)throw new Error('Kunne ikke gemme ('+r.status+')');
+  GHSHA=(await r.json()).content.sha;
+}
+
+const Disk={
+  async get(){
+    if(ghCfg()){MODE='github';GHERR='';
+      try{const r=await ghPull();if(r&&r.text)return r.text}
+      catch(e){GHERR=e.message;MODE='gherr'}
+      try{return localStorage.getItem(K)}catch(e){return null}}
+    if(window.storage){try{const r=await window.storage.get(K);MODE='cloud';return r&&r.value?r.value:null}catch(e){MODE='cloud';return null}}
+    try{const v=localStorage.getItem(K);MODE='local';return v}catch(e){MODE='none';return null}},
+  async set(v){
+    if(ghCfg()){try{localStorage.setItem(K,v)}catch(e){}
+      await ghPush(v);MODE='github';GHERR='';return}
+    if(window.storage)return window.storage.set(K,v);
+    if(MODE==='local')return localStorage.setItem(K,v);throw new Error('x')}};
+async function load(){const r=await Disk.get();
+  if(r){try{const p=JSON.parse(r);S={...S,...p};if(!Array.isArray(S.focus)||S.focus.length!==3)S.focus=['','',''];S.meta=S.meta||{}}catch(e){}}}
+let sv;
+function save(now){DIRTY=1;clearTimeout(sv);
+  const go=async()=>{S.meta={...S.meta,at:Date.now(),dev:DEV};
+    try{await Disk.set(JSON.stringify(S));DIRTY=0;
+      toast('Gemt '+new Date().toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'}))}
+    catch(e){toast('Kunne ikke gemme',1)}syncBadge()};
+  now?go():sv=setTimeout(go,600)}
+function set(fn,now){fn();save(now);draw()}
+function driveBadge(){const d=$('#drv');if(!d)return;
+  const u=drive();
+  d.innerHTML=u?`<a href="${E(u)}" target="_blank" rel="noopener" title="Åbner din Drive-mappe i en ny fane">
+    <span>Materialemappe</span><span class="ar">↗</span></a>`:'';}
+function syncBadge(){const a=$('#sy'),b=$('#syn');if(!a)return;
+  const m={github:['','Synk til GitHub','Samme data på alle dine computere.'],
+    gherr:['b','Synk fejlede',''+GHERR],
+    cloud:['','Gemmer på din konto','Følger dig mellem begge computere.'],
+    local:['w','Kun denne '+DEV,'Lav backup under Arkiv for at flytte data.'],
+    none:['b','Gemmer ikke','Åbn boardet i Claude.']}[MODE]||['b','—',''];
+  a.innerHTML=`<span class="led ${m[0]}"></span><span>${m[1]}</span>`;
+  b.textContent=(S.meta&&S.meta.at?`Sidst gemt ${new Date(S.meta.at).toLocaleString('da-DK',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}. `:'')+m[2]}
+document.addEventListener('visibilitychange',async()=>{
+  if(document.hidden||DIRTY)return;
+  if(ghCfg()){try{const r=await ghPull();if(!r||!r.text)return;const p=JSON.parse(r.text);
+    if(p.meta&&p.meta.at&&(!S.meta.at||p.meta.at>S.meta.at)){S={...S,...p};draw();toast('Hentet nyeste version')}}
+    catch(e){GHERR=e.message;MODE='gherr';syncBadge()}return}
+  if(!window.storage)return;
+  const r=await Disk.get();if(!r)return;
+  try{const p=JSON.parse(r);if(p.meta&&p.meta.at&&(!S.meta.at||p.meta.at>S.meta.at)){S={...S,...p};draw();toast('Hentet nyeste version')}}catch(e){}});
+
+/* ═══ AFLEDT ═══ */
+const on=ds=>[...LESSONS,...SOCIAL].filter(e=>e.date===ds);
+const L=id=>S.lessons[id]||{};
+const hasN=l=>{const x=L(l.id);return!!((x.note&&x.note.trim())||(x.key&&x.key.trim()))};
+const hasF=l=>S.files.some(f=>f.lesson===l.id);
+const hasH=l=>{const x=L(l.id);return!!(x.hw&&x.hw.trim()&&!x.hwDone)};
+const emneOf=l=>(L(l.id).emne||'').trim();
+function nextL(){const t=LESSONS.find(l=>l.date===TS);if(t)return{l:t,now:1};
+  const n=LESSONS.find(l=>l.date>TS);return n?{l:n,now:0}:null}
+const openT=()=>S.tasks.filter(t=>!t.done);
+function examT(){return EXAM.s.filter(s=>s[3]).map(s=>({id:'X'+s[0],title:'Eksamen – aflevering',type:'Aflevering',due:s[0],fixed:1,done:0}))}
+const gOpen=()=>G().tasks.filter(t=>!t.done);
+const meetsOn=ds=>G().meets.filter(m=>m.date===ds);
+const nextMeet=()=>G().meets.filter(m=>m.date>=TS).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''))[0];
+const livePins=()=>(S.pins||[]).filter(p=>!p.until||p.until>=TS);
+const allDue=()=>[...openT().filter(t=>t.due),
+  ...gOpen().filter(t=>t.due).map(t=>({id:t.id,title:t.text,type:'Studiegruppe',due:t.due,grp:1})),
+  ...examT()].sort((a,b)=>a.due.localeCompare(b.due));
+function emneList(){const m={};LESSONS.forEach(l=>{const e=emneOf(l);if(e)m[e]=(m[e]||0)+1});
+  return Object.entries(m).map(([e,n])=>({e,n})).sort((a,b)=>b.n-a.n||a.e.localeCompare(b.e))}
+function searchAll(q){
+  if(!q||q.length<2)return null;const t=q.toLowerCase();
+  return LESSONS.map(l=>{const x=L(l.id);
+    const fields=[['emne',x.emne],['noter',x.note],['huske',x.key],['lektier',x.hw],['spørgsmål',x.q],
+      ['materiale',S.files.filter(f=>f.lesson===l.id).map(f=>f.name).join(' ')]];
+    const hits=fields.filter(f=>f[1]&&String(f[1]).toLowerCase().includes(t));
+    if(!hits.length)return null;
+    const src=hits[0][1],i=String(src).toLowerCase().indexOf(t);
+    return{l,hits:hits.map(h=>h[0]),snip:String(src).slice(Math.max(0,i-55),i+120),where:hits[0][0]};
+  }).filter(Boolean)}
+const hl=(s,q)=>{if(!q)return E(s);
+  const i=s.toLowerCase().indexOf(q.toLowerCase());if(i<0)return E(s);
+  return E(s.slice(0,i))+'<mark>'+E(s.slice(i,i+q.length))+'</mark>'+E(s.slice(i+q.length))};
+
+/* ═══ NAV ═══ */
+let tab='forside',wko=0,openL=null,tf='alle',nf='alle',q='';
+const TABS=[['forside','Forside','◈'],['idag','I dag','◉'],['noter','Noter','✎'],
+  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],['skema','Skema','▤'],['pensum','Pensum','▧'],
+  ['eksamen','Eksamen','◆'],['arkiv','Arkiv','⬒']];
+function nav(){
+  const od=allDue().filter(t=>dd(t.due)<=7&&dd(t.due)>=0).length;
+  $('#nav').innerHTML=TABS.map(t=>{let b='';
+    if(t[0]==='opgaver'){const n=openT().length;if(od)b=`<span class="bd hot">${od}</span>`;else if(n)b=`<span class="bd">${n}</span>`}
+    if(t[0]==='idag'&&S.inbox.length)b=`<span class="bd">${S.inbox.length}</span>`;
+    if(t[0]==='studiegruppe'&&gOpen().length)b=`<span class="bd">${gOpen().length}</span>`;
+    return`<a href="#" data-t="${t[0]}" class="${tab===t[0]?'on':''}"><span class="ic">${t[2]}</span>${t[1]}${b}</a>`}).join('')}
+
+/* ═══ BÅND ═══ */
+function band(){
+  let c='',lab=[],lm=-1,cur=P(START),end=P('2026-12-16');
+  while(cur<=end){const ds=iso(cur),w=cur.getDay(),ev=on(ds),ls=ev.find(e=>e.kind==='lesson');
+    let k='',tip=fL(ds);
+    if(ls){k=ls.start==='09:00'?'am':'pm';tip+=` · ${ls.start}–${ls.end} · ${ls.room}`;const e=emneOf(ls);if(e)tip+=' · '+e}
+    else if(ev.length){k='so';tip+=' · '+ev[0].title}
+    else if(w===0||w===6){k='we';tip+=' · weekend'}else tip+=' · fri';
+    if(ds===DL){k='ex';tip=fL(ds)+' · AFLEVERING 12:00'}
+    if(ds==='2026-12-15'||ds==='2026-12-16'){k='ex';tip=fL(ds)+' · mundtlig'}
+    if(ds===TS)k+=' nw';
+    c+=`<i class="${k}" title="${E(tip)}"></i>`;
+    if(cur.getMonth()!==lm){lab.push(MO[cur.getMonth()]);lm=cur.getMonth()}
+    cur.setDate(cur.getDate()+1)}
+  return`<div class="card band"><div class="bandh"><h3>Hele semestret</h3><div class="lgd">
+    <span><i style="background:var(--gn)"></i>undervisning</span><span><i style="background:var(--pl3)"></i>socialt</span>
+    <span><i style="background:var(--or)"></i>eksamen</span></div></div>
+    <div class="strip">${c}</div><div class="mrow">${lab.map(m=>`<span style="flex:1">${m}</span>`).join('')}</div></div>`}
+
+/* ═══ 1 · FORSIDE ═══ */
+function vForside(){
+  const n=dd(DL),nx=nextL();
+  const total=Math.round((P(DL)-P(START))/864e5);
+  const gone=Math.max(0,Math.min(total,Math.round((T-P(START))/864e5)));
+  const held=LESSONS.filter(l=>l.date<TS).length;
+  const m=mon(0),cells=[];
+  for(let i=0;i<5;i++){const d=new Date(m);d.setDate(d.getDate()+i);const ds=iso(d);
+    const ev=on(ds),ls=ev.find(e=>e.kind==='lesson'),so=ev.find(e=>e.kind==='social');
+    const dq=allDue().filter(t=>t.due===ds),mq=meetsOn(ds);
+    const pills=[...mq.map(m=>`<span class="tag">${m.time?E(m.time)+' ':''}studiegruppe</span>`),
+                 ...dq.map(x=>`<span class="tag cr">${E(x.title)}</span>`)].join('');
+    cells.push(`<div class="ds ${ds===TS?'now':''} ${!ls&&!so&&!dq.length&&!mq.length?'free':''}">
+      <div class="dn"><span>${DN[d.getDay()]}</span><span>${d.getDate()}/${d.getMonth()+1}</span></div>
+      ${ls?`<div class="dt">${ls.start}</div><div class="dr">${E(ls.room)}</div>
+        ${emneOf(ls)?`<div class="de">${E(emneOf(ls))}</div>`:''}`
+        :`<div class="dz">${so?E(so.title):'fri'}</div>`}
+      ${pills?`<div class="de" style="margin-top:9px;display:flex;flex-wrap:wrap;gap:5px">${pills}</div>`:''}
+    </div>`)}
+  const due=allDue().slice(0,4);
+
+  return`<div class="top">
+    <div class="big"><div class="lbl">Aflevering 7. december</div>
+      <div class="num">${n}</div><div class="capt">dage tilbage · ${LESSONS.length-held} lektioner endnu</div>
+      <div class="bar"><i style="width:${Math.round(gone/total*100)}%"></i></div>
+      <div class="prog"><span>24. aug</span><span>${Math.round(gone/total*100)}%</span><span>7. dec</span></div></div>
+    ${nx?`<div class="nxt"><div class="lbl">${nx.now?'Undervisning i dag':'Næste lektion'}</div>
+      <div class="tm">${nx.l.start}–${nx.l.end}</div>
+      ${emneOf(nx.l)?`<div class="em">${E(emneOf(nx.l))}</div>`:''}
+      <div class="mt">${nx.now?E(nx.l.room):fF(nx.l.date)+' · '+E(nx.l.room)}</div>
+      <div class="go"><button class="btn ${nx.now?'':'gh'}" data-t="idag">${nx.now?'Skriv noter':'Forbered'}</button></div></div>`
+     :`<div class="nxt"><div class="lbl">Undervisning slut</div><div class="tm">—</div>
+      <div class="mt">Sidste lektion var 27. november</div>
+      <div class="go"><button class="btn" data-t="eksamen">Til eksamen</button></div></div>`}
+  </div>
+
+  <div class="sec"><div class="sech"><h3>Husk</h3><span class="sp"></span>
+    <span class="ct">${livePins().length?livePins().length+' fastgjort':'ingenting fastgjort'}</span></div>
+    <div class="card">
+      <div class="qa"><input class="g" id="pn-t" placeholder="Fx: næste mandag er vi i FIR.401 i stedet for 307">
+        <input class="s" id="pn-u" type="date" title="Vises til og med denne dato">
+        <button class="btn" data-a="pin">Fastgør</button></div>
+      ${(S.pins||[]).length?(S.pins||[]).slice().reverse().map(p=>{
+        const ex=p.until&&p.until<TS,n=p.until?dd(p.until):null;
+        return `<div class="li ${ex?'done':''}"><div class="bd"><div class="tt">${E(p.t)}</div>
+        <div class="mt">${p.until?`<span class="tag ${ex?'':n<=2?'cr':'yl'}">${ex?'udløbet '+fD(p.until):'til og med '+fD(p.until)}</span>`:'<span class="tag">indtil du fjerner den</span>'}</div></div>
+        <button class="x" data-del="pin:${p.id}">×</button></div>`}).join(''):
+        `<div class="emp"><b>Ingenting fastgjort</b>
+          <p>Her sætter du de beskeder der ikke må glemmes — lokaleskift, ændrede tider, noget underviseren sagde i forbifarten. Sæt en slutdato, så forsvinder de af sig selv.</p></div>`}
+    </div></div>
+
+  <div class="sec"><div class="sech"><h3>Denne uge</h3><span class="sp"></span>
+    <button class="btn gh sm" data-t="skema">Hele skemaet</button></div>
+    <div class="wkstrip">${cells.join('')}</div></div>
+
+  <div class="sec"><div class="sech"><h3>Næste deadlines</h3></div>
+    <div class="card">${due.length?due.map(t=>{const k=dd(t.due);
+      return`<div class="li">${t.fixed?'<span class="tag cr" style="margin-top:1px">fast</span>':`<button class="chk" data-tog="${t.id}"></button>`}
+        <div class="bd"><div class="tt">${E(t.title)}</div><div class="mt">
+        <span class="tag ${k<=3?'cr':k<=10?'yl':''}">${fD(t.due)} · ${rel(k)}</span>
+        ${t.type?`<span class="tag">${E(t.type)}</span>`:''}</div></div></div>`}).join(''):
+      `<div class="emp"><b>Kun eksamen står i kalenderen</b><p>Afleveringsfrister fra Moodle lægger du ind under Opgaver.</p></div>`}</div></div>
+`;
+}
+
+/* ═══ 2 · I DAG ═══ */
+function vIdag(){
+  const nx=nextL();
+  if(!nx)return`<div class="card"><div class="emp"><div class="ei">◉</div><b>Undervisningen er slut</b>
+    <p>Sidste lektion var 27. november. Alt ligger under Noter.</p></div></div>`;
+  const l=nx.l,d=L(l.id),soc=on(TS).filter(e=>e.kind==='social');
+  const hw=LESSONS.filter(x=>x.date<TS&&L(x.id).hw&&!L(x.id).hwDone).slice(-4);
+
+  return`<div class="hero ${nx.now?'':'no'}">
+    <div class="hero-t"><span class="w">${nx.now?'Lektion i dag':'Næste lektion · '+rel(dd(l.date))}</span>
+      <span class="r"><span class="tag">${fL(l.date)}</span><span class="tag sc">${E(l.room)}</span></span></div>
+    <div class="hero-b">
+      <div class="hero-time">${l.start}–${l.end}<small>lektion ${l.no} af ${LESSONS.length}</small></div>
+      <div style="margin-top:17px">
+        <div class="fld"><label>Hvad handler timen om?<span class="h">bruges til at finde noterne igen</span></label>
+          <input class="emne" data-l="${l.id}" data-f="emne" value="${E(d.emne||'')}" placeholder="Fx Programmering, SQL joins, deskriptiv statistik"></div>
+        <div class="fld"><label>Noter<span class="h">gemmes automatisk</span></label>
+          <textarea data-l="${l.id}" data-f="note" placeholder="Skriv løs — det behøver ikke være pænt">${E(d.note||'')}</textarea></div>
+        <div class="fr2">
+          <div class="fld"><label>Det vigtigste at huske</label>
+            <textarea class="sm" data-l="${l.id}" data-f="key" placeholder="1–3 linjer til eksamen">${E(d.key||'')}</textarea></div>
+          <div class="fld"><label>Lektier til næste gang</label>
+            <textarea class="sm" data-l="${l.id}" data-f="hw" placeholder="Hvad skal laves inden næste lektion?">${E(d.hw||'')}</textarea></div>
+        </div>
+        <div class="fld"><label>Spørgsmål jeg skal have svar på</label>
+          <textarea class="sm" data-l="${l.id}" data-f="q" placeholder="Det du ikke fik spurgt om">${E(d.q||'')}</textarea></div>
+        <div class="fld"><label>PowerPoint eller materiale
+          ${drive()?`<span class="h"><a href="${E(drive())}" target="_blank" rel="noopener" style="color:var(--gnd);text-decoration:none;font-weight:600;font-size:12.5px">Åbn Drive-mappen ↗</a></span>`:''}</label>
+          <div style="display:flex;gap:8px"><input id="qf-u" placeholder="Sæt link ind fra Drive, iCloud eller Moodle">
+            <button class="btn" data-a="qfile" data-l="${l.id}">Gem</button></div></div>
+        ${files(l.id)}
+      </div></div></div>
+
+  ${soc.length?`<div class="sec" style="margin-top:22px"><div class="sech"><h3>Også i dag</h3></div>
+    <div class="card">${soc.map(s=>`<div class="li"><span class="tag so">${s.start}</span>
+      <div class="bd"><div class="tt">${E(s.title)}</div><div class="mt"><span class="tag">${E(s.room)}</span>
+      <span class="tag">frivilligt</span></div></div></div>`).join('')}</div></div>`:''}
+
+  ${hw.length?`<div class="sec" style="margin-top:22px"><div class="sech"><h3>Lektier der mangler</h3></div>
+    <div class="card">${hw.map(x=>`<div class="li"><button class="chk" data-hwd="${x.id}"></button>
+      <div class="bd"><div class="tt">${E(L(x.id).hw)}</div><div class="mt">
+      <span class="tag">${emneOf(x)||fD(x.date)}</span>
+      <button class="btn gh sm" data-open="${x.id}">Åbn</button></div></div></div>`).join('')}</div></div>`:''}
+
+  <div class="sec" style="margin-top:22px"><div class="sech"><h3>Ufordelt</h3><span class="sp"></span>
+    <span class="ct">${S.inbox.length}</span></div>
+    ${S.inbox.length?`<div class="card">${S.inbox.slice().reverse().map(i=>`<div class="li">
+      <div class="bd"><div class="tt">${E(i.t)}</div><div class="mt"><span class="tag">${fD(i.at)}</span></div></div>
+      <button class="btn gh sm" data-mv="${i.id}">Gør til opgave</button>
+      <button class="x" data-del="inbox:${i.id}">×</button></div>`).join('')}</div>`:
+      `<div class="card"><div class="emp"><div class="ei">✓</div><b>Ingenting hænger i luften</b>
+      <p><kbd>⌘</kbd><kbd>K</kbd> eller plusset nederst når noget skal huskes midt i en time.</p></div></div>`}</div>`;
+}
+function files(id){const f=S.files.filter(x=>x.lesson===id);if(!f.length)return'';
+  return`<div class="flist">${f.map(x=>`<div class="frow"><span class="fn">${E(x.name)}</span>
+    ${x.url?`<a href="${E(x.url)}" target="_blank" rel="noopener">åbn ↗</a>`:''}
+    <button class="x" data-del="file:${x.id}">×</button></div>`).join('')}</div>`}
+
+/* ═══ 3 · NOTER ═══ */
+function vNoter(){
+  const res=searchAll(q),em=emneList();
+  const written=LESSONS.filter(hasN);
+  let list;
+  if(res)list=res.map(r=>r.l);
+  else if(nf==='alle')list=written;
+  else if(nf==='tomme')list=LESSONS.filter(l=>l.date<TS&&!hasN(l));
+  else if(nf==='materiale')list=LESSONS.filter(hasF);
+  else list=LESSONS.filter(l=>emneOf(l)===nf);
+  list=list.slice().sort((a,b)=>b.date.localeCompare(a.date));
+
+  const row=l=>{const x=L(l.id),r=res&&res.find(z=>z.l.id===l.id);
+    const e=emneOf(l);
+    return`<button class="nrow ${l.date===TS?'today':''} ${l.date>TS?'fut':''}" data-open="${l.id}">
+      <div class="r1"><span class="em ${e?'':'q'}">${e?hl(e,q):'Lektion '+l.no+' · uden emne'}</span>
+        <span class="dt">${fL(l.date)}</span></div>
+      ${r?`<div class="sn">…${hl(r.snip,q)}…</div>`:
+        x.key&&x.key.trim()?`<div class="sn">${E(x.key)}</div>`:
+        x.note&&x.note.trim()?`<div class="sn">${E(x.note.slice(0,170))}</div>`:''}
+      <div class="r3"><span class="dots"><i class="${hasN(l)?'n':''}"></i><i class="${hasF(l)?'f':''}"></i><i class="${hasH(l)?'h':''}"></i></span>
+        ${r?r.hits.map(h=>`<span class="tag yl">fundet i ${h}</span>`).join(''):''}
+        ${hasH(l)?'<span class="tag yl">lektier mangler</span>':''}
+        ${hasF(l)?`<span class="tag sc">${S.files.filter(f=>f.lesson===l.id).length} materiale</span>`:''}
+      </div></button>`};
+
+  return`<div class="srch"><span class="mg">⌕</span>
+    <input id="q" value="${E(q)}" placeholder="Søg i alle noter, emner, lektier og materiale" autocomplete="off">
+    ${q?'<button class="cl" data-a="clrq">ryd</button>':''}</div>
+  ${res?`<div class="nt i"><b>${res.length} ${res.length===1?'lektion':'lektioner'} matcher "${E(q)}"</b>
+    <p>Søger på tværs af emne, noter, det vigtigste, lektier, spørgsmål og navne på materiale.</p></div>`:
+   `${em.length?`<div class="emnes">
+      <button data-nf="alle" class="${nf==='alle'?'on':''}">Alle noter<span class="c">${written.length}</span></button>
+      ${em.map(x=>`<button data-nf="${E(x.e)}" class="${nf===x.e?'on':''}">${E(x.e)}<span class="c">${x.n}</span></button>`).join('')}
+      <button data-nf="materiale" class="${nf==='materiale'?'on':''}">Med materiale<span class="c">${LESSONS.filter(hasF).length}</span></button>
+      <button data-nf="tomme" class="${nf==='tomme'?'on':''}">Timer uden noter<span class="c">${LESSONS.filter(l=>l.date<TS&&!hasN(l)).length}</span></button>
+    </div>`:''}`}
+  <div class="card">${list.length?list.map(row).join(''):
+    `<div class="emp"><div class="ei">✎</div><b>${q?'Ingen noter matcher':nf==='alle'?'Ingen noter endnu':'Ingenting her'}</b>
+      <p>${q?'Prøv et andet ord — søgningen kigger i al din tekst.':
+        'Skriv noter under I dag. Giv hver time et emne, fx "Programmering" — så kan du finde dem igen ved at søge eller klikke på emnet.'}</p></div>`}
+  </div>
+  ${!res&&em.length?'<p class="hint">Grøn prik = noter · blå = materiale · gul = lektier ikke lavet</p>':''}`;
+}
+
+/* ═══ 4 · OPGAVER ═══ */
+function vOpgaver(){
+  const all=[...S.tasks,...examT()];
+  const c={alle:all.filter(t=>!t.done).length,
+    uge:all.filter(t=>!t.done&&t.due&&dd(t.due)>=0&&dd(t.due)<=7).length,
+    over:all.filter(t=>!t.done&&t.due&&dd(t.due)<0).length,
+    ingen:S.tasks.filter(t=>!t.done&&!t.due).length,
+    done:S.tasks.filter(t=>t.done).length};
+  let list=all.slice();
+  if(tf==='alle')list=list.filter(t=>!t.done);
+  if(tf==='uge')list=list.filter(t=>!t.done&&t.due&&dd(t.due)>=0&&dd(t.due)<=7);
+  if(tf==='over')list=list.filter(t=>!t.done&&t.due&&dd(t.due)<0);
+  if(tf==='ingen')list=list.filter(t=>!t.done&&!t.due);
+  if(tf==='done')list=list.filter(t=>t.done);
+  list.sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
+  const F=[['alle','Åbne'],['uge','Denne uge'],['over','Overskredet'],['ingen','Uden dato'],['done','Færdige']];
+  return`<div class="card" style="margin-bottom:18px"><div class="qa">
+      <input class="g" id="t-t" placeholder="Hvad skal laves?">
+      <select id="t-k"><option>Opgave</option><option>Aflevering</option><option>Læsning</option><option>Gruppearbejde</option></select>
+      <input class="s" id="t-d" type="date"><button class="btn" data-a="task">Tilføj</button></div>
+    <div style="padding:11px 18px;font-size:11.5px;color:var(--i3)">Afleveringsfrister fra Moodle skal ind her. Eksamen ligger der allerede.</div></div>
+  <div class="fil">${F.map(f=>`<button data-tf="${f[0]}" class="${tf===f[0]?'on':''}">${f[1]}<span class="n">${c[f[0]]||0}</span></button>`).join('')}</div>
+  <div class="card">${list.length?list.map(t=>{const n=t.due?dd(t.due):null;
+    return`<div class="li ${t.done?'done':''}">
+      ${t.fixed?'<span class="tag cr" style="margin-top:1px">fast</span>':`<button class="chk ${t.done?'on':''}" data-tog="${t.id}">${t.done?'✓':''}</button>`}
+      <div class="bd"><div class="tt">${E(t.title)}</div><div class="mt">
+      ${t.type?`<span class="tag ${t.type==='Aflevering'?'cr':t.type==='Læsning'?'sc':''}">${E(t.type)}</span>`:''}
+      ${t.due?`<span class="tag ${n<0?'cr':n<=3?'yl':''}">${fD(t.due)} · ${rel(n)}</span>`:'<span class="tag">ingen dato</span>'}</div></div>
+      ${t.fixed?'':`<button class="x" data-del="task:${t.id}">×</button>`}</div>`}).join(''):
+    `<div class="emp"><div class="ei">✓</div><b>Ingenting her</b><p>${tf==='alle'?'Alt er lukket.':'Skift filter.'}</p></div>`}</div>`;
+}
+
+/* ═══ 5 · SKEMA ═══ */
+function vSkema(){
+  const up=[...LESSONS,...SOCIAL].filter(e=>e.date>=TS).sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));
+  const held=LESSONS.filter(l=>l.date<TS).length;
+  return band()+
+  `<div class="st" style="margin-top:18px">
+    <div><b>${LESSONS.length}</b><span>lektioner</span></div>
+    <div><b style="color:var(--gnd)">${LESSONS.length-held}</b><span>tilbage</span></div>
+    <div><b>Onsdag</b><span>altid fri</span></div>
+    <div><b>27/11</b><span>sidste dag</span></div>
+  </div>
+  <div class="sec"><div class="sech"><h3>Kommende</h3><span class="sp"></span><span class="ct">${up.length}</span></div>
+    <div class="card">${up.map(e=>{const l=e.kind==='lesson';
+      return`<button class="lrow ${e.date===TS?'today':''}" ${l?`data-open="${e.id}"`:''}>
+      <span class="dt">${fL(e.date)}</span><span class="tw2">${e.start}–${e.end}</span>
+      <span class="nm">${l?(emneOf(e)?E(emneOf(e)):'Lektion '+e.no):'<span style="color:var(--i3);font-style:italic">'+E(e.title)+'</span>'}</span>
+      <span class="rm">${E(e.room)}</span><span class="cv">${l?'›':''}</span></button>`}).join('')}</div></div>
+  <p class="hint">Alle tider er dansk tid. Skemaet er hele efterårssemestret fra TimeEdit. Ændrer skolen noget, indlæs en ny .ics under Arkiv.</p>`;
+}
+
+/* ═══ 6 · PENSUM ═══ */
+function vPensum(){
+  const un=S.reading.filter(r=>!r.done),rd=S.reading.filter(r=>r.done);
+  const row=r=>`<div class="li ${r.done?'done':''}"><button class="chk ${r.done?'on':''}" data-togr="${r.id}">${r.done?'✓':''}</button>
+    <div class="bd"><div class="tt">${E(r.title)}</div><div class="mt">
+    ${r.pages?`<span class="tag">s. ${E(r.pages)}</span>`:''}${r.src?`<span class="tag">${E(r.src)}</span>`:''}
+    ${r.due?`<span class="tag ${dd(r.due)<0?'cr':dd(r.due)<=2?'yl':''}">til ${fD(r.due)}</span>`:''}</div></div>
+    <button class="x" data-del="read:${r.id}">×</button></div>`;
+  return`<div class="card" style="margin-bottom:18px"><div class="qa">
+    <input class="g" id="r-t" placeholder="Tekst, kapitel eller bog"><input class="s" id="r-p" placeholder="Sider">
+    <input class="s" id="r-s" placeholder="Kilde"><input class="s" id="r-d" type="date">
+    <button class="btn" data-a="read">Tilføj</button></div></div>
+  <div class="sec"><div class="sech"><h3>Skal læses</h3><span class="sp"></span><span class="ct">${un.length}</span></div>
+    <div class="card">${un.length?un.sort((a,b)=>(a.due||'9').localeCompare(b.due||'9')).map(row).join(''):
+    `<div class="emp"><div class="ei">▧</div><b>Intet pensum endnu</b>
+      <p>Litteraturlisten kommer typisk i den første uge. Læg teksterne ind, så kan du se hvad der mangler før eksamen.</p></div>`}</div></div>
+  ${rd.length?`<div class="sec"><div class="sech"><h3>Læst</h3><span class="sp"></span><span class="ct">${rd.length}</span></div>
+    <div class="card">${rd.map(row).join('')}</div></div>`:''}`;
+}
+
+
+/* ═══ STUDIEGRUPPE ═══ */
+function vGruppe(){
+  const g=G(),nm=nextMeet();
+  const meets=g.meets.slice().sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));
+  const open=g.tasks.filter(t=>!t.done),done=g.tasks.filter(t=>t.done);
+
+  const tRow=t=>{const n=t.due?dd(t.due):null;
+    return `<div class="li ${t.done?'done':''}">
+      <button class="chk ${t.done?'on':''}" data-togg="${t.id}">${t.done?'✓':''}</button>
+      <div class="bd"><div class="tt">${E(t.text)}</div><div class="mt">
+        ${t.who?`<span class="tag">${E(t.who)}</span>`:'<span class="tag">ingen ansvarlig</span>'}
+        ${t.due?`<span class="tag ${n<0?'cr':n<=3?'yl':''}">${fD(t.due)} · ${rel(n)}</span>`:''}
+      </div></div><button class="x" data-del="gt:${t.id}">×</button></div>`};
+
+  return `<div class="nt"><b>Gruppens mappe</b>
+    <p>Alt I laver sammen — noter, opgaver, oplæg — hører herind, så ingen sidder med sin egen version.</p>
+    <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap">
+      <a class="btn" href="${E(gdrive())}" target="_blank" rel="noopener" style="text-decoration:none">Åbn gruppens mappe ↗</a>
+      <a class="btn gh" href="${E(drive())}" target="_blank" rel="noopener" style="text-decoration:none">Min egen mappe ↗</a>
+    </div></div>
+
+  ${nm?`<div class="top" style="grid-template-columns:1fr">
+    <div class="big grp"><div class="lbl">Næste gang vi mødes</div>
+      <div class="num" style="font-size:56px">${fF(nm.date).replace(/^./,c=>c.toUpperCase())}</div>
+      <div class="capt">${nm.time?'Kl. '+E(nm.time)+' · ':''}${nm.place?E(nm.place):'sted ikke aftalt'} · ${rel(dd(nm.date))}
+        ${nm.note?'<br>'+E(nm.note):''}</div></div></div>`:''}
+
+  <div class="sec"><div class="sech"><h3>Mødeaftaler</h3><span class="sp"></span>
+    <span class="ct">${meets.filter(m=>m.date>=TS).length} kommende</span></div>
+    <div class="card">
+      <div class="qa"><input class="s" id="gm-d" type="date"><input class="s" id="gm-c" placeholder="Kl.">
+        <input class="g" id="gm-p" placeholder="Hvor? Fx bibliotek, FIR.304, online">
+        <input class="g" id="gm-n" placeholder="Hvad skal vi nå? (valgfrit)">
+        <button class="btn" data-a="gmeet">Aftal</button></div>
+      ${meets.length?meets.map(m=>{const past=m.date<TS,nx=nm&&nm.id===m.id;
+        return `<div class="li ${past?'done':''}" ${nx?'style="background:var(--or)"':''}>
+          <div class="bd"><div class="tt" style="font:600 18px var(--d);letter-spacing:-.015em">${fF(m.date)}${m.time?' kl. '+E(m.time):''}</div>
+          <div class="mt">${m.place?`<span class="tag" ${nx?'style="background:rgba(0,0,0,.12)"':''}>${E(m.place)}</span>`:''}
+            ${nx?'<span class="tag" style="background:var(--bk);color:var(--wh)">næste</span>':past?'<span class="tag">overstået</span>':`<span class="tag">${rel(dd(m.date))}</span>`}</div>
+          ${m.note?`<div style="font-size:14px;color:${nx?'var(--bk)':'var(--i2)'};margin-top:7px">${E(m.note)}</div>`:''}</div>
+          <button class="x" data-del="gm:${m.id}">×</button></div>`}).join(''):
+        `<div class="emp"><b>Ingen aftaler endnu</b><p>Læg de dage ind hvor I mødes. Den næste bliver fremhævet, og de vises også i ugen på forsiden.</p></div>`}
+    </div></div>
+
+  <div class="sec"><div class="sech"><h3>Hvad skal laves</h3><span class="sp"></span>
+    <span class="ct">${open.length} åbne</span></div>
+    <div class="card">
+      <div class="qa"><input class="g" id="gt-t" placeholder="Hvad skal der laves?">
+        <input class="s" id="gt-w" placeholder="Hvem?"><input class="s" id="gt-d" type="date">
+        <button class="btn" data-a="gtask">Tilføj</button></div>
+      ${open.length?open.sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')).map(tRow).join(''):
+        `<div class="emp"><b>Ingen åbne opgaver</b><p>Skriv hvem der gør hvad, mens I sidder sammen. Opgaver med dato dukker også op under Næste deadlines på forsiden.</p></div>`}
+    </div></div>
+
+  ${done.length?`<div class="sec"><div class="sech"><h3>Klaret</h3><span class="sp"></span><span class="ct">${done.length}</span></div>
+    <div class="card">${done.map(tRow).join('')}</div></div>`:''}
+
+  <div class="sec"><div class="sech"><h3>Gruppen</h3><span class="sp"></span><span class="ct">${g.members.length}</span></div>
+    <div class="card">
+      <div class="qa"><input class="g" id="gp-n" placeholder="Navn"><input class="g" id="gp-c" placeholder="Mobil eller mail">
+        <button class="btn" data-a="gmem">Tilføj</button></div>
+      ${g.members.length?g.members.map(m=>`<div class="li">
+        <div class="bd"><div class="tt">${E(m.name)}</div>
+        ${m.c?`<div class="mt"><span class="tag">${E(m.c)}</span>
+          <span class="tag ac">${g.tasks.filter(t=>!t.done&&t.who&&t.who.toLowerCase()===m.name.toLowerCase().split(' ')[0]).length} opgaver</span></div>`:''}</div>
+        <button class="x" data-del="gp:${m.id}">×</button></div>`).join(''):
+        `<div class="emp"><b>Ingen navne endnu</b><p>Skriv navn og nummer på dem du er i gruppe med. Så kan du sætte navn på opgaverne ovenfor.</p></div>`}
+    </div></div>
+
+  <div class="sec"><div class="sech"><h3>Skift mappe</h3></div>
+    <div class="card pad"><div class="fld" style="margin-bottom:0"><label>Link til gruppens mappe</label>
+      <div style="display:flex;gap:9px"><input id="gd-u" value="${E(S.gdrive||GDRIVE_DEF)}" placeholder="Link til Drive- eller iCloud-mappe">
+        <button class="btn gh" data-a="gdrive">Gem</button></div></div></div></div>`;
+}
+
+/* ═══ 7 · EKSAMEN ═══ */
+function vEksamen(){
+  const n=dd(DL),gap=Math.round((P(DL)-P(LAST))/864e5);
+  const keys=LESSONS.filter(l=>{const x=L(l.id);return x.key&&x.key.trim()});
+  return`<div class="nt i"><b>Sådan hænger den sammen</b>
+    <p>Du afleverer den skriftlige opgave <code>7. december kl. 12:00</code>. Derefter — 14. december — får du udleveret en ny opgave, som du forsvarer mundtligt 15.–16. december. Den kan ikke forberedes på forhånd, kun trænes.</p>
+    <p style="margin-top:7px">Du har <code>${gap} dage</code> fra sidste undervisningsdag til afleveringen.</p></div>
+  <div class="st">
+    <div><b style="color:var(--ink)">${n}</b><span>dage til aflevering</span></div>
+    <div><b>30</b><span>min mundtlig</span></div>
+    <div><b>${(S.rep||[]).filter(r=>!r.done).length}</b><span>at repetere</span></div>
+    <div><b>${keys.length}</b><span>takeaways</span></div></div>
+  <div class="sec"><div class="sech"><h3>${E(EXAM.n)}</h3><span class="sp"></span><span class="ct">${E(EXAM.f)}</span></div>
+    <div class="exb">${EXAM.s.map(s=>{const k=dd(s[0]);return`<div class="stp ${s[3]?'hot':''}">
+      <span class="sd">${fD(s[0])}${s[1]?' '+s[1]:''}</span><span class="sk">${E(s[2])}</span>
+      <span class="sn">${k>0?'om '+k+' d':k===0?'i dag':''}</span></div>`}).join('')}</div></div>
+  <div class="sec"><div class="sech"><h3>Repetition</h3></div>
+    <div class="card"><div class="qa"><input class="g" id="p-t" placeholder="Emne du skal have styr på">
+      <button class="btn" data-a="rep">Tilføj</button></div>
+      ${(S.rep||[]).length?S.rep.map(r=>`<div class="li ${r.done?'done':''}">
+        <button class="chk ${r.done?'on':''}" data-togp="${r.id}">${r.done?'✓':''}</button>
+        <div class="bd"><div class="tt">${E(r.title)}</div></div>
+        <button class="x" data-del="rep:${r.id}">×</button></div>`).join(''):
+        `<div class="emp"><div class="ei">◆</div><b>Ingen emner endnu</b>
+          <p>Læringsmålene står i studieordningen. Læg dem ind, så bliver repetitionen en liste i stedet for en følelse.</p></div>`}</div></div>
+  ${keys.length?`<div class="sec"><div class="sech"><h3>Alt du har markeret som vigtigt</h3><span class="sp"></span><span class="ct">${keys.length}</span></div>
+    <div class="card">${keys.map(l=>`<div class="li"><div class="bd">
+      <div class="tt" style="white-space:pre-wrap">${E(L(l.id).key)}</div>
+      <div class="mt"><span class="tag sc">${E(emneOf(l)||'Lektion '+l.no)}</span><span class="tag">${fD(l.date)}</span></div></div>
+      <button class="btn gh sm" data-open="${l.id}">Åbn</button></div>`).join('')}</div></div>`:''}
+  <p class="hint">Planen er markeret som foreløbig af Cphbusiness. Dit personlige tidspunkt til den mundtlige står under "Mine eksamener" og i WISEflow.</p>`;
+}
+
+/* ═══ 8 · ARKIV ═══ */
+function vArkiv(){
+  const cnt=S.tasks.length+S.reading.length+S.files.length+S.inbox.length+Object.keys(S.lessons).length+(S.rep||[]).length;
+  const c=ghCfg();
+  return`<div class="sec"><div class="sech"><h3>Synk mellem computere</h3><span class="sp"></span>
+    <span class="ct">${c?'forbundet':'ikke sat op'}</span></div>
+    <div class="card pad">
+      ${c?`<div style="display:flex;align-items:center;gap:11px;margin-bottom:14px">
+          <span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:${MODE==='gherr'?'var(--aps)':'var(--gn)'}"></span>
+          <b style="font:600 20px var(--d)">${MODE==='gherr'?'Synk fejlede':'Forbundet til '+E(c.owner)+'/'+E(c.repo)}</b></div>
+        ${MODE==='gherr'?`<p style="font-size:15px;color:var(--aps);margin-bottom:14px">${E(GHERR)}</p>`:
+          `<p style="font-size:15px;margin-bottom:14px">Alt hvad du skriver lægges op i dit private repo. Åbner du boardet på din anden computer, hentes det ned automatisk.</p>`}
+        <div style="display:flex;gap:9px;flex-wrap:wrap">
+          <button class="btn" data-a="ghPull">Hent nyeste nu</button>
+          <button class="btn gh" data-a="ghPush">Gem op nu</button>
+          <button class="btn gh" data-a="ghOff">Afbryd på denne computer</button></div>
+        ${localStorage.getItem(K+':konflikt')?`<p class="hint" style="color:var(--aps)">Der ligger en gemt kopi fra en sammenstød. Tryk <b>Hent kopi</b> hvis du mangler noget.
+          <button class="btn gh sm" data-a="ghConf" style="margin-left:8px">Hent kopi</button></p>`:''}`
+      :`<p style="font-size:15px;margin-bottom:16px">Uden synk gemmer boardet kun i den browser du sidder i. Forbind det til et privat GitHub-repo, så er dine noter de samme på iMac og MacBook — og du kan åbne boardet uden Claude.</p>
+        <div class="fld"><label>Brugernavn på GitHub</label><input id="gh-o" value="lauranielsen32"></div>
+        <div class="fld"><label>Navn på det private repo</label><input id="gh-r" value="studieboard-data" placeholder="studieboard-data"></div>
+        <div class="fld"><label>Token<span class="h">gemmes kun her på maskinen</span></label>
+          <input id="gh-t" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+        <button class="btn" data-a="ghOn">Forbind</button>
+        <p class="hint">Tokenet skal være et fine-grained token med adgang til <b>kun</b> dette ene repo, og med <b>Contents: Read and write</b>. Det sendes udelukkende til github.com.</p>`}
+    </div></div>
+
+  <div class="sec"><div class="sech"><h3>Materialemappe</h3></div>
+    <div class="card pad">
+      ${drive()?`<a href="${E(drive())}" target="_blank" rel="noopener" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:13px">Åbn mappen i Drive ↗</a>`:''}
+      <div class="fld" style="margin-bottom:0"><label>Link til mappen</label>
+        <div style="display:flex;gap:8px"><input id="dr-u" value="${E(S.drive||DRIVE_DEF)}" placeholder="Sæt link til din Drive- eller iCloud-mappe ind">
+          <button class="btn gh" data-a="drive">Gem</button></div></div>
+      <p class="hint">Mappen ligger som genvej nede i venstre side, så du kan komme til den fra alle sider. Skifter du mappe, retter du linket her.</p></div></div>
+  <div class="sec"><div class="sech"><h3>Gemning</h3></div>
+    <div class="card pad">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+        <span style="width:8px;height:8px;border-radius:50%;display:inline-block;background:${MODE==='cloud'?'var(--gn)':MODE==='local'?'var(--or)':'var(--aps)'}"></span>
+        <b style="font:600 14px var(--d)">${MODE==='cloud'?'Gemmer på din Claude-konto':MODE==='local'?'Gemmer kun i denne browser':'Gemmer ikke'}</b></div>
+      <p style="font-size:13px;color:var(--i2)">${MODE==='cloud'
+        ?'Alt følger din konto. Åbner du boardet på din anden computer, er det samme data. Det henter automatisk nyeste version når du skifter tilbage til fanen.'
+        :MODE==='local'?'Du kører boardet som lokal fil, så data bliver på denne computer. Brug backup for at flytte dem.'
+        :'Hverken kontolagring eller browserlagring virker her.'}</p>
+      <p class="hint">Sidst gemt: ${S.meta&&S.meta.at?new Date(S.meta.at).toLocaleString('da-DK'):'aldrig'} · ${cnt} poster</p></div></div>
+  <div class="sec"><div class="sech"><h3>Backup</h3></div>
+    <div class="card pad"><p style="font-size:13px;margin-bottom:12px">Hent en fil med alt dit indhold. Læg den i iCloud, så kan du altid gendanne.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-a="export">Hent backup</button>
+        <button class="btn gh" data-a="impUI">Gendan fra backup</button></div>
+      <div id="impbox" style="display:none;margin-top:13px"><textarea class="raw" id="imp" placeholder="Sæt indholdet af backup-filen ind her"></textarea>
+        <div style="margin-top:8px;display:flex;gap:8px"><button class="btn" data-a="imp">Gendan</button>
+          <button class="btn gh" data-a="impX">Fortryd</button></div></div></div></div>
+  <div class="sec"><div class="sech"><h3>Alt materiale</h3><span class="sp"></span><span class="ct">${S.files.length}</span></div>
+    <div class="card"><div class="qa"><input class="g" id="f-n" placeholder="Navn">
+      <input class="g" id="f-u" placeholder="Link">
+      <select id="f-l"><option value="">Ingen lektion</option>
+        ${LESSONS.map(l=>`<option value="${l.id}">L${l.no} · ${fD(l.date)}${emneOf(l)?' · '+E(emneOf(l)):''}</option>`).join('')}</select>
+      <button class="btn" data-a="file">Tilføj</button></div>
+    ${S.files.length?`<div class="tw"><table><thead><tr><th>Navn</th><th>Lektion</th><th>Link</th><th></th></tr></thead><tbody>
+      ${S.files.slice().reverse().map(f=>{const l=LESSONS.find(x=>x.id===f.lesson);
+      return`<tr><td>${E(f.name)}</td><td class="m">${l?(emneOf(l)||'L'+l.no)+' · '+fD(l.date):'—'}</td>
+      <td>${f.url?`<a href="${E(f.url)}" target="_blank" rel="noopener" style="color:var(--gnd);font-weight:600;font-size:13px;text-decoration:none">åbn ↗</a>`:'<span class="m">—</span>'}</td>
+      <td style="text-align:right"><button class="btn gh sm" data-del="file:${f.id}">Slet</button></td></tr>`}).join('')}
+    </tbody></table></div>`:`<div class="emp"><div class="ei">⬒</div><b>Intet materiale endnu</b>
+      <p>Boardet kan ikke rumme selve filerne — kun links. Læg PowerPoints i Drive eller iCloud og gem linket på lektionen.</p></div>`}</div></div>
+  <div class="sec"><div class="sech"><h3>Opdatér skemaet</h3></div>
+    <div class="card pad"><p style="font-size:13px;margin-bottom:11px">Hent .ics-filen fra TimeEdit igen og sæt indholdet ind her.</p>
+      <textarea class="raw" id="ics" placeholder="BEGIN:VCALENDAR…"></textarea>
+      <div style="margin-top:9px"><button class="btn" data-a="ics">Indlæs</button></div>
+      <p class="hint">Boardet kan ikke hente linket selv — browsere blokerer kald til andres servere. Noterne følger lektionsnumrene, så de bliver hvor de er.</p></div></div>
+  <div class="sec"><div class="sech"><h3>Nulstil</h3></div>
+    <div class="card pad"><p style="font-size:13px;margin-bottom:12px">Sletter alle noter, opgaver, pensum og links.</p>
+      <button class="btn gh" data-a="wipe">Slet alt mit indhold</button></div></div>`;
+}
+
+/* ═══ PANEL ═══ */
+function panel(){
+  if(!openL)return'';
+  const l=LESSONS.find(x=>x.id===openL);if(!l)return'';
+  const d=L(l.id),n=dd(l.date);
+  return`<div class="det" id="det"><div class="det-p">
+    <div class="det-h"><div class="r1"><h4>${E(d.emne||'Lektion '+l.no)}</h4><button class="cl" data-close="1">×</button></div>
+      <div class="r2"><span class="tag">${fF(l.date)}</span><span class="tag">${l.start}–${l.end}</span>
+        <span class="tag sc">${E(l.room)}</span><span class="tag ${n<0?'':'ac'}">${rel(n)}</span></div></div>
+    <div class="det-b">
+      <div class="fld"><label>Emne<span class="h">gør noterne søgbare</span></label>
+        <input class="emne" data-l="${l.id}" data-f="emne" value="${E(d.emne||'')}" placeholder="Fx Programmering, SQL joins"></div>
+      <div class="fld"><label>Noter</label>
+        <textarea data-l="${l.id}" data-f="note" style="min-height:200px" placeholder="Noter fra timen">${E(d.note||'')}</textarea></div>
+      <div class="fld"><label>Det vigtigste at huske</label>
+        <textarea class="sm" data-l="${l.id}" data-f="key" placeholder="Samles på Eksamen-siden">${E(d.key||'')}</textarea></div>
+      <div class="fld"><label>Lektier${d.hw?`<span class="h"><button class="btn gh sm" data-hwd="${l.id}">${d.hwDone?'Ikke lavet endnu':'Marker som lavet'}</button></span>`:''}</label>
+        <textarea class="sm" data-l="${l.id}" data-f="hw" placeholder="Hvad skal laves inden næste gang?">${E(d.hw||'')}</textarea>
+        ${d.hwDone?'<p class="hint" style="color:var(--gnd)">✓ Lavet</p>':''}</div>
+      <div class="fld"><label>Spørgsmål til underviseren</label>
+        <textarea class="sm" data-l="${l.id}" data-f="q" placeholder="Det du ikke fik spurgt om">${E(d.q||'')}</textarea></div>
+      <div class="fld"><label>Materiale</label>
+        <div style="display:flex;gap:8px;margin-bottom:9px">
+          <input id="pf-n" placeholder="Navn" style="flex:1">
+          <input id="pf-u" placeholder="Link" style="flex:1.4">
+          <button class="btn" data-a="pfile" data-l="${l.id}">Gem</button></div>
+        ${files(l.id)||'<p class="hint">Læg PowerPointen i Drive eller iCloud og gem linket her.</p>'}</div>
+    </div></div></div>`;
+}
+
+/* ═══ RENDER ═══ */
+const V={forside:vForside,idag:vIdag,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,skema:vSkema,pensum:vPensum,eksamen:vEksamen,arkiv:vArkiv};
+const H={forside:['Forside',null],idag:['I dag',null],noter:['Noter','Søg på tværs af hele semestret'],
+  opgaver:['Opgaver','Alt du skal lave'],studiegruppe:['Studiegruppe','Aftaler, opgaver og mappe'],
+  skema:['Skema','Hele efterårssemestret'],
+  pensum:['Pensum','Hvad der skal læses'],eksamen:['Eksamen','1. semesterprøve'],arkiv:['Arkiv','Materiale, backup og skema']};
+function draw(){
+  nav();const[t,s]=H[tab];let sub=s;
+  if(tab==='forside')sub=fF(TS)+(TS<START?' · semestret starter '+rel(dd(START)):'');
+  if(tab==='idag'){const nx=nextL();sub=nx?(nx.now?fF(TS):'Næste lektion '+rel(dd(nx.l.date))):''}
+  $('#main').innerHTML=`<div class="ph"><div><h2>${t}</h2><div class="sub">${E(sub||'')}</div></div></div>${V[tab]()}`;
+  const o=$('#det');if(o)o.remove();
+  if(openL)document.body.insertAdjacentHTML('beforeend',panel());
+  syncBadge();driveBadge();
+}
+
+/* ═══ ICS ═══ */
+function parseICS(txt){
+  const u=txt.replace(/\r\n/g,'\n').replace(/\n[ \t]/g,'');const L2=[],S2=[];let i=0;
+  u.split('BEGIN:VEVENT').slice(1).forEach(b=>{
+    const g=r=>{const m=b.match(r);return m?m[1].trim():''};
+    const a=g(/DTSTART:(\d{8}T\d{6}Z)/);if(!a)return;
+    const e=g(/DTEND:(\d{8}T\d{6}Z)/);
+    const sum=g(/SUMMARY:([^\n]*)/).replace(/\\,/g,',').replace(/\\n/g,' ');
+    if(/^Note:/.test(sum))return;
+    const loc=g(/LOCATION:([^\n]*)/).replace(/Lokale:\s*/,'').replace(/\\,/g,' + ');
+    const cv=z=>{const d=new Date(Date.UTC(+z.slice(0,4),+z.slice(4,6)-1,+z.slice(6,8),+z.slice(9,11),+z.slice(11,13)));
+      return{d:iso(d),t:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}};
+    const A=cv(a),B=e?cv(e):A;
+    const soc=/Reservationsårsag/.test(sum);
+    if(soc){const r=(sum.match(/Reservationsårsag:\s*([^,(]+)/)||[])[1];
+      S2.push({id:'S'+S2.length,date:A.d,start:A.t,end:B.t,room:loc||'—',kind:'social',title:(r||'Arrangement').trim(),teach:'Frivilligt'})}
+    else{i++;const und=[...sum.matchAll(/Underviser:\s*([^.]+)\./g)].map(m=>m[1].trim().split(' ').pop()).join(' / ');
+      L2.push({id:'L'+String(i).padStart(2,'0'),date:A.d,start:A.t,end:B.t,room:loc||'—',kind:'lesson',
+        title:'Undervisning',teach:und||'—',no:i})}});
+  return{L:L2,S:S2}}
+
+/* ═══ PLUMBING ═══ */
+let tt;
+function toast(m,bad){const e=$('#toast');e.textContent=m;e.className='toast on'+(bad?' bad':'');
+  clearTimeout(tt);tt=setTimeout(()=>e.className='toast',1900)}
+const v=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
+function capture(){if($('#cap'))return;
+  document.body.insertAdjacentHTML('beforeend',`<div class="cap" id="cap"><div class="cap-b">
+    <input id="cap-i" placeholder="Hvad skal huskes?" autocomplete="off">
+    <div class="cap-f"><button class="btn" data-a="capS">Gem i Ufordelt</button>
+      <button class="btn gh" data-a="capT">Gem som opgave</button><span class="kb"><kbd>esc</kbd> luk</span></div></div></div>`);
+  setTimeout(()=>{const i=$('#cap-i');if(i)i.focus()},30)}
+const capX=()=>{const c=$('#cap');if(c)c.remove()};
+
+document.addEventListener('click',ev=>{
+  if($('#cap')&&!ev.target.closest('.cap-b')){capX();return}
+  if($('#det')&&ev.target.id==='det'){openL=null;draw();return}
+  const b=ev.target.closest('button,a');if(!b)return;const D=b.dataset;
+  if(D.t){ev.preventDefault();tab=D.t;wko=0;openL=null;q='';draw();window.scrollTo(0,0);return}
+  if(D.close){openL=null;draw();return}
+  if(D.open){openL=D.open;draw();return}
+  if(D.tf){tf=D.tf;draw();return}
+  if(D.nf){nf=D.nf;q='';draw();return}
+  if(D.tog){set(()=>{const t=S.tasks.find(x=>x.id===D.tog);if(t)t.done=!t.done});return}
+  if(D.togr){set(()=>{const r=S.reading.find(x=>x.id===D.togr);if(r)r.done=!r.done});return}
+  if(D.togp){set(()=>{const r=S.rep.find(x=>x.id===D.togp);if(r)r.done=!r.done});return}
+  if(D.togg){set(()=>{const t=G().tasks.find(x=>x.id===D.togg);if(t)t.done=!t.done});return}
+  if(D.hwd){set(()=>{S.lessons[D.hwd]=S.lessons[D.hwd]||{};S.lessons[D.hwd].hwDone=!S.lessons[D.hwd].hwDone});return}
+  if(D.mv){set(()=>{const i=S.inbox.find(x=>x.id===D.mv);
+    S.tasks.push({id:uid(),title:i.t,type:'Opgave',due:'',done:false});S.inbox=S.inbox.filter(x=>x.id!==D.mv)});
+    toast('Flyttet til Opgaver');return}
+  if(D.del){const[k,id]=D.del.split(':');
+    if(k==='gm'||k==='gt'||k==='gp'){const F={gm:'meets',gt:'tasks',gp:'members'}[k];
+      set(()=>{G()[F]=G()[F].filter(x=>x.id!==id)});return}
+    const M={task:'tasks',read:'reading',file:'files',inbox:'inbox',rep:'rep',pin:'pins'};
+    set(()=>{S[M[k]]=(S[M[k]]||[]).filter(x=>x.id!==id)});return}
+  const a=D.a;if(!a)return;
+  if(a==='clrq'){q='';draw();setTimeout(()=>{const e=$('#q');if(e)e.focus()},20)}
+  if(a==='task'){const x=v('t-t');if(!x)return toast('Skriv en opgave',1);
+    set(()=>S.tasks.push({id:uid(),title:x,type:v('t-k')||'Opgave',due:v('t-d'),done:false}),1)}
+  if(a==='read'){const x=v('r-t');if(!x)return toast('Skriv en titel',1);
+    set(()=>S.reading.push({id:uid(),title:x,pages:v('r-p'),src:v('r-s'),due:v('r-d'),done:false}),1)}
+  if(a==='rep'){const x=v('p-t');if(!x)return;set(()=>{S.rep=S.rep||[];S.rep.push({id:uid(),title:x,done:false})},1)}
+  if(a==='file'){const x=v('f-n');if(!x)return toast('Giv den et navn',1);
+    set(()=>S.files.push({id:uid(),name:x,url:v('f-u'),lesson:v('f-l')}),1)}
+  if(a==='qfile'){const u=v('qf-u');if(!u)return toast('Sæt et link ind',1);
+    const l=LESSONS.find(x=>x.id===D.l),e=emneOf(l);
+    set(()=>S.files.push({id:uid(),name:(e||'Lektion '+l.no)+' – materiale',url:u,lesson:D.l}),1);toast('Link gemt')}
+  if(a==='pfile'){const u=v('pf-u');if(!u)return toast('Sæt et link ind',1);
+    set(()=>S.files.push({id:uid(),name:v('pf-n')||'Materiale',url:u,lesson:D.l}),1)}
+  if(a==='capS'){const x=v('cap-i');if(!x)return capX();set(()=>S.inbox.push({id:uid(),t:x,at:TS}),1);capX();toast('Gemt')}
+  if(a==='capT'){const x=v('cap-i');if(!x)return capX();
+    set(()=>S.tasks.push({id:uid(),title:x,type:'Opgave',due:'',done:false}),1);capX();toast('Gemt som opgave')}
+  if(a==='export'){const bl=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+    const u=URL.createObjectURL(bl),el=document.createElement('a');
+    el.href=u;el.download='studieboard-backup-'+TS+'.json';el.click();URL.revokeObjectURL(u);toast('Backup hentet')}
+  if(a==='ghOn'){const o=v('gh-o'),r=v('gh-r'),t=v('gh-t');
+    if(!o||!r||!t)return toast('Udfyld alle tre felter',1);
+    ghSave({owner:o,repo:r,token:t,path:'data.json',branch:'main'});
+    toast('Forbinder…');
+    (async()=>{try{const g=await ghPull();
+      if(g&&g.text){const p=JSON.parse(g.text);
+        if(confirm('Der ligger allerede data i repoet. Hent dem ind? (Annullér for at beholde det du har lokalt og lægge det op i stedet.)')){
+          S={...S,...p};MODE='github';GHERR='';draw();return toast('Hentet fra GitHub')}}
+      await ghPush(JSON.stringify(S));MODE='github';GHERR='';draw();toast('Forbundet og gemt')}
+     catch(e){GHERR=e.message;MODE='gherr';draw();toast(e.message,1)}})()}
+  if(a==='ghPull'){toast('Henter…');(async()=>{try{const g=await ghPull();
+      if(!g||!g.text)return toast('Der ligger ingen data endnu',1);
+      S={...S,...JSON.parse(g.text)};DIRTY=0;MODE='github';GHERR='';draw();toast('Hentet nyeste')}
+     catch(e){GHERR=e.message;MODE='gherr';draw();toast(e.message,1)}})()}
+  if(a==='ghPush'){save(1)}
+  if(a==='ghOff'){if(!confirm('Afbryd synk på denne computer? Dine data bliver i repoet, og boardet gemmer herefter kun lokalt.'))return;
+    ghSave(null);MODE='local';draw();toast('Synk afbrudt')}
+  if(a==='ghConf'){const t=localStorage.getItem(K+':konflikt');if(!t)return;
+    if(!confirm('Erstat det du har nu med den gemte kopi?'))return;
+    try{S={...S,...JSON.parse(t)};localStorage.removeItem(K+':konflikt');save(1);toast('Kopi hentet ind')}catch(e){toast('Kopien kunne ikke læses',1)}}
+  if(a==='pin'){const x=v('pn-t');if(!x)return toast('Skriv hvad du skal huske',1);
+    set(()=>{S.pins=S.pins||[];S.pins.push({id:uid(),t:x,until:v('pn-u')})},1);toast('Fastgjort')}
+  if(a==='gmeet'){const d=v('gm-d');if(!d)return toast('Vælg en dato',1);
+    set(()=>G().meets.push({id:uid(),date:d,time:v('gm-c'),place:v('gm-p'),note:v('gm-n')}),1);toast('Aftale gemt')}
+  if(a==='gtask'){const x=v('gt-t');if(!x)return toast('Skriv en opgave',1);
+    set(()=>G().tasks.push({id:uid(),text:x,who:v('gt-w'),due:v('gt-d'),done:false}),1)}
+  if(a==='gmem'){const x=v('gp-n');if(!x)return toast('Skriv et navn',1);
+    set(()=>G().members.push({id:uid(),name:x,c:v('gp-c')}),1)}
+  if(a==='gdrive'){const u=v('gd-u');set(()=>{S.gdrive=u},1);toast(u?'Mappe gemt':'Mappe fjernet')}
+  if(a==='drive'){const u=v('dr-u');set(()=>{S.drive=u},1);toast(u?'Mappe gemt':'Mappe fjernet')}
+  if(a==='impUI'){$('#impbox').style.display='block';$('#imp').focus()}
+  if(a==='impX'){$('#impbox').style.display='none'}
+  if(a==='imp'){try{const p=JSON.parse(v('imp'));if(!p||typeof p!=='object')throw 0;
+    if(!confirm('Gendan backup? Det overskriver hvad der ligger nu.'))return;
+    set(()=>{S={...S,...p}},1);toast('Gendannet')}catch(e){toast('Filen kunne ikke læses',1)}}
+  if(a==='ics'){const r=v('ics');if(!r.includes('BEGIN:VEVENT'))return toast('Det ligner ikke en .ics-fil',1);
+    const p=parseICS(r);if(!p.L.length)return toast('Fandt ingen lektioner',1);
+    LESSONS=p.L;SOCIAL=p.S;toast(p.L.length+' lektioner indlæst');draw()}
+  if(a==='wipe'){if(!confirm('Slet alt dit indhold? Hent evt. en backup først.'))return;
+    set(()=>{S={lessons:{},tasks:[],reading:[],files:[],inbox:[],pins:[],rep:[],drive:S.drive,gdrive:S.gdrive,
+      grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}}},1);toast('Nulstillet')}
+});
+
+$('#fab').addEventListener('click',capture);
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();capture();return}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='f'&&tab!=='noter'){e.preventDefault();tab='noter';draw();
+    setTimeout(()=>{const x=$('#q');if(x)x.focus()},40);return}
+  if(e.key==='Escape'){if($('#cap'))return capX();if(q){q='';draw();return}if(openL){openL=null;draw()}return}
+  if(e.key!=='Enter')return;const id=e.target.id;if(!id)return;
+  const M={'cap-i':'capS','t-t':'task','t-d':'task','r-t':'read','r-d':'read','p-t':'rep',
+    'f-n':'file','f-u':'file','pf-u':'pfile','pf-n':'pfile','qf-u':'qfile','dr-u':'drive',
+    'pn-t':'pin','pn-u':'pin','gm-p':'gmeet','gm-n':'gmeet','gm-c':'gmeet','gt-t':'gtask','gt-w':'gtask','gt-d':'gtask',
+    'gp-n':'gmem','gp-c':'gmem','gd-u':'gdrive','gh-t':'ghOn','gh-r':'ghOn','gh-o':'ghOn'};
+  if(M[id]){e.preventDefault();const b=document.querySelector(`[data-a="${M[id]}"]`);if(b)b.click()}
+});
+
+let it,qt;
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.id==='q'){q=el.value;clearTimeout(qt);qt=setTimeout(()=>{const p=el.selectionStart;draw();
+    const n=$('#q');if(n){n.focus();n.setSelectionRange(p,p)}},220);return}
+  if(el.dataset.focus!==undefined)S.focus[+el.dataset.focus]=el.value;
+  else if(el.dataset.l&&el.dataset.f){const i=el.dataset.l;S.lessons[i]=S.lessons[i]||{};S.lessons[i][el.dataset.f]=el.value}
+  else return;
+  DIRTY=1;clearTimeout(it);it=setTimeout(()=>{save(1);nav()},800);
+});
+window.addEventListener('beforeunload',()=>{if(DIRTY)save(1)});
+(async()=>{await load();draw()})();
+
+</script>
+</body>
+</html>
