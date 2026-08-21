@@ -985,13 +985,20 @@ function vArkiv(){
       <p class="hint">Mappen ligger som genvej nede i venstre side, så du kan komme til den fra alle sider. Skifter du mappe, retter du linket her.</p></div></div>
   <div class="sec"><div class="sech"><h3>Gemning</h3></div>
     <div class="card pad">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
-        <span style="width:8px;height:8px;border-radius:50%;display:inline-block;background:${MODE==='cloud'?'var(--gn)':MODE==='local'?'var(--or)':'var(--aps)'}"></span>
-        <b style="font:600 14px var(--d)">${MODE==='cloud'?'Gemmer på din Claude-konto':MODE==='local'?'Gemmer kun i denne browser':'Gemmer ikke'}</b></div>
-      <p style="font-size:13px;color:var(--i2)">${MODE==='cloud'
-        ?'Alt følger din konto. Åbner du boardet på din anden computer, er det samme data. Det henter automatisk nyeste version når du skifter tilbage til fanen.'
-        :MODE==='local'?'Du kører boardet som lokal fil, så data bliver på denne computer. Brug backup for at flytte dem.'
-        :'Hverken kontolagring eller browserlagring virker her.'}</p>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:${
+          MODE==='github'||MODE==='cloud'?'var(--gn)':MODE==='local'?'var(--ap)':'var(--aps)'}"></span>
+        <b style="font:700 22px var(--d)">${
+          MODE==='github'?'Gemmer i dit private repo':
+          MODE==='gherr'?'Synk fejlede':
+          MODE==='cloud'?'Gemmer på din Claude-konto':
+          MODE==='local'?'Gemmer kun i denne browser':'Gemmer ikke'}</b></div>
+      <p>${
+        MODE==='github'?'Hver ændring lægges op i studieboard-data med det samme, og hentes ned igen når du åbner boardet et andet sted. Din fulde historik ligger i repoet.'
+        :MODE==='gherr'?E(GHERR)+' — boardet gemmer indtil videre kun her på maskinen.'
+        :MODE==='cloud'?'Alt følger din konto. Åbner du boardet på din anden computer, er det samme data.'
+        :MODE==='local'?'Boardet kører uden synk, så data bliver på denne computer. Sæt synk op ovenfor, eller brug backup.'
+        :'Hverken synk, kontolagring eller browserlagring virker her.'}</p>
       <p class="hint">Sidst gemt: ${S.meta&&S.meta.at?new Date(S.meta.at).toLocaleString('da-DK'):'aldrig'} · ${cnt} poster</p></div></div>
   <div class="sec"><div class="sech"><h3>Backup</h3></div>
     <div class="card pad"><p style="font-size:13px;margin-bottom:12px">Hent en fil med alt dit indhold. Læg den i iCloud, så kan du altid gendanne.</p>
