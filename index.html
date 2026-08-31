@@ -423,6 +423,79 @@ const EXAM={n:'1. semesterprøve',f:'Skriftlig aflevering med mundtlig eksamen �
      ['2026-12-14','','Udlevering af eksamensopgave',0],
      ['2026-12-15','','Mundtlig prøve · 15.–16. december',0]]};
 const DL='2026-12-07',START='2026-08-24',LAST='2026-11-27';
+/* ═══ FLOWPLAN — Moodle: "Overblik over semestret" ═══
+   Dato · Fag · Tid (F=09:00-12:30, E=12:30-16:00) · Indhold · Hvem
+   Planen er foreløbig ifølge Cphbusiness. Eksamensdatoer og OLA-oplæg ligger fast.
+   Kun 1. semester E26 — Dataanalyse. */
+const PLANRAW=[
+['09-07','Intro til data kildeforståelse','F','Oplæg OLA','Baum/Wulf'],
+['09-08','Statistik og ML','E','Multipel lineær regression','Baum'],
+['09-10','Statistik og ML','E','API DST','Wulf'],
+['09-11','Statistik og ML','F','Multipel lineær regression','Baum'],
+['09-14','Statistik og ML','F','API Eurostat','Wulf'],
+['09-15','Statistik og ML','E','Multipel lineær regression','Baum'],
+['09-17','Statistik og ML','E','Multipel lineær regression','Baum'],
+['09-18','ML og algoritmer','F','Logistisk regression','Baum'],
+['09-21','ML og algoritmer','F','Logistisk regression','Baum/Wulf'],
+['09-22','Statistik og ML','E','Logistisk regression','Baum'],
+['09-24','Datakildeforståelse','E','','Wulf'],
+['09-25','ML og algoritmer','F','Logistisk regression','Baum'],
+['09-28','ML og algoritmer','F','Validering af ML modeller','Wulf'],
+['09-29','ML og algoritmer','E','Validering af ML modeller','Wulf'],
+['10-01','ML og algoritmer','E','Arbejde med OLA','Wulf'],
+['10-02','Datakildeforståelse','F','','Wulf'],
+['10-05','ML og algoritmer','F','Oplæg OLA','Baum/Wulf'],
+['10-06','ML og algoritmer','E','Økonomiske indikatorer','Baum'],
+['10-08','ML og algoritmer','E','Simple lineær regression og loops','Baum'],
+['10-09','Data i forretningskontekst','F','Arbejde med OLA','Baum'],
+['10-12','Data i forretningskontekst','F','Kombinationsalgoritmen','Baum'],
+['10-13','Data i forretningskontekst','E','PCA, PLS','Baum'],
+['10-15','Data i forretningskontekst','E','PCA, PLS','Baum'],
+['10-16','Data i forretningskontekst','F','Præsentation Nationalbanken, Arbejde med OLA','Baum'],
+['10-19','','F','',''],
+['10-20','Computer Science','E','API\'er','Wulf'],
+['10-22','Datakildeforståelse','E','','Wulf'],
+['10-23','Data i forretningskontekst','F','Arbejde med OLA','Baum'],
+['10-26','','','Arbejd selv',''],
+['10-27','Data i forretningskontekst','E','Oplæg OLA','Baum/Wulf'],
+['10-29','Computer Science','E','Opstart Flow 3','Baum/Wulf'],
+['10-30','Fri','F','','Baum/Wulf'],
+['11-02','Intro til dataforespørgsler','F','Mongo, Webscraping og R','Wulf'],
+['11-03','Computer Science','E','Webscraping: Case EDC, Bilbasen og Børsen','Wulf'],
+['11-05','Computer Science','E','ML på data EDC og Bilbasen','Wulf'],
+['11-06','Statistik og ML','F','ML på data EDC og Bilbasen og oplæg','Baum'],
+['11-09','Webscraping','F','MySQL og R','Baum'],
+['11-10','Webscraping','E','MySQL: Case Northwind','Wulf'],
+['11-12','ML og algoritmer','E','MySQL: Case Northwind','Wulf'],
+['11-13','Webscraping','F','Webscraping: Case EDC, Bilbasen og Børsen','Wulf'],
+['11-16','Computer Science','F','SQL','Wulf'],
+['11-17','Computer Science','E','SQL','Wulf'],
+['11-19','ML og algoritmer','E','Cummulative link models og eksternt oplæg','Baum'],
+['11-20','ML og algoritmer','F','Cummulative link models og eksternt oplæg','Baum'],
+['11-23','Computer Science','F','Cloud computing','Wulf'],
+['11-24','Computer Science','E','AWS - server og services','Wulf'],
+['11-25','Computer Science','F','Case: MySQL på AWS',''],
+['11-26','Spørgetime OLAer','E','','Baum/Wulf'],
+['11-27','Spørgetime OLAer','F','','Baum/Wulf'],
+['11-30','IOT','F','Internet of Things','Wulf'],
+['12-01','IOT','E','Case: Afstands-sensor','Wulf'],
+['12-02','','F','',''],
+['12-03','','E','','Baum/Wulf'],
+['12-04','','F','','Baum/Wulf'],
+['12-07','','F','Oplæg OLA','Baum/Wulf'],
+['12-08','Spørgetime','E','','Baum/Wulf'],
+['12-09','Spørgetime','F','','Baum/Wulf'],
+['12-14','Udlevering af opgave','','',''],
+['12-15','Eksamen','','','Baum/Wulf'],
+['12-16','Eksamen','','','Baum/Wulf']];
+const PLAN={};PLANRAW.forEach(r=>{PLAN['2026-'+r[0]]={fag:r[1],tid:r[2],ind:r[3],who:r[4]}});
+const PL=ds=>PLAN[ds]||{};
+
+/* ═══ MOODLE — Dataanalyse 1. semester E26 ═══ */
+const MOODLE={
+  home:'https://cphbusiness.mrooms.net/course/view.php?id=17822',
+  hold:'Dataanalyse 1. semester E26 · EK Firskovvej'};
+
 const DRIVE_DEF='https://drive.google.com/drive/folders/16C6MqBW8WPv1fzcYq-l8dEWkY80Hi9_v';
 const GDRIVE_DEF='https://drive.google.com/drive/folders/1mQMS803OrUGcnCdsnnHppv_6c7xCYcT0';
 const DN=['søn','man','tir','ons','tor','fre','lør'],DF=['Søndag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag'];
@@ -445,7 +518,7 @@ const rel=n=>n===0?'i dag':n===1?'i morgen':n===-1?'i går':n<0?Math.abs(n)+' da
 
 const K='studieboard:v3';
 let S={lessons:{},tasks:[],reading:[],files:[],inbox:[],pins:[],rep:[],drive:'',gdrive:'',
-  grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}};
+  ghUser:'',rproj:[],rsShort:'',grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}};
 let MODE='none',DIRTY=0;
 const drive=()=>(S.drive||DRIVE_DEF).trim();
 const gdrive=()=>(S.gdrive||GDRIVE_DEF).trim();
@@ -454,6 +527,13 @@ const DEV=(()=>{try{return navigator.userAgent.includes('Mac')?'Mac':'PC'}catch(
 
 /* ═══ GITHUB-SYNK — tokenet gemmes KUN lokalt i browseren, aldrig i repoet ═══ */
 const GK='studieboard:github';
+/* ═══ UDVIKLINGSTILSTAND ═══
+   Kører boardet fra file:// eller localhost, LÆSER det fra GitHub men SKRIVER aldrig.
+   Så kan koden udvikles videre uden at data.json i studieboard-data kan overskrives.
+   På Vercel er flaget falsk, og alt fungerer som før. */
+/* Live = https på et rigtigt domæne (Vercel). Alt andet — file://, localhost, data:, http —
+   regnes som udvikling, så en tilfældig lokal kopi aldrig kan skrive til repoet. */
+const SAFE=(()=>{try{return !(location.protocol==='https:'&&!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname))}catch(e){return true}})();
 let GHSHA=null,GHERR='';
 const ghCfg=()=>{try{return JSON.parse(localStorage.getItem(GK)||'null')}catch(e){return null}};
 const ghSave=c=>{c?localStorage.setItem(GK,JSON.stringify(c)):localStorage.removeItem(GK)};
@@ -472,6 +552,7 @@ async function ghPull(){
   const j=await r.json();GHSHA=j.sha;return{sha:j.sha,text:unb64(j.content||'')};
 }
 async function ghPush(text){
+  if(SAFE)return;                       /* udviklingstilstand — repoet røres ikke */
   const c=ghCfg();if(!c)throw new Error('ikke forbundet');
   const mk=sha=>{const b={message:'Studieboard '+new Date().toLocaleString('da-DK'),content:b64(text),branch:c.branch||'main'};
     if(sha)b.sha=sha;return b};
@@ -492,7 +573,7 @@ async function ghPush(text){
 
 const Disk={
   async get(){
-    if(ghCfg()){MODE='github';GHERR='';
+    if(ghCfg()){MODE=SAFE?'ghsafe':'github';GHERR='';
       try{const r=await ghPull();if(r&&r.text)return r.text}
       catch(e){GHERR=e.message;MODE='gherr'}
       try{return localStorage.getItem(K)}catch(e){return null}}
@@ -500,7 +581,7 @@ const Disk={
     try{const v=localStorage.getItem(K);MODE='local';return v}catch(e){MODE='none';return null}},
   async set(v){
     if(ghCfg()){try{localStorage.setItem(K,v)}catch(e){}
-      await ghPush(v);MODE='github';GHERR='';return}
+      await ghPush(v);MODE=SAFE?'ghsafe':'github';GHERR='';return}
     if(window.storage)return window.storage.set(K,v);
     if(MODE==='local')return localStorage.setItem(K,v);throw new Error('x')}};
 async function load(){const r=await Disk.get();
@@ -509,7 +590,7 @@ let sv;
 function save(now){DIRTY=1;clearTimeout(sv);
   const go=async()=>{S.meta={...S.meta,at:Date.now(),dev:DEV};
     try{await Disk.set(JSON.stringify(S));DIRTY=0;
-      toast('Gemt '+new Date().toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'}))}
+      toast((SAFE&&ghCfg()?'Gemt lokalt · ':'Gemt ')+new Date().toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'}))}
     catch(e){toast('Kunne ikke gemme',1)}syncBadge()};
   now?go():sv=setTimeout(go,600)}
 function set(fn,now){fn();save(now);draw()}
@@ -519,6 +600,7 @@ function driveBadge(){const d=$('#drv');if(!d)return;
     <span>Materialemappe</span><span class="ar">↗</span></a>`:'';}
 function syncBadge(){const a=$('#sy'),b=$('#syn');if(!a)return;
   const m={github:['','Synk til GitHub','Samme data på alle dine computere.'],
+    ghsafe:['w','Udvikling · skriver ikke','Læser fra GitHub. Ændringer gemmes kun i denne browser.'],
     gherr:['b','Synk fejlede',''+GHERR],
     cloud:['','Gemmer på din konto','Følger dig mellem begge computere.'],
     local:['w','Kun denne '+DEV,'Lav backup under Arkiv for at flytte data.'],
@@ -540,7 +622,15 @@ const L=id=>S.lessons[id]||{};
 const hasN=l=>{const x=L(l.id);return!!((x.note&&x.note.trim())||(x.key&&x.key.trim()))};
 const hasF=l=>S.files.some(f=>f.lesson===l.id);
 const hasH=l=>{const x=L(l.id);return!!(x.hw&&x.hw.trim()&&!x.hwDone)};
-const emneOf=l=>(L(l.id).emne||'').trim();
+const fagOf=ds=>{const f=(PL(ds).fag||'').trim();return /^fri$/i.test(f)?'':f};
+const emneOf=l=>((L(l.id).emne||'').trim()||fagOf(l.date));
+/* Standardnavn til materiale — indeholder emne, indhold og dato, så to filer aldrig hedder det samme */
+const fileDef=l=>[emneOf(l)||'Lektion '+l.no,indOf(l),fD(l.date)].filter(Boolean).join(' · ');
+const uniqName=(n,id)=>{let x=n,i=2;
+  while(S.files.some(f=>f.lesson===id&&f.name===x))x=n+' ('+(i++)+')';return x};
+const emneEgen=l=>(L(l.id).emne||'').trim();        /* kun det du selv har skrevet */
+const indOf=l=>(PL(l.date).ind||'').trim();
+const whoOf=l=>(PL(l.date).who||'').trim();
 function nextL(){const t=LESSONS.find(l=>l.date===TS);if(t)return{l:t,now:1};
   const n=LESSONS.find(l=>l.date>TS);return n?{l:n,now:0}:null}
 const openT=()=>S.tasks.filter(t=>!t.done);
@@ -569,9 +659,9 @@ const hl=(s,q)=>{if(!q)return E(s);
   return E(s.slice(0,i))+'<mark>'+E(s.slice(i,i+q.length))+'</mark>'+E(s.slice(i+q.length))};
 
 /* ═══ NAV ═══ */
-let tab='forside',wko=0,openL=null,tf='alle',nf='alle',q='';
-const TABS=[['forside','Forside','◈'],['idag','I dag','◉'],['noter','Noter','✎'],
-  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],['skema','Skema','▤'],['pensum','Pensum','▧'],
+let tab='forside',wko=0,openL=null,tf='alle',nf='alle',q='',wall=0;
+const TABS=[['forside','Forside','◈'],['idag','I dag','◉'],['moodle','Moodle','▦'],['noter','Noter','✎'],
+  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],['rstudio','RStudio','◧'],['pensum','Pensum','▧'],
   ['eksamen','Eksamen','◆'],['arkiv','Arkiv','⬒']];
 function nav(){
   const od=allDue().filter(t=>dd(t.due)<=7&&dd(t.due)>=0).length;
@@ -615,11 +705,13 @@ function vForside(){
     cells.push(`<div class="ds ${ds===TS?'now':''} ${!ls&&!so&&!dq.length&&!mq.length?'free':''}">
       <div class="dn"><span>${DN[d.getDay()]}</span><span>${d.getDate()}/${d.getMonth()+1}</span></div>
       ${ls?`<div class="dt">${ls.start}</div><div class="dr">${E(ls.room)}</div>
-        ${emneOf(ls)?`<div class="de">${E(emneOf(ls))}</div>`:''}`
+        ${emneOf(ls)?`<div class="de">${E(emneOf(ls))}</div>`:''}
+        ${indOf(ls)?`<div class="de" style="margin-top:4px">${E(indOf(ls))}</div>`:''}`
         :`<div class="dz">${so?E(so.title):'fri'}</div>`}
       ${pills?`<div class="de" style="margin-top:9px;display:flex;flex-wrap:wrap;gap:5px">${pills}</div>`:''}
     </div>`)}
   const due=allDue().slice(0,4);
+  const up=[...LESSONS,...SOCIAL].filter(e=>e.date>=TS).sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));
 
   return`<div class="top">
     <div class="big"><div class="lbl">Aflevering 7. december</div>
@@ -651,9 +743,29 @@ function vForside(){
           <p>Her sætter du de beskeder der ikke må glemmes — lokaleskift, ændrede tider, noget underviseren sagde i forbifarten. Sæt en slutdato, så forsvinder de af sig selv.</p></div>`}
     </div></div>
 
-  <div class="sec"><div class="sech"><h3>Denne uge</h3><span class="sp"></span>
-    <button class="btn gh sm" data-t="skema">Hele skemaet</button></div>
+  <div class="sec"><div class="sech"><h3>Denne uge</h3></div>
     <div class="wkstrip">${cells.join('')}</div></div>
+
+  <div class="sec"><div class="sech"><h3>Resten af semestret</h3><span class="sp"></span>
+    <span class="ct">${up.length} lektioner tilbage · sidste dag 27. nov</span></div>
+    <div class="card">${up.slice(0,wall?999:12).map(e=>{const isL=e.kind==='lesson';
+      return`<button class="lrow ${e.date===TS?'today':''}" ${isL?`data-open="${e.id}"`:''}>
+        <span class="dt">${fL(e.date)}</span><span class="tw2">${e.start}–${e.end}</span>
+        <span class="nm">${isL?(emneOf(e)?E(emneOf(e)):'Lektion '+e.no)+(indOf(e)?' · '+E(indOf(e)):'')
+          :'<span style="font-style:italic">'+E(e.title)+'</span>'}</span>
+        <span class="rm"><span class="tag ${e.date===TS?'so':'sc'}">${E(e.room)}</span></span>
+        <span class="cv">${isL?'›':''}</span></button>`}).join('')}</div>
+    ${up.length>12?`<div style="margin-top:12px"><button class="btn gh sm" data-a="wall">${wall?'Vis kun de næste 12':'Vis alle '+up.length}</button></div>`:''}
+  </div>
+
+  <div class="sec"><div class="sech"><h3>Hele semestret</h3></div>
+    ${band()}
+    <div class="st" style="margin:12px 0 0">
+      <div><b>${LESSONS.length}</b><span>lektioner i alt</span></div>
+      <div><b>${LESSONS.length-held}</b><span>tilbage</span></div>
+      <div><b>Onsdag</b><span>altid fri</span></div>
+      <div><b>27/11</b><span>sidste dag</span></div>
+    </div></div>
 
   <div class="sec"><div class="sech"><h3>Næste deadlines</h3></div>
     <div class="card">${due.length?due.map(t=>{const k=dd(t.due);
@@ -678,9 +790,14 @@ function vIdag(){
       <span class="r"><span class="tag">${fL(l.date)}</span><span class="tag sc">${E(l.room)}</span></span></div>
     <div class="hero-b">
       <div class="hero-time">${l.start}–${l.end}<small>lektion ${l.no} af ${LESSONS.length}</small></div>
+      ${(fagOf(l.date)||indOf(l)||whoOf(l))?`<div class="mt" style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px">
+        ${fagOf(l.date)?`<span class="tag ac">${E(fagOf(l.date))}</span>`:''}
+        ${indOf(l)?`<span class="tag yl">${E(indOf(l))}</span>`:''}
+        ${whoOf(l)?`<span class="tag">${E(whoOf(l))}</span>`:''}
+        <span class="tag sc">fra flowplanen</span></div>`:''}
       <div style="margin-top:17px">
         <div class="fld"><label>Hvad handler timen om?<span class="h">bruges til at finde noterne igen</span></label>
-          <input class="emne" data-l="${l.id}" data-f="emne" value="${E(d.emne||'')}" placeholder="Fx Programmering, SQL joins, deskriptiv statistik"></div>
+          <input class="emne" data-l="${l.id}" data-f="emne" value="${E(d.emne||'')}" placeholder="${E(fagOf(l.date)||'Fx Programmering, SQL joins, deskriptiv statistik')}"></div>
         <div class="fld"><label>Noter<span class="h">gemmes automatisk</span></label>
           <textarea data-l="${l.id}" data-f="note" placeholder="Skriv løs — det behøver ikke være pænt">${E(d.note||'')}</textarea></div>
         <div class="fr2">
@@ -693,8 +810,11 @@ function vIdag(){
           <textarea class="sm" data-l="${l.id}" data-f="q" placeholder="Det du ikke fik spurgt om">${E(d.q||'')}</textarea></div>
         <div class="fld"><label>PowerPoint eller materiale
           ${drive()?`<span class="h"><a href="${E(drive())}" target="_blank" rel="noopener" style="color:var(--gnd);text-decoration:none;font-weight:600;font-size:12.5px">Åbn Drive-mappen ↗</a></span>`:''}</label>
-          <div style="display:flex;gap:8px"><input id="qf-u" placeholder="Sæt link ind fra Drive, iCloud eller Moodle">
-            <button class="btn" data-a="qfile" data-l="${l.id}">Gem</button></div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input id="qf-n" style="flex:1 1 200px" value="${E(fileDef(l))}" placeholder="Navn på filen">
+            <input id="qf-u" style="flex:1 1 240px" placeholder="Sæt link ind fra Drive, iCloud eller Moodle">
+            <button class="btn" data-a="qfile" data-l="${l.id}">Gem</button></div>
+          <p class="hint">Navnet er udfyldt med emne, indhold og dato — ret det til fx "Slides – logistisk regression" hvis du vil noget andet.</p></div>
         ${files(l.id)}
       </div></div></div>
 
@@ -742,7 +862,8 @@ function vNoter(){
         <span class="dt">${fL(l.date)}</span></div>
       ${r?`<div class="sn">…${hl(r.snip,q)}…</div>`:
         x.key&&x.key.trim()?`<div class="sn">${E(x.key)}</div>`:
-        x.note&&x.note.trim()?`<div class="sn">${E(x.note.slice(0,170))}</div>`:''}
+        x.note&&x.note.trim()?`<div class="sn">${E(x.note.slice(0,170))}</div>`:
+        indOf(l)?`<div class="sn">${E(indOf(l))}</div>`:''}
       <div class="r3"><span class="dots"><i class="${hasN(l)?'n':''}"></i><i class="${hasF(l)?'f':''}"></i><i class="${hasH(l)?'h':''}"></i></span>
         ${r?r.hits.map(h=>`<span class="tag yl">fundet i ${h}</span>`).join(''):''}
         ${hasH(l)?'<span class="tag yl">lektier mangler</span>':''}
@@ -800,24 +921,62 @@ function vOpgaver(){
     `<div class="emp"><div class="ei">✓</div><b>Ingenting her</b><p>${tf==='alle'?'Alt er lukket.':'Skift filter.'}</p></div>`}</div>`;
 }
 
-/* ═══ 5 · SKEMA ═══ */
-function vSkema(){
-  const up=[...LESSONS,...SOCIAL].filter(e=>e.date>=TS).sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));
-  const held=LESSONS.filter(l=>l.date<TS).length;
-  return band()+
-  `<div class="st" style="margin-top:18px">
-    <div><b>${LESSONS.length}</b><span>lektioner</span></div>
-    <div><b style="color:var(--gnd)">${LESSONS.length-held}</b><span>tilbage</span></div>
-    <div><b>Onsdag</b><span>altid fri</span></div>
-    <div><b>27/11</b><span>sidste dag</span></div>
-  </div>
-  <div class="sec"><div class="sech"><h3>Kommende</h3><span class="sp"></span><span class="ct">${up.length}</span></div>
-    <div class="card">${up.map(e=>{const l=e.kind==='lesson';
-      return`<button class="lrow ${e.date===TS?'today':''}" ${l?`data-open="${e.id}"`:''}>
-      <span class="dt">${fL(e.date)}</span><span class="tw2">${e.start}–${e.end}</span>
-      <span class="nm">${l?(emneOf(e)?E(emneOf(e)):'Lektion '+e.no):'<span style="color:var(--i3);font-style:italic">'+E(e.title)+'</span>'}</span>
-      <span class="rm">${E(e.room)}</span><span class="cv">${l?'›':''}</span></button>`}).join('')}</div></div>
-  <p class="hint">Alle tider er dansk tid. Skemaet er hele efterårssemestret fra TimeEdit. Ændrer skolen noget, indlæs en ny .ics under Arkiv.</p>`;
+/* ═══ RSTUDIO ═══
+   En browser kan ikke starte et Mac-program direkte. To veje virker:
+   1) Genveje (Shortcuts) registrerer shortcuts:// — ét klik, ingen Terminal.
+   2) Kommandoen kopieres, og du sætter den ind i Terminal.
+   Mappelinks (file://) virker når boardet kører lokalt; på Vercel blokerer Chrome dem. */
+const RS=()=>{S.rproj=S.rproj||[];return S.rproj};
+const rsName=()=>(S.rsShort||'Åbn R-projekt').trim();
+const rsUrl=path=>'shortcuts://run-shortcut?name='+encodeURIComponent(rsName())+
+  (path?'&input=text&text='+encodeURIComponent(path):'');
+
+function vRstudio(){
+  const list=RS();
+  const row=r=>`<div class="li"><div class="bd">
+    <div class="tt" style="font:700 19px var(--d);letter-spacing:-.01em">${E(r.name)}</div>
+    <div style="font:400 13.5px/1.5 ui-monospace,Menlo,monospace;margin-top:6px;word-break:break-all">${E(r.path)}</div>
+    <div class="mt">
+      <a class="tag ac" href="${E(rsUrl(r.path))}" style="text-decoration:none">åbn i RStudio</a>
+      <a class="tag sc" href="file://${encodeURI(r.path)}" target="_blank" rel="noopener" style="text-decoration:none">vis mappe</a>
+      <button class="tag" data-copy="${E(r.path)}">kopiér sti</button>
+      <button class="tag" data-copy='open -a RStudio "${E(r.path)}"'>kopiér terminal-kommando</button>
+      ${r.repo?`<a class="tag" href="${E(r.repo)}" target="_blank" rel="noopener" style="text-decoration:none">repo ↗</a>`:''}
+    </div></div><button class="x" data-del="rproj:${r.id}">×</button></div>`;
+
+  return`<div class="nt"><b>Åbn RStudio</b>
+    <p>Ét klik åbner programmet gennem Genveje. Virker det ikke, er genvejen ikke oprettet endnu — se opskriften nedenfor.</p>
+    <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap">
+      <a class="btn" href="${E(rsUrl(''))}" style="text-decoration:none">Åbn RStudio ↗</a>
+      <button class="btn gh" data-copy="open -a RStudio">Kopiér terminal-kommando</button>
+    </div></div>
+
+  <div class="sec"><div class="sech"><h3>Mine R-projekter</h3><span class="sp"></span><span class="ct">${list.length}</span></div>
+    <div class="card">
+      <div class="qa"><input class="g" id="rp-n" placeholder="Projektets navn, fx Multipel regression – OLA 1">
+        <input class="g" id="rp-p" placeholder="/Users/laurabotoft/R/ola1">
+        <input class="g" id="rp-r" placeholder="GitHub-link (valgfrit)">
+        <button class="btn" data-a="rproj">Tilføj</button></div>
+      ${list.length?list.map(row).join(''):
+        `<div class="emp"><b>Ingen projekter endnu</b>
+          <p>Læg én mappe pr. projekt på din Mac — fx <b>/Users/laurabotoft/R/ola1</b> — og skriv stien ind her. Så har du samme indgang til alle projekter hver gang, i stedet for at lede i Finder.</p></div>`}
+    </div>
+    <p class="hint">Find stien i Finder: højreklik på mappen → hold <kbd>alt</kbd> → "Kopiér … som stinavn". Sæt den ind i feltet.</p></div>
+
+  <div class="sec"><div class="sech"><h3>Sådan sætter du genvejen op</h3><span class="sp"></span>
+    <span class="ct">én gang, tager to minutter</span></div>
+    <div class="card pad">
+      <div class="f3" style="padding:0">
+        <div class="sl"><span class="n">1</span><span style="font:400 16px/1.45 var(--b)">Åbn <b>Genveje</b> på din Mac og lav en ny genvej.</span></div>
+        <div class="sl"><span class="n">2</span><span style="font:400 16px/1.45 var(--b)">Tilføj handlingen <b>Kør shell-script</b> og skriv:
+          <code style="display:block;margin-top:8px;background:var(--ap);border-radius:12px;padding:10px 14px;font:400 13.5px ui-monospace,Menlo,monospace">if [ -n "$1" ]; then open -a RStudio "$1"; else open -a RStudio; fi</code>
+          Sæt <b>Input</b> til "Genvejsinput" og send det videre som argumenter.</span></div>
+        <div class="sl"><span class="n">3</span><span style="font:400 16px/1.45 var(--b)">Kald genvejen <b>${E(rsName())}</b> og gem. Første gang du klikker, spørger Chrome om lov — sig ja.</span></div>
+      </div>
+      <div class="fld" style="margin:22px 0 0"><label>Har din genvej et andet navn?</label>
+        <div style="display:flex;gap:9px"><input id="rs-n" value="${E(S.rsShort||'')}" placeholder="Åbn R-projekt">
+          <button class="btn gh" data-a="rsShort">Gem</button></div></div>
+      <p class="hint">Vil du ikke bruge Genveje, virker "kopiér terminal-kommando" på hvert projekt i stedet — sæt den ind i Terminal og tryk retur.</p></div></div>`;
 }
 
 /* ═══ 6 · PENSUM ═══ */
@@ -916,6 +1075,26 @@ function vGruppe(){
         <button class="btn gh" data-a="gdrive">Gem</button></div></div></div></div>`;
 }
 
+/* ═══ MOODLE + FLOWPLAN ═══ */
+const WULF={navn:'Thorbjørn Wulf',user:'cphstud'};
+const ghu=()=>((S.ghUser||WULF.user).trim().replace(/^.*github\.com\//,'').replace(/\/.*$/,''));
+
+function vMoodle(){
+  return`<div class="nt"><b>${E(MOODLE.hold)}</b>
+    <p>Moodle er hovedmenuen i studiet — materiale, flowplaner og afleveringsfoldere. Boardet her holder dine egne noter og opgaver.</p>
+    <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+      <a class="btn" href="${E(MOODLE.home)}" target="_blank" rel="noopener" style="text-decoration:none">Åbn Moodle ↗</a>
+      <button class="btn gh" data-copy="${E(MOODLE.home)}">Kopiér link</button>
+    </div>
+    <p class="hint">Siger Moodle "Du skal angive kursus-id", har deres login smidt <code>?id=17822</code> væk. Kopiér linket og sæt det ind i adresselinjen — så virker det.</p></div>
+
+  <div class="nt"><b>${E(WULF.navn)}</b>
+    <p>Undervisernes kode ændres løbende, så boardet henter ikke noget ned. Linkene går direkte til GitHub, hvor du altid ser nyeste version.</p>
+    <div style="margin-top:18px">
+      <a class="btn" href="https://github.com/${E(ghu())}?tab=repositories&sort=updated" target="_blank" rel="noopener" style="text-decoration:none">github.com/${E(ghu())} ↗</a>
+    </div></div>`;
+}
+
 /* ═══ 7 · EKSAMEN ═══ */
 function vEksamen(){
   const n=dd(DL),gap=Math.round((P(DL)-P(LAST))/864e5);
@@ -957,13 +1136,14 @@ function vArkiv(){
     <span class="ct">${c?'forbundet':'ikke sat op'}</span></div>
     <div class="card pad">
       ${c?`<div style="display:flex;align-items:center;gap:11px;margin-bottom:14px">
-          <span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:${MODE==='gherr'?'var(--aps)':'var(--gn)'}"></span>
-          <b style="font:600 20px var(--d)">${MODE==='gherr'?'Synk fejlede':'Forbundet til '+E(c.owner)+'/'+E(c.repo)}</b></div>
+          <span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:${MODE==='gherr'?'var(--aps)':SAFE?'var(--ap)':'var(--gn)'}"></span>
+          <b style="font:600 20px var(--d)">${MODE==='gherr'?'Synk fejlede':SAFE?'Udviklingstilstand · læser fra '+E(c.owner)+'/'+E(c.repo):'Forbundet til '+E(c.owner)+'/'+E(c.repo)}</b></div>
         ${MODE==='gherr'?`<p style="font-size:15px;color:var(--aps);margin-bottom:14px">${E(GHERR)}</p>`:
+          SAFE?`<p style="font-size:15px;margin-bottom:14px">Du kører boardet lokalt. Dine rigtige noter hentes ned, så du kan udvikle på ægte data, men <b>der skrives aldrig til repoet herfra</b>. Ændringer du laver nu bliver kun i denne browser.</p>`:
           `<p style="font-size:15px;margin-bottom:14px">Alt hvad du skriver lægges op i dit private repo. Åbner du boardet på din anden computer, hentes det ned automatisk.</p>`}
         <div style="display:flex;gap:9px;flex-wrap:wrap">
           <button class="btn" data-a="ghPull">Hent nyeste nu</button>
-          <button class="btn gh" data-a="ghPush">Gem op nu</button>
+          ${SAFE?'':'<button class="btn gh" data-a="ghPush">Gem op nu</button>'}
           <button class="btn gh" data-a="ghOff">Afbryd på denne computer</button></div>
         ${localStorage.getItem(K+':konflikt')?`<p class="hint" style="color:var(--aps)">Der ligger en gemt kopi fra en sammenstød. Tryk <b>Hent kopi</b> hvis du mangler noget.
           <button class="btn gh sm" data-a="ghConf" style="margin-left:8px">Hent kopi</button></p>`:''}`
@@ -987,14 +1167,16 @@ function vArkiv(){
     <div class="card pad">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:${
-          MODE==='github'||MODE==='cloud'?'var(--gn)':MODE==='local'?'var(--ap)':'var(--aps)'}"></span>
+          MODE==='github'||MODE==='cloud'?'var(--gn)':MODE==='local'||MODE==='ghsafe'?'var(--ap)':'var(--aps)'}"></span>
         <b style="font:700 22px var(--d)">${
           MODE==='github'?'Gemmer i dit private repo':
+          MODE==='ghsafe'?'Udvikling · gemmer kun lokalt':
           MODE==='gherr'?'Synk fejlede':
           MODE==='cloud'?'Gemmer på din Claude-konto':
           MODE==='local'?'Gemmer kun i denne browser':'Gemmer ikke'}</b></div>
       <p>${
         MODE==='github'?'Hver ændring lægges op i studieboard-data med det samme, og hentes ned igen når du åbner boardet et andet sted. Din fulde historik ligger i repoet.'
+        :MODE==='ghsafe'?'Boardet kører fra din egen maskine, så det læser fra studieboard-data men skriver ikke tilbage. Dine live-noter kan altså ikke overskrives af det du laver her.'
         :MODE==='gherr'?E(GHERR)+' — boardet gemmer indtil videre kun her på maskinen.'
         :MODE==='cloud'?'Alt følger din konto. Åbner du boardet på din anden computer, er det samme data.'
         :MODE==='local'?'Boardet kører uden synk, så data bliver på denne computer. Sæt synk op ovenfor, eller brug backup.'
@@ -1036,9 +1218,11 @@ function panel(){
   const l=LESSONS.find(x=>x.id===openL);if(!l)return'';
   const d=L(l.id),n=dd(l.date);
   return`<div class="det" id="det"><div class="det-p">
-    <div class="det-h"><div class="r1"><h4>${E(d.emne||'Lektion '+l.no)}</h4><button class="cl" data-close="1">×</button></div>
+    <div class="det-h"><div class="r1"><h4>${E(emneOf(l)||'Lektion '+l.no)}</h4><button class="cl" data-close="1">×</button></div>
       <div class="r2"><span class="tag">${fF(l.date)}</span><span class="tag">${l.start}–${l.end}</span>
-        <span class="tag sc">${E(l.room)}</span><span class="tag ${n<0?'':'ac'}">${rel(n)}</span></div></div>
+        <span class="tag sc">${E(l.room)}</span><span class="tag ${n<0?'':'ac'}">${rel(n)}</span>
+        ${indOf(l)?`<span class="tag yl">${E(indOf(l))}</span>`:''}
+        ${whoOf(l)?`<span class="tag">${E(whoOf(l))}</span>`:''}</div></div>
     <div class="det-b">
       <div class="fld"><label>Emne<span class="h">gør noterne søgbare</span></label>
         <input class="emne" data-l="${l.id}" data-f="emne" value="${E(d.emne||'')}" placeholder="Fx Programmering, SQL joins"></div>
@@ -1053,7 +1237,7 @@ function panel(){
         <textarea class="sm" data-l="${l.id}" data-f="q" placeholder="Det du ikke fik spurgt om">${E(d.q||'')}</textarea></div>
       <div class="fld"><label>Materiale</label>
         <div style="display:flex;gap:8px;margin-bottom:9px">
-          <input id="pf-n" placeholder="Navn" style="flex:1">
+          <input id="pf-n" value="${E(fileDef(l))}" placeholder="Navn" style="flex:1">
           <input id="pf-u" placeholder="Link" style="flex:1.4">
           <button class="btn" data-a="pfile" data-l="${l.id}">Gem</button></div>
         ${files(l.id)||'<p class="hint">Læg PowerPointen i Drive eller iCloud og gem linket her.</p>'}</div>
@@ -1061,10 +1245,11 @@ function panel(){
 }
 
 /* ═══ RENDER ═══ */
-const V={forside:vForside,idag:vIdag,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,skema:vSkema,pensum:vPensum,eksamen:vEksamen,arkiv:vArkiv};
-const H={forside:['Forside',null],idag:['I dag',null],noter:['Noter','Søg på tværs af hele semestret'],
+const V={forside:vForside,idag:vIdag,moodle:vMoodle,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,rstudio:vRstudio,pensum:vPensum,eksamen:vEksamen,arkiv:vArkiv};
+const H={forside:['Forside',null],idag:['I dag',null],
+  moodle:['Moodle','Hovedmenu, flowplan og undervisernes kode'],noter:['Noter','Søg på tværs af hele semestret'],
   opgaver:['Opgaver','Alt du skal lave'],studiegruppe:['Studiegruppe','Aftaler, opgaver og mappe'],
-  skema:['Skema','Hele efterårssemestret'],
+  rstudio:['RStudio','Projekter og mapper på din Mac'],
   pensum:['Pensum','Hvad der skal læses'],eksamen:['Eksamen','1. semesterprøve'],arkiv:['Arkiv','Materiale, backup og skema']};
 function draw(){
   nav();const[t,s]=H[tab];let sub=s;
@@ -1114,6 +1299,12 @@ document.addEventListener('click',ev=>{
   if($('#cap')&&!ev.target.closest('.cap-b')){capX();return}
   if($('#det')&&ev.target.id==='det'){openL=null;draw();return}
   const b=ev.target.closest('button,a');if(!b)return;const D=b.dataset;
+  if(D.copy!==undefined){ev.preventDefault();
+    const t=D.copy;const ok=()=>toast('Kopieret: '+(t.length>40?t.slice(0,40)+'…':t));
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>toast('Kunne ikke kopiere',1));
+    else{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();
+      try{document.execCommand('copy');ok()}catch(e){toast('Kunne ikke kopiere',1)}x.remove()}
+    return}
   if(D.t){ev.preventDefault();tab=D.t;wko=0;openL=null;q='';draw();window.scrollTo(0,0);return}
   if(D.close){openL=null;draw();return}
   if(D.open){openL=D.open;draw();return}
@@ -1130,7 +1321,7 @@ document.addEventListener('click',ev=>{
   if(D.del){const[k,id]=D.del.split(':');
     if(k==='gm'||k==='gt'||k==='gp'){const F={gm:'meets',gt:'tasks',gp:'members'}[k];
       set(()=>{G()[F]=G()[F].filter(x=>x.id!==id)});return}
-    const M={task:'tasks',read:'reading',file:'files',inbox:'inbox',rep:'rep',pin:'pins'};
+    const M={task:'tasks',read:'reading',file:'files',inbox:'inbox',rep:'rep',pin:'pins',rproj:'rproj'};
     set(()=>{S[M[k]]=(S[M[k]]||[]).filter(x=>x.id!==id)});return}
   const a=D.a;if(!a)return;
   if(a==='clrq'){q='';draw();setTimeout(()=>{const e=$('#q');if(e)e.focus()},20)}
@@ -1142,10 +1333,11 @@ document.addEventListener('click',ev=>{
   if(a==='file'){const x=v('f-n');if(!x)return toast('Giv den et navn',1);
     set(()=>S.files.push({id:uid(),name:x,url:v('f-u'),lesson:v('f-l')}),1)}
   if(a==='qfile'){const u=v('qf-u');if(!u)return toast('Sæt et link ind',1);
-    const l=LESSONS.find(x=>x.id===D.l),e=emneOf(l);
-    set(()=>S.files.push({id:uid(),name:(e||'Lektion '+l.no)+' – materiale',url:u,lesson:D.l}),1);toast('Link gemt')}
+    const l=LESSONS.find(x=>x.id===D.l),nm=uniqName(v('qf-n')||fileDef(l),D.l);
+    set(()=>S.files.push({id:uid(),name:nm,url:u,lesson:D.l}),1);toast('Gemt som "'+nm+'"')}
   if(a==='pfile'){const u=v('pf-u');if(!u)return toast('Sæt et link ind',1);
-    set(()=>S.files.push({id:uid(),name:v('pf-n')||'Materiale',url:u,lesson:D.l}),1)}
+    const l=LESSONS.find(x=>x.id===D.l),nm=uniqName(v('pf-n')||fileDef(l),D.l);
+    set(()=>S.files.push({id:uid(),name:nm,url:u,lesson:D.l}),1);toast('Gemt som "'+nm+'"')}
   if(a==='capS'){const x=v('cap-i');if(!x)return capX();set(()=>S.inbox.push({id:uid(),t:x,at:TS}),1);capX();toast('Gemt')}
   if(a==='capT'){const x=v('cap-i');if(!x)return capX();
     set(()=>S.tasks.push({id:uid(),title:x,type:'Opgave',due:'',done:false}),1);capX();toast('Gemt som opgave')}
@@ -1159,12 +1351,13 @@ document.addEventListener('click',ev=>{
     (async()=>{try{const g=await ghPull();
       if(g&&g.text){const p=JSON.parse(g.text);
         if(confirm('Der ligger allerede data i repoet. Hent dem ind? (Annullér for at beholde det du har lokalt og lægge det op i stedet.)')){
-          S={...S,...p};MODE='github';GHERR='';draw();return toast('Hentet fra GitHub')}}
-      await ghPush(JSON.stringify(S));MODE='github';GHERR='';draw();toast('Forbundet og gemt')}
+          S={...S,...p};MODE=SAFE?'ghsafe':'github';GHERR='';draw();return toast('Hentet fra GitHub')}
+        ghSave(null);MODE='local';draw();return toast('Afbrudt — repoet er ikke rørt',1)}
+      await ghPush(JSON.stringify(S));MODE=SAFE?'ghsafe':'github';GHERR='';draw();toast('Forbundet og gemt')}
      catch(e){GHERR=e.message;MODE='gherr';draw();toast(e.message,1)}})()}
   if(a==='ghPull'){toast('Henter…');(async()=>{try{const g=await ghPull();
       if(!g||!g.text)return toast('Der ligger ingen data endnu',1);
-      S={...S,...JSON.parse(g.text)};DIRTY=0;MODE='github';GHERR='';draw();toast('Hentet nyeste')}
+      S={...S,...JSON.parse(g.text)};DIRTY=0;MODE=SAFE?'ghsafe':'github';GHERR='';draw();toast('Hentet nyeste')}
      catch(e){GHERR=e.message;MODE='gherr';draw();toast(e.message,1)}})()}
   if(a==='ghPush'){save(1)}
   if(a==='ghOff'){if(!confirm('Afbryd synk på denne computer? Dine data bliver i repoet, og boardet gemmer herefter kun lokalt.'))return;
@@ -1172,6 +1365,10 @@ document.addEventListener('click',ev=>{
   if(a==='ghConf'){const t=localStorage.getItem(K+':konflikt');if(!t)return;
     if(!confirm('Erstat det du har nu med den gemte kopi?'))return;
     try{S={...S,...JSON.parse(t)};localStorage.removeItem(K+':konflikt');save(1);toast('Kopi hentet ind')}catch(e){toast('Kopien kunne ikke læses',1)}}
+  if(a==='wall'){wall=wall?0:1;draw()}
+  if(a==='rproj'){const n=v('rp-n'),pa=v('rp-p');if(!n||!pa)return toast('Både navn og sti skal udfyldes',1);
+    set(()=>RS().push({id:uid(),name:n,path:pa.replace(/\/+$/,''),repo:v('rp-r')}),1);toast('Projekt gemt')}
+  if(a==='rsShort'){set(()=>{S.rsShort=v('rs-n')},1);toast('Gemt')}
   if(a==='pin'){const x=v('pn-t');if(!x)return toast('Skriv hvad du skal huske',1);
     set(()=>{S.pins=S.pins||[];S.pins.push({id:uid(),t:x,until:v('pn-u')})},1);toast('Fastgjort')}
   if(a==='gmeet'){const d=v('gm-d');if(!d)return toast('Vælg en dato',1);
@@ -1205,7 +1402,8 @@ document.addEventListener('keydown',e=>{
   const M={'cap-i':'capS','t-t':'task','t-d':'task','r-t':'read','r-d':'read','p-t':'rep',
     'f-n':'file','f-u':'file','pf-u':'pfile','pf-n':'pfile','qf-u':'qfile','dr-u':'drive',
     'pn-t':'pin','pn-u':'pin','gm-p':'gmeet','gm-n':'gmeet','gm-c':'gmeet','gt-t':'gtask','gt-w':'gtask','gt-d':'gtask',
-    'gp-n':'gmem','gp-c':'gmem','gd-u':'gdrive','gh-t':'ghOn','gh-r':'ghOn','gh-o':'ghOn'};
+    'gp-n':'gmem','gp-c':'gmem','gd-u':'gdrive','gh-t':'ghOn','gh-r':'ghOn','gh-o':'ghOn',
+    'rp-n':'rproj','rp-p':'rproj','rp-r':'rproj','rs-n':'rsShort'};
   if(M[id]){e.preventDefault();const b=document.querySelector(`[data-a="${M[id]}"]`);if(b)b.click()}
 });
 
