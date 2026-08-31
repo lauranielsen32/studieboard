@@ -684,25 +684,6 @@ function nav(){
     if(t[0]==='studiegruppe'&&gOpen().length)b=`<span class="bd">${gOpen().length}</span>`;
     return`<a href="#" data-t="${t[0]}" class="${tab===t[0]?'on':''}"><span class="ic">${t[2]}</span>${t[1]}${b}</a>`}).join('')}
 
-/* ═══ BÅND ═══ */
-function band(){
-  let c='',lab=[],lm=-1,cur=P(START),end=P('2026-12-16');
-  while(cur<=end){const ds=iso(cur),w=cur.getDay(),ev=on(ds),ls=ev.find(e=>e.kind==='lesson');
-    let k='',tip=fL(ds);
-    if(ls){k=ls.start==='09:00'?'am':'pm';tip+=` · ${ls.start}–${ls.end} · ${ls.room}`;const e=emneOf(ls);if(e)tip+=' · '+e}
-    else if(ev.length){k='so';tip+=' · '+ev[0].title}
-    else if(w===0||w===6){k='we';tip+=' · weekend'}else tip+=' · fri';
-    if(ds===DL){k='ex';tip=fL(ds)+' · AFLEVERING 12:00'}
-    if(ds==='2026-12-15'||ds==='2026-12-16'){k='ex';tip=fL(ds)+' · mundtlig'}
-    if(ds===TS)k+=' nw';
-    c+=`<i class="${k}" title="${E(tip)}"></i>`;
-    if(cur.getMonth()!==lm){lab.push(MO[cur.getMonth()]);lm=cur.getMonth()}
-    cur.setDate(cur.getDate()+1)}
-  return`<div class="card band"><div class="bandh"><h3>Hele semestret</h3><div class="lgd">
-    <span><i style="background:var(--gn)"></i>undervisning</span><span><i style="background:var(--pl3)"></i>socialt</span>
-    <span><i style="background:var(--or)"></i>eksamen</span></div></div>
-    <div class="strip">${c}</div><div class="mrow">${lab.map(m=>`<span style="flex:1">${m}</span>`).join('')}</div></div>`}
-
 /* ═══ 1 · FORSIDE ═══ */
 function vForside(){
   const n=dd(DL),nx=nextL();
@@ -777,8 +758,7 @@ function vForside(){
   </div>
 
   <div class="sec"><div class="sech"><h3>Hele semestret</h3></div>
-    ${band()}
-    <div class="st" style="margin:12px 0 0">
+    <div class="st" style="margin:0">
       <div><b>${LESSONS.length}</b><span>lektioner i alt</span></div>
       <div><b>${LESSONS.length-held}</b><span>tilbage</span></div>
       <div><b>Onsdag</b><span>altid fri</span></div>
