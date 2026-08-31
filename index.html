@@ -928,12 +928,15 @@ function vOpgaver(){
    Mappelinks (file://) virker når boardet kører lokalt; på Vercel blokerer Chrome dem. */
 const RS=()=>{S.rproj=S.rproj||[];return S.rproj};
 const rsName=()=>(S.rsShort||'Åbn R-projekt').trim();
+/* Stier sat ind fra Terminal kommer i anførselstegn, fra Finder nogle gange som file:// — ryd op */
+const cleanPath=p=>p.trim().replace(/^['"`]|['"`]$/g,'').replace(/^file:\/\//,'')
+  .replace(/\\ /g,' ').replace(/\/+$/,'').trim();
 const rsUrl=path=>'shortcuts://run-shortcut?name='+encodeURIComponent(rsName())+
   (path?'&input=text&text='+encodeURIComponent(path):'');
 
 function vRstudio(){
   const list=RS();
-  const row=r=>`<div class="li"><div class="bd">
+  const row=r0=>{const r={...r0,path:cleanPath(r0.path)};return`<div class="li"><div class="bd">
     <div class="tt" style="font:700 19px var(--d);letter-spacing:-.01em">${E(r.name)}</div>
     <div style="font:400 13.5px/1.5 ui-monospace,Menlo,monospace;margin-top:6px;word-break:break-all">${E(r.path)}</div>
     <div class="mt">
@@ -942,7 +945,7 @@ function vRstudio(){
       <button class="tag" data-copy="${E(r.path)}">kopiér sti</button>
       <button class="tag" data-copy='open -a RStudio "${E(r.path)}"'>kopiér terminal-kommando</button>
       ${r.repo?`<a class="tag" href="${E(r.repo)}" target="_blank" rel="noopener" style="text-decoration:none">repo ↗</a>`:''}
-    </div></div><button class="x" data-del="rproj:${r.id}">×</button></div>`;
+    </div></div><button class="x" data-del="rproj:${r.id}">×</button></div>`};
 
   return`<div class="nt"><b>Åbn RStudio</b>
     <p>Ét klik åbner programmet gennem Genveje. Virker det ikke, er genvejen ikke oprettet endnu — se opskriften nedenfor.</p>
@@ -1367,7 +1370,7 @@ document.addEventListener('click',ev=>{
     try{S={...S,...JSON.parse(t)};localStorage.removeItem(K+':konflikt');save(1);toast('Kopi hentet ind')}catch(e){toast('Kopien kunne ikke læses',1)}}
   if(a==='wall'){wall=wall?0:1;draw()}
   if(a==='rproj'){const n=v('rp-n'),pa=v('rp-p');if(!n||!pa)return toast('Både navn og sti skal udfyldes',1);
-    set(()=>RS().push({id:uid(),name:n,path:pa.replace(/\/+$/,''),repo:v('rp-r')}),1);toast('Projekt gemt')}
+    set(()=>RS().push({id:uid(),name:n,path:cleanPath(pa),repo:v('rp-r')}),1);toast('Projekt gemt')}
   if(a==='rsShort'){set(()=>{S.rsShort=v('rs-n')},1);toast('Gemt')}
   if(a==='pin'){const x=v('pn-t');if(!x)return toast('Skriv hvad du skal huske',1);
     set(()=>{S.pins=S.pins||[];S.pins.push({id:uid(),t:x,until:v('pn-u')})},1);toast('Fastgjort')}
