@@ -518,7 +518,7 @@ const rel=n=>n===0?'i dag':n===1?'i morgen':n===-1?'i går':n<0?Math.abs(n)+' da
 
 const K='studieboard:v3';
 let S={lessons:{},tasks:[],reading:[],files:[],inbox:[],pins:[],rep:[],drive:'',gdrive:'',
-  ghUser:'',rproj:[],rsShort:'',grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}};
+  ghUser:'',grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}};
 let MODE='none',DIRTY=0;
 const drive=()=>(S.drive||DRIVE_DEF).trim();
 const gdrive=()=>(S.gdrive||GDRIVE_DEF).trim();
@@ -661,7 +661,7 @@ const hl=(s,q)=>{if(!q)return E(s);
 /* ═══ NAV ═══ */
 let tab='forside',wko=0,openL=null,tf='alle',nf='alle',q='',wall=0;
 const TABS=[['forside','Forside','◈'],['idag','I dag','◉'],['moodle','Moodle','▦'],['noter','Noter','✎'],
-  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],['rstudio','RStudio','◧'],['pensum','Pensum','▧'],
+  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],
   ['eksamen','Eksamen','◆'],['arkiv','Arkiv','⬒']];
 function nav(){
   const od=allDue().filter(t=>dd(t.due)<=7&&dd(t.due)>=0).length;
@@ -713,7 +713,12 @@ function vForside(){
   const due=allDue().slice(0,4);
   const up=[...LESSONS,...SOCIAL].filter(e=>e.date>=TS).sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));
 
-  return`<div class="top">
+  return`<div class="drv" style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px">
+    <a href="${E(MOODLE.home)}" target="_blank" rel="noopener"><span>Åbn Moodle</span><span class="ar">↗</span></a>
+    <a href="https://github.com/${E(ghu())}?tab=repositories&sort=updated" target="_blank" rel="noopener"><span>github.com/${E(ghu())}</span><span class="ar">↗</span></a>
+  </div>
+
+  <div class="top">
     <div class="big"><div class="lbl">Aflevering 7. december</div>
       <div class="num">${n}</div><div class="capt">dage tilbage · ${LESSONS.length-held} lektioner endnu</div>
       <div class="bar"><i style="width:${Math.round(gone/total*100)}%"></i></div>
@@ -840,6 +845,7 @@ function vIdag(){
 }
 function files(id){const f=S.files.filter(x=>x.lesson===id);if(!f.length)return'';
   return`<div class="flist">${f.map(x=>`<div class="frow"><span class="fn">${E(x.name)}</span>
+    <button class="tag" data-ren="${x.id}">omdøb</button>
     ${x.url?`<a href="${E(x.url)}" target="_blank" rel="noopener">åbn ↗</a>`:''}
     <button class="x" data-del="file:${x.id}">×</button></div>`).join('')}</div>`}
 
@@ -920,88 +926,6 @@ function vOpgaver(){
       ${t.fixed?'':`<button class="x" data-del="task:${t.id}">×</button>`}</div>`}).join(''):
     `<div class="emp"><div class="ei">✓</div><b>Ingenting her</b><p>${tf==='alle'?'Alt er lukket.':'Skift filter.'}</p></div>`}</div>`;
 }
-
-/* ═══ RSTUDIO ═══
-   En browser kan ikke starte et Mac-program direkte. To veje virker:
-   1) Genveje (Shortcuts) registrerer shortcuts:// — ét klik, ingen Terminal.
-   2) Kommandoen kopieres, og du sætter den ind i Terminal.
-   Mappelinks (file://) virker når boardet kører lokalt; på Vercel blokerer Chrome dem. */
-const RS=()=>{S.rproj=S.rproj||[];return S.rproj};
-const rsName=()=>(S.rsShort||'Åbn R-projekt').trim();
-/* Stier sat ind fra Terminal kommer i anførselstegn, fra Finder nogle gange som file:// — ryd op */
-const cleanPath=p=>p.trim().replace(/^['"`]|['"`]$/g,'').replace(/^file:\/\//,'')
-  .replace(/\\ /g,' ').replace(/\/+$/,'').trim();
-const rsUrl=path=>'shortcuts://run-shortcut?name='+encodeURIComponent(rsName())+
-  (path?'&input=text&text='+encodeURIComponent(path):'');
-
-function vRstudio(){
-  const list=RS();
-  const row=r0=>{const r={...r0,path:cleanPath(r0.path)};return`<div class="li"><div class="bd">
-    <div class="tt" style="font:700 19px var(--d);letter-spacing:-.01em">${E(r.name)}</div>
-    <div style="font:400 13.5px/1.5 ui-monospace,Menlo,monospace;margin-top:6px;word-break:break-all">${E(r.path)}</div>
-    <div class="mt">
-      <a class="tag ac" href="${E(rsUrl(r.path))}" style="text-decoration:none">åbn i RStudio</a>
-      <a class="tag sc" href="file://${encodeURI(r.path)}" target="_blank" rel="noopener" style="text-decoration:none">vis mappe</a>
-      <button class="tag" data-copy="${E(r.path)}">kopiér sti</button>
-      <button class="tag" data-copy='open -a RStudio "${E(r.path)}"'>kopiér terminal-kommando</button>
-      ${r.repo?`<a class="tag" href="${E(r.repo)}" target="_blank" rel="noopener" style="text-decoration:none">repo ↗</a>`:''}
-    </div></div><button class="x" data-del="rproj:${r.id}">×</button></div>`};
-
-  return`<div class="nt"><b>Åbn RStudio</b>
-    <p>Ét klik åbner programmet gennem Genveje. Virker det ikke, er genvejen ikke oprettet endnu — se opskriften nedenfor.</p>
-    <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap">
-      <a class="btn" href="${E(rsUrl(''))}" style="text-decoration:none">Åbn RStudio ↗</a>
-      <button class="btn gh" data-copy="open -a RStudio">Kopiér terminal-kommando</button>
-    </div></div>
-
-  <div class="sec"><div class="sech"><h3>Mine R-projekter</h3><span class="sp"></span><span class="ct">${list.length}</span></div>
-    <div class="card">
-      <div class="qa"><input class="g" id="rp-n" placeholder="Projektets navn, fx Multipel regression – OLA 1">
-        <input class="g" id="rp-p" placeholder="/Users/laurabotoft/R/ola1">
-        <input class="g" id="rp-r" placeholder="GitHub-link (valgfrit)">
-        <button class="btn" data-a="rproj">Tilføj</button></div>
-      ${list.length?list.map(row).join(''):
-        `<div class="emp"><b>Ingen projekter endnu</b>
-          <p>Læg én mappe pr. projekt på din Mac — fx <b>/Users/laurabotoft/R/ola1</b> — og skriv stien ind her. Så har du samme indgang til alle projekter hver gang, i stedet for at lede i Finder.</p></div>`}
-    </div>
-    <p class="hint">Find stien i Finder: højreklik på mappen → hold <kbd>alt</kbd> → "Kopiér … som stinavn". Sæt den ind i feltet.</p></div>
-
-  <div class="sec"><div class="sech"><h3>Sådan sætter du genvejen op</h3><span class="sp"></span>
-    <span class="ct">én gang, tager to minutter</span></div>
-    <div class="card pad">
-      <div class="f3" style="padding:0">
-        <div class="sl"><span class="n">1</span><span style="font:400 16px/1.45 var(--b)">Åbn <b>Genveje</b> på din Mac og lav en ny genvej.</span></div>
-        <div class="sl"><span class="n">2</span><span style="font:400 16px/1.45 var(--b)">Tilføj handlingen <b>Kør shell-script</b> og skriv:
-          <code style="display:block;margin-top:8px;background:var(--ap);border-radius:12px;padding:10px 14px;font:400 13.5px ui-monospace,Menlo,monospace">if [ -n "$1" ]; then open -a RStudio "$1"; else open -a RStudio; fi</code>
-          Sæt <b>Input</b> til "Genvejsinput" og send det videre som argumenter.</span></div>
-        <div class="sl"><span class="n">3</span><span style="font:400 16px/1.45 var(--b)">Kald genvejen <b>${E(rsName())}</b> og gem. Første gang du klikker, spørger Chrome om lov — sig ja.</span></div>
-      </div>
-      <div class="fld" style="margin:22px 0 0"><label>Har din genvej et andet navn?</label>
-        <div style="display:flex;gap:9px"><input id="rs-n" value="${E(S.rsShort||'')}" placeholder="Åbn R-projekt">
-          <button class="btn gh" data-a="rsShort">Gem</button></div></div>
-      <p class="hint">Vil du ikke bruge Genveje, virker "kopiér terminal-kommando" på hvert projekt i stedet — sæt den ind i Terminal og tryk retur.</p></div></div>`;
-}
-
-/* ═══ 6 · PENSUM ═══ */
-function vPensum(){
-  const un=S.reading.filter(r=>!r.done),rd=S.reading.filter(r=>r.done);
-  const row=r=>`<div class="li ${r.done?'done':''}"><button class="chk ${r.done?'on':''}" data-togr="${r.id}">${r.done?'✓':''}</button>
-    <div class="bd"><div class="tt">${E(r.title)}</div><div class="mt">
-    ${r.pages?`<span class="tag">s. ${E(r.pages)}</span>`:''}${r.src?`<span class="tag">${E(r.src)}</span>`:''}
-    ${r.due?`<span class="tag ${dd(r.due)<0?'cr':dd(r.due)<=2?'yl':''}">til ${fD(r.due)}</span>`:''}</div></div>
-    <button class="x" data-del="read:${r.id}">×</button></div>`;
-  return`<div class="card" style="margin-bottom:18px"><div class="qa">
-    <input class="g" id="r-t" placeholder="Tekst, kapitel eller bog"><input class="s" id="r-p" placeholder="Sider">
-    <input class="s" id="r-s" placeholder="Kilde"><input class="s" id="r-d" type="date">
-    <button class="btn" data-a="read">Tilføj</button></div></div>
-  <div class="sec"><div class="sech"><h3>Skal læses</h3><span class="sp"></span><span class="ct">${un.length}</span></div>
-    <div class="card">${un.length?un.sort((a,b)=>(a.due||'9').localeCompare(b.due||'9')).map(row).join(''):
-    `<div class="emp"><div class="ei">▧</div><b>Intet pensum endnu</b>
-      <p>Litteraturlisten kommer typisk i den første uge. Læg teksterne ind, så kan du se hvad der mangler før eksamen.</p></div>`}</div></div>
-  ${rd.length?`<div class="sec"><div class="sech"><h3>Læst</h3><span class="sp"></span><span class="ct">${rd.length}</span></div>
-    <div class="card">${rd.map(row).join('')}</div></div>`:''}`;
-}
-
 
 /* ═══ STUDIEGRUPPE ═══ */
 function vGruppe(){
@@ -1200,7 +1124,8 @@ function vArkiv(){
       <button class="btn" data-a="file">Tilføj</button></div>
     ${S.files.length?`<div class="tw"><table><thead><tr><th>Navn</th><th>Lektion</th><th>Link</th><th></th></tr></thead><tbody>
       ${S.files.slice().reverse().map(f=>{const l=LESSONS.find(x=>x.id===f.lesson);
-      return`<tr><td>${E(f.name)}</td><td class="m">${l?(emneOf(l)||'L'+l.no)+' · '+fD(l.date):'—'}</td>
+      return`<tr><td>${E(f.name)} <button class="tag" data-ren="${f.id}" style="margin-left:6px">omdøb</button></td>
+      <td class="m">${l?(emneOf(l)||'L'+l.no)+' · '+fD(l.date):'—'}</td>
       <td>${f.url?`<a href="${E(f.url)}" target="_blank" rel="noopener" style="color:var(--gnd);font-weight:600;font-size:13px;text-decoration:none">åbn ↗</a>`:'<span class="m">—</span>'}</td>
       <td style="text-align:right"><button class="btn gh sm" data-del="file:${f.id}">Slet</button></td></tr>`}).join('')}
     </tbody></table></div>`:`<div class="emp"><div class="ei">⬒</div><b>Intet materiale endnu</b>
@@ -1248,12 +1173,11 @@ function panel(){
 }
 
 /* ═══ RENDER ═══ */
-const V={forside:vForside,idag:vIdag,moodle:vMoodle,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,rstudio:vRstudio,pensum:vPensum,eksamen:vEksamen,arkiv:vArkiv};
+const V={forside:vForside,idag:vIdag,moodle:vMoodle,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,eksamen:vEksamen,arkiv:vArkiv};
 const H={forside:['Forside',null],idag:['I dag',null],
   moodle:['Moodle','Hovedmenu, flowplan og undervisernes kode'],noter:['Noter','Søg på tværs af hele semestret'],
   opgaver:['Opgaver','Alt du skal lave'],studiegruppe:['Studiegruppe','Aftaler, opgaver og mappe'],
-  rstudio:['RStudio','Projekter og mapper på din Mac'],
-  pensum:['Pensum','Hvad der skal læses'],eksamen:['Eksamen','1. semesterprøve'],arkiv:['Arkiv','Materiale, backup og skema']};
+  eksamen:['Eksamen','1. semesterprøve'],arkiv:['Arkiv','Materiale, backup og skema']};
 function draw(){
   nav();const[t,s]=H[tab];let sub=s;
   if(tab==='forside')sub=fF(TS)+(TS<START?' · semestret starter '+rel(dd(START)):'');
@@ -1311,10 +1235,13 @@ document.addEventListener('click',ev=>{
   if(D.t){ev.preventDefault();tab=D.t;wko=0;openL=null;q='';draw();window.scrollTo(0,0);return}
   if(D.close){openL=null;draw();return}
   if(D.open){openL=D.open;draw();return}
+  if(D.ren){const f=S.files.find(x=>x.id===D.ren);if(!f)return;
+    const n=prompt('Nyt navn på materialet',f.name);
+    if(n===null||!n.trim()||n.trim()===f.name)return;
+    set(()=>{f.name=n.trim()},1);toast('Omdøbt');return}
   if(D.tf){tf=D.tf;draw();return}
   if(D.nf){nf=D.nf;q='';draw();return}
   if(D.tog){set(()=>{const t=S.tasks.find(x=>x.id===D.tog);if(t)t.done=!t.done});return}
-  if(D.togr){set(()=>{const r=S.reading.find(x=>x.id===D.togr);if(r)r.done=!r.done});return}
   if(D.togp){set(()=>{const r=S.rep.find(x=>x.id===D.togp);if(r)r.done=!r.done});return}
   if(D.togg){set(()=>{const t=G().tasks.find(x=>x.id===D.togg);if(t)t.done=!t.done});return}
   if(D.hwd){set(()=>{S.lessons[D.hwd]=S.lessons[D.hwd]||{};S.lessons[D.hwd].hwDone=!S.lessons[D.hwd].hwDone});return}
@@ -1324,14 +1251,12 @@ document.addEventListener('click',ev=>{
   if(D.del){const[k,id]=D.del.split(':');
     if(k==='gm'||k==='gt'||k==='gp'){const F={gm:'meets',gt:'tasks',gp:'members'}[k];
       set(()=>{G()[F]=G()[F].filter(x=>x.id!==id)});return}
-    const M={task:'tasks',read:'reading',file:'files',inbox:'inbox',rep:'rep',pin:'pins',rproj:'rproj'};
+    const M={task:'tasks',file:'files',inbox:'inbox',rep:'rep',pin:'pins'};
     set(()=>{S[M[k]]=(S[M[k]]||[]).filter(x=>x.id!==id)});return}
   const a=D.a;if(!a)return;
   if(a==='clrq'){q='';draw();setTimeout(()=>{const e=$('#q');if(e)e.focus()},20)}
   if(a==='task'){const x=v('t-t');if(!x)return toast('Skriv en opgave',1);
     set(()=>S.tasks.push({id:uid(),title:x,type:v('t-k')||'Opgave',due:v('t-d'),done:false}),1)}
-  if(a==='read'){const x=v('r-t');if(!x)return toast('Skriv en titel',1);
-    set(()=>S.reading.push({id:uid(),title:x,pages:v('r-p'),src:v('r-s'),due:v('r-d'),done:false}),1)}
   if(a==='rep'){const x=v('p-t');if(!x)return;set(()=>{S.rep=S.rep||[];S.rep.push({id:uid(),title:x,done:false})},1)}
   if(a==='file'){const x=v('f-n');if(!x)return toast('Giv den et navn',1);
     set(()=>S.files.push({id:uid(),name:x,url:v('f-u'),lesson:v('f-l')}),1)}
@@ -1369,9 +1294,6 @@ document.addEventListener('click',ev=>{
     if(!confirm('Erstat det du har nu med den gemte kopi?'))return;
     try{S={...S,...JSON.parse(t)};localStorage.removeItem(K+':konflikt');save(1);toast('Kopi hentet ind')}catch(e){toast('Kopien kunne ikke læses',1)}}
   if(a==='wall'){wall=wall?0:1;draw()}
-  if(a==='rproj'){const n=v('rp-n'),pa=v('rp-p');if(!n||!pa)return toast('Både navn og sti skal udfyldes',1);
-    set(()=>RS().push({id:uid(),name:n,path:cleanPath(pa),repo:v('rp-r')}),1);toast('Projekt gemt')}
-  if(a==='rsShort'){set(()=>{S.rsShort=v('rs-n')},1);toast('Gemt')}
   if(a==='pin'){const x=v('pn-t');if(!x)return toast('Skriv hvad du skal huske',1);
     set(()=>{S.pins=S.pins||[];S.pins.push({id:uid(),t:x,until:v('pn-u')})},1);toast('Fastgjort')}
   if(a==='gmeet'){const d=v('gm-d');if(!d)return toast('Vælg en dato',1);
@@ -1402,11 +1324,10 @@ document.addEventListener('keydown',e=>{
     setTimeout(()=>{const x=$('#q');if(x)x.focus()},40);return}
   if(e.key==='Escape'){if($('#cap'))return capX();if(q){q='';draw();return}if(openL){openL=null;draw()}return}
   if(e.key!=='Enter')return;const id=e.target.id;if(!id)return;
-  const M={'cap-i':'capS','t-t':'task','t-d':'task','r-t':'read','r-d':'read','p-t':'rep',
+  const M={'cap-i':'capS','t-t':'task','t-d':'task','p-t':'rep',
     'f-n':'file','f-u':'file','pf-u':'pfile','pf-n':'pfile','qf-u':'qfile','dr-u':'drive',
     'pn-t':'pin','pn-u':'pin','gm-p':'gmeet','gm-n':'gmeet','gm-c':'gmeet','gt-t':'gtask','gt-w':'gtask','gt-d':'gtask',
-    'gp-n':'gmem','gp-c':'gmem','gd-u':'gdrive','gh-t':'ghOn','gh-r':'ghOn','gh-o':'ghOn',
-    'rp-n':'rproj','rp-p':'rproj','rp-r':'rproj','rs-n':'rsShort'};
+    'gp-n':'gmem','gp-c':'gmem','gd-u':'gdrive','gh-t':'ghOn','gh-r':'ghOn','gh-o':'ghOn'};
   if(M[id]){e.preventDefault();const b=document.querySelector(`[data-a="${M[id]}"]`);if(b)b.click()}
 });
 
