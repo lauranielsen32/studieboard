@@ -48,14 +48,18 @@ mark{background:var(--ap);color:var(--bk);padding:1px 3px}
 .logo h1{font:700 23px/1.1 var(--d);letter-spacing:-.015em}
 .logo p{font:400 14px var(--b)}
 .logo .rt{margin-left:auto;display:flex;align-items:center;gap:10px}
-.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:14px 0 18px}
+.navw{padding:10px 0 20px}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;
+  background:var(--bl);border-radius:100px;padding:5px;width:fit-content;max-width:100%}
 .nav::-webkit-scrollbar{display:none}
-.nav a{padding:9px 18px;border-radius:100px;color:var(--bk);text-decoration:none;font:400 15px var(--b);
-  white-space:nowrap;flex:0 0 auto;transition:background .15s;display:flex;align-items:center;gap:9px;background:var(--bl)}
+.nav a{padding:9px 17px;border-radius:100px;color:var(--bk);text-decoration:none;font:400 15px var(--b);
+  white-space:nowrap;flex:0 0 auto;transition:background .15s,color .15s;
+  display:flex;align-items:center;gap:8px;background:none}
 .nav a:hover{background:var(--bls)}
+.nav a.on:hover{background:var(--bk)}
 .nav a.on{background:var(--bk);color:var(--wh);font-weight:500}
 .nav a .ic{display:none}
-.nav a .bd{font:500 12px var(--b);padding:0 8px;border-radius:100px;background:var(--wh);color:var(--bk);min-width:21px;text-align:center}
+.nav a .bd{font:500 12px var(--b);padding:1px 7px;border-radius:100px;background:var(--wh);color:var(--bk);min-width:20px;text-align:center}
 .nav a.on .bd{background:var(--wh);color:var(--bk)}
 .nav a .bd.hot{background:var(--ap);color:var(--bk)}
 .drv a{display:flex;align-items:center;gap:9px;padding:9px 16px;border-radius:100px;color:var(--bk);
@@ -346,8 +350,9 @@ textarea.raw{width:100%;background:var(--wh);border:0;border-radius:var(--rm);pa
   .logo h1{font-size:20px}
   .logo p{display:none}
   .sy{display:none}
-  .nav{padding:10px 0 12px}
-  .nav a{padding:8px 15px;font-size:14.5px}
+  .navw{padding:8px 0 14px}
+  .nav{padding:4px;border-radius:100px}
+  .nav a{padding:8px 14px;font-size:14.5px;gap:7px}
   .wrap{padding:8px 16px 130px}
   .ph h2{font-size:32px}
   .ph .sub{font-size:17px}
@@ -385,7 +390,7 @@ textarea.raw{width:100%;background:var(--wh);border:0;border-radius:var(--rm);pa
       <p>Dataanalyse · 1. semester</p>
       <div class="rt"><div class="drv" id="drv"></div><div class="sy" id="sy"></div></div>
     </div>
-    <nav class="nav" id="nav"></nav>
+    <div class="navw"><nav class="nav" id="nav"></nav></div>
   </div></header>
   <main><div class="wrap" id="main"></div></main>
 </div>
@@ -1186,6 +1191,7 @@ function draw(){
   const o=$('#det');if(o)o.remove();
   if(openL)document.body.insertAdjacentHTML('beforeend',panel());
   syncBadge();driveBadge();
+  const a=$('.nav a.on');if(a)a.scrollIntoView({inline:'center',block:'nearest'});
 }
 
 /* ═══ ICS ═══ */
