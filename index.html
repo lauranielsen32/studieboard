@@ -46,7 +46,46 @@ mark{background:var(--ap);color:var(--bk);padding:1px 3px}
 .qlink a .ar{font-size:15px}
 .qlink a.btn:hover{background:var(--gn);color:var(--bk)}
 .qlink a.btn.gh:hover{background:var(--gn);border-color:var(--gn)}
-@media(max-width:900px){.qlink a{flex:1 1 100%;justify-content:center;padding:15px 20px}}
+@media(max-width:900px){.qlink{gap:8px}.qlink a{flex:1 1 calc(50% - 4px);justify-content:center;padding:14px 12px;font-size:15px}}
+
+/* ══ FORSIDENS HOVEDKORT ══
+   Samme kort som før, nu i fuld bredde. Vandmærket sidder hvor det altid har siddet. */
+.big.solo{margin-bottom:14px;padding:36px 40px 74px}
+.big.solo .num{font-size:112px}
+/* vandmærket får sin egen plads under fremdriftsbjælken, så teksten kan læses */
+.big.solo::after{font-size:200px;right:-10px;bottom:-64px}
+@media(max-width:900px){
+  .big.solo{padding:28px 24px 50px}
+  .big.solo .num{font-size:78px}
+  .big.solo::after{font-size:120px;right:-6px;bottom:-38px}
+}
+
+/* ══ RESTEN AF SEMESTRET — én måned ad gangen ══ */
+.mtabs{display:flex;gap:2px;background:var(--bl);border-radius:100px;padding:4px;
+  width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none;margin-bottom:12px}
+.mtabs::-webkit-scrollbar{display:none}
+.mtabs button{border-radius:100px;padding:7px 15px;font:400 14.5px var(--b);white-space:nowrap;
+  flex:0 0 auto;display:flex;align-items:center;gap:7px;transition:background .15s}
+.mtabs button:hover{background:var(--bls)}
+.mtabs button.on{background:var(--bk);color:var(--wh);font-weight:500}
+.mtabs button.on:hover{background:var(--bk)}
+.mtabs .n{font-size:12.5px;background:var(--wh);color:var(--bk);border-radius:100px;padding:1px 7px;min-width:20px;text-align:center}
+.lrow .ld{flex:0 0 62px;display:flex;align-items:baseline;gap:7px}
+.lrow .ld b{font:700 22px/1 var(--d);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.lrow .ld span{font:400 13px var(--b)}
+.lrow .lt{flex:0 0 108px;font:500 14.5px var(--b);font-variant-numeric:tabular-nums}
+.lrow .lt span{font-weight:400}
+.lrow .lm{flex:1;min-width:0}
+.lrow .lm b{display:block;font:500 16px/1.3 var(--b)}
+.lrow .lm i{display:block;font:400 14px/1.3 var(--b);font-style:normal;margin-top:3px}
+.lrow .lr{flex:0 0 auto}
+.lrow.soc .lm b{font-style:italic;font-weight:400}
+@media(max-width:900px){
+  .lrow{flex-wrap:wrap;gap:6px 14px}
+  .lrow .ld,.lrow .lt{flex:0 0 auto}
+  .lrow .lm{flex:1 1 100%;order:5}
+  .lrow .lr{margin-left:auto}
+}
 
 /* ══ TOP ══ */
 .app{min-height:100vh}
@@ -111,6 +150,7 @@ main{max-width:1120px;margin:0 auto}
 .big .bar i{display:block;height:100%;background:var(--gns);border-radius:100px}
 .big .prog{display:flex;justify-content:space-between;font:400 14px var(--b);margin-top:11px;position:relative}
 
+
 .nxt{background:var(--bl);border-radius:var(--rl);padding:10px;display:flex;flex-direction:column}
 .nxt>*{padding-left:28px;padding-right:28px}
 .nxt .lbl{font:400 15px var(--b);padding-top:26px}
@@ -120,15 +160,24 @@ main{max-width:1120px;margin:0 auto}
 .nxt .go{margin-top:auto;padding-top:26px;padding-bottom:26px}
 
 .wkstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.ds{background:var(--wh);border-radius:var(--rm);padding:19px 20px;text-align:left;min-height:136px;
-  box-sizing:border-box;border:1px solid var(--bl)}
+.ds{background:var(--wh);border-radius:var(--rm);padding:18px 18px 20px;text-align:left;min-height:168px;
+  box-sizing:border-box;border:1px solid var(--bl);display:flex;flex-direction:column;
+  align-items:flex-start;transition:border-color .15s,background .15s;color:var(--bk)}
+button.ds:hover{border-color:var(--bk)}
+.ds .dn{font:500 13px var(--b);display:flex;justify-content:space-between;align-items:center;
+  gap:8px;width:100%}
+.ds .dn i{font:500 11.5px var(--b);font-style:normal;background:var(--gn);color:var(--bk);
+  border-radius:100px;padding:2px 9px;letter-spacing:.02em}
+.ds .dt{font:700 32px/1 var(--d);margin:15px 0 10px;letter-spacing:-.03em}
+.ds .dr{background:var(--bl);border-radius:100px;padding:3px 12px;font:400 13px var(--b)}
+.ds .de{font:500 14px/1.35 var(--b);margin-top:12px}
+.ds .di{font:400 13.5px/1.35 var(--b);margin-top:4px}
+.ds .dq{background:var(--aps);border-radius:100px;padding:3px 11px;font:400 12.5px var(--b);margin-top:10px}
+.ds .dz{font:400 16px var(--b);margin-top:16px}
 .ds.free{background:var(--bl);border-color:var(--bl)}
-.ds.now,.ds.now.free{background:var(--bk);color:var(--wh);border-color:var(--bk)}
-.ds .dn{font:400 13px var(--b);display:flex;justify-content:space-between}
-.ds .dt{font:700 30px/1 var(--d);margin:16px 0 6px;letter-spacing:-.03em}
-.ds .dr{font:400 14px var(--b)}
-.ds .de{font:400 14px/1.35 var(--b);margin-top:11px}
-.ds .dz{font:400 15px var(--b);margin-top:16px}
+.ds.free .dr{background:var(--wh)}
+.ds.now{background:var(--bk);color:var(--wh);border-color:var(--bk)}
+.ds.now .dr{background:var(--gn);color:var(--bk)}
 
 /* nummererede markører ① ② ③ */
 .f3{background:var(--wh);border-radius:var(--rm);padding:8px 28px}
@@ -296,10 +345,6 @@ main{max-width:1120px;margin:0 auto}
 .lrow:hover{background:var(--bl)}
 .lrow.past{background:var(--bl)}
 .lrow.today{background:var(--gn)}
-.lrow .dt{font:400 14.5px var(--b);flex:0 0 108px}
-.lrow .tw2{font:400 14.5px var(--b);flex:0 0 114px}
-.lrow .nm{flex:1;min-width:0;font:400 16px var(--b);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lrow .rm{font:400 14px var(--b);flex:0 0 auto}
 .lrow .cv{font-size:19px;flex:0 0 14px;text-align:right}
 
 .st{display:grid;grid-template-columns:repeat(auto-fit,minmax(116px,1fr));gap:12px;margin-bottom:30px}
@@ -383,9 +428,6 @@ textarea.raw{width:100%;background:var(--wh);border:0;border-radius:var(--rm);pa
   .det-p{width:100%}
   .det-h,.det-b{padding-left:20px;padding-right:20px}
   .det-h h4{font-size:28px}
-  .lrow{flex-wrap:wrap;gap:6px 16px}
-  .lrow .dt,.lrow .tw2{flex:0 0 auto}
-  .lrow .nm{flex:1 1 100%;order:5;white-space:normal}
   .x{visibility:visible}
   .fab{bottom:18px;right:18px;width:56px;height:56px;font-size:28px}
 }
@@ -404,39 +446,91 @@ textarea.raw{width:100%;background:var(--wh);border:0;border-radius:var(--rm);pa
   <main><div class="wrap" id="main"></div></main>
 </div>
 <small id="syn"></small>
-<button class="fab" id="fab" title="Hurtig note (⌘K)">+</button>
 <div class="toast" id="toast"></div>
 <script>
 
 /* ═══ SKEMA — TimeEdit ═══ */
-const RAW=[['08-24','09:00','12:30','FIR.307'],['08-25','12:30','16:00','FIR.310'],['08-26','09:00','12:30','FIR.310'],
-['08-27','09:00','12:30','FIR.310'],['08-28','09:00','12:30','FIR.310'],['08-31','09:00','12:30','FIR.307'],
-['09-01','12:30','15:55','FIR.307'],['09-03','12:30','16:00','FIR.307'],['09-04','09:00','12:30','FIR.307'],
-['09-07','09:00','12:30','FIR.307'],['09-08','12:30','16:00','FIR.307'],['09-10','12:30','16:00','FIR.304'],
-['09-11','09:00','12:25','FIR.307'],['09-14','09:00','12:30','FIR.307'],['09-15','12:30','16:00','FIR.307'],
-['09-17','12:30','16:00','FIR.304'],['09-18','09:00','12:30','FIR.307'],['09-21','09:00','12:30','FIR.307'],
-['09-22','12:30','16:00','FIR.307'],['09-24','12:30','16:00','FIR.304'],['09-25','09:00','12:30','FIR.307'],
-['09-28','09:00','12:30','FIR.307'],['09-29','12:30','16:00','FIR.307'],['10-01','12:30','16:00','FIR.304'],
-['10-02','09:00','12:30','FIR.307'],['10-05','09:00','12:30','FIR.307'],['10-08','12:30','16:00','FIR.304'],
-['10-09','09:00','12:30','FIR.307'],['10-12','09:00','12:30','FIR.307'],['10-13','12:30','16:00','FIR.307'],
-['10-15','12:30','16:00','FIR.304'],['10-16','09:00','12:30','FIR.307'],['10-19','09:00','12:30','FIR.304'],
-['10-20','12:30','16:00','FIR.307'],['10-22','12:30','16:00','FIR.304'],['10-23','09:00','12:30','FIR.307'],
-['10-26','09:00','12:30','FIR.307'],['10-27','12:30','16:00','FIR.307'],['10-29','09:00','12:30','Online'],
-['10-30','09:00','12:30','FIR.307'],['11-02','09:00','12:30','FIR.307'],['11-03','12:30','16:00','FIR.304'],
-['11-05','12:30','16:00','FIR.304'],['11-06','09:00','12:30','FIR.307'],['11-09','09:00','12:30','FIR.307'],
-['11-10','12:30','16:00','FIR.304'],['11-12','09:00','12:30','FIR.304'],['11-13','09:00','12:30','FIR.307'],
-['11-16','09:00','12:30','FIR.401+402'],['11-17','12:30','16:00','FIR.307'],['11-20','09:00','12:30','FIR.307'],
-['11-23','09:00','12:30','FIR.307'],['11-24','12:30','16:00','FIR.307'],['11-27','09:00','12:30','FIR.307']];
+/* Hentet fra TimeEdit 7. september 2026 · 62 lektioner, sidste dag 9. december */
+const RAW=[
+['08-24','09:00','12:30','FIR.307'],
+['08-25','12:30','16:00','FIR.308 + FIR.310'],
+['08-26','09:00','12:30','FIR.308 + FIR.310'],
+['08-27','09:00','12:30','FIR.310'],
+['08-28','09:00','12:30','FIR.310'],
+['08-31','09:00','12:30','FIR.307'],
+['09-01','12:30','16:00','FIR.307'],
+['09-02','12:30','16:00','FIR.307'],
+['09-03','12:30','16:00','FIR.307'],
+['09-04','09:00','12:30','FIR.307'],
+['09-08','12:30','16:00','FIR.307'],
+['09-09','12:30','16:00','FIR.310'],
+['09-10','09:00','12:30','FIR.401 + FIR.402'],
+['09-11','09:00','12:25','FIR.307'],
+['09-14','09:00','12:30','FIR.307'],
+['09-15','12:30','16:00','FIR.307'],
+['09-17','12:30','16:00','FIR.304'],
+['09-18','09:00','12:30','FIR.307'],
+['09-21','09:00','12:30','FIR.307'],
+['09-22','12:30','16:00','FIR.307'],
+['09-24','12:30','16:00','FIR.304'],
+['09-25','09:00','12:30','FIR.307'],
+['09-28','09:00','12:30','FIR.307'],
+['09-29','12:30','16:00','FIR.307'],
+['10-01','12:30','16:00','FIR.304'],
+['10-02','09:00','12:30','FIR.307'],
+['10-05','09:00','12:30','FIR.307'],
+['10-08','12:30','16:00','FIR.304'],
+['10-09','09:00','12:30','FIR.307'],
+['10-12','09:00','12:30','FIR.307'],
+['10-13','12:30','16:00','FIR.307'],
+['10-15','12:30','16:00','FIR.304'],
+['10-16','09:00','12:30','FIR.307'],
+['10-19','09:00','12:30','FIR.304'],
+['10-20','12:30','16:00','FIR.307'],
+['10-22','12:30','16:00','FIR.304'],
+['10-23','09:00','12:30','FIR.307'],
+['10-26','09:00','12:30','FIR.307'],
+['10-27','12:30','16:00','FIR.307'],
+['10-29','09:00','12:30','Online'],
+['10-30','09:00','12:30','FIR.307'],
+['11-02','09:00','12:30','FIR.307'],
+['11-03','12:30','16:00','FIR.304'],
+['11-05','12:30','16:00','FIR.304'],
+['11-06','09:00','12:30','FIR.307'],
+['11-09','09:00','12:30','FIR.307'],
+['11-10','12:30','16:00','FIR.304'],
+['11-12','09:00','12:30','FIR.304'],
+['11-13','09:00','12:30','FIR.307'],
+['11-16','09:00','12:30','FIR.401 + FIR.402'],
+['11-17','12:30','16:00','FIR.307'],
+['11-20','09:00','12:30','FIR.307'],
+['11-23','09:00','12:30','FIR.307'],
+['11-24','12:30','16:00','FIR.307'],
+['11-27','09:00','12:30','FIR.307'],
+['11-30','09:00','12:30','FIR.307'],
+['12-01','12:30','16:00','FIR.401 + FIR.402'],
+['12-03','12:30','16:00','FIR.304'],
+['12-04','09:00','12:30','FIR.401 + FIR.402'],
+['12-07','09:00','12:30','FIR.401 + FIR.402'],
+['12-08','12:30','16:00','FIR.304 + FIR.307'],
+['12-09','09:00','12:25','FIR.304 + FIR.307']];
 let LESSONS=RAW.map((r,i)=>({id:'L'+String(i+1).padStart(2,'0'),date:'2026-'+r[0],start:r[1],end:r[2],
   room:r[3],kind:'lesson',title:'Undervisning',teach:'Baum / Wulf',no:i+1}));
-let SOCIAL=[['08-27','14:00','18:00','Introcafé'],['10-01','14:00','18:00','BarFirs'],
- ['10-29','14:00','19:00','BarFirs'],['11-19','14:00','19:00','BarFirs']]
+let SOCIAL=[['08-27','14:00','18:00','Introcafé/studenterbar'],
+['10-01','14:00','18:00','BarFirs'],
+['10-29','14:00','19:00','BarFirs'],
+['11-19','14:00','19:00','BarFirs']]
  .map((s,i)=>({id:'S'+i,date:'2026-'+s[0],start:s[1],end:s[2],room:'FIR.Kantinen',kind:'social',title:s[3],teach:'Frivilligt'}));
+const BASE_L=LESSONS,BASE_S=SOCIAL;   /* det indbyggede skema, som der faldes tilbage på */
 const EXAM={n:'1. semesterprøve',f:'Skriftlig aflevering med mundtlig eksamen · 30 minutter',
   s:[['2026-12-07','12:00','Aflevering af skriftlig opgave',1],
      ['2026-12-14','','Udlevering af eksamensopgave',0],
      ['2026-12-15','','Mundtlig prøve · 15.–16. december',0]]};
-const DL='2026-12-07',START='2026-08-24',LAST='2026-11-27';
+const DL='2026-12-07',START='2026-08-24';
+const sidst=()=>LESSONS.length?LESSONS[LESSONS.length-1].date:START;
+/* Hvilken hverdag har færrest lektioner — den kalder vi fridagen */
+const fridag=()=>{const c=[0,0,0,0,0];LESSONS.forEach(l=>{const w=(P(l.date).getDay()+6)%7;if(w<5)c[w]++});
+  const m=Math.min(...c);return ['Mandag','Tirsdag','Onsdag','Torsdag','Fredag'][c.indexOf(m)]};
 /* ═══ FLOWPLAN — Moodle: "Overblik over semestret" ═══
    Dato · Fag · Tid (F=09:00-12:30, E=12:30-16:00) · Indhold · Hvem
    Planen er foreløbig ifølge Cphbusiness. Eksamensdatoer og OLA-oplæg ligger fast.
@@ -533,6 +627,7 @@ const lmDone=id=>!!(S.lm||{})[id];
 const lmTal=f=>{const a=lmAll(f);return{i:a.length,n:a.filter(x=>lmDone(x.id)).length}};
 const DN=['søn','man','tir','ons','tor','fre','lør'],DF=['Søndag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag'];
 const MO=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+const MOF=['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'];
 
 /* ═══ HELPERS ═══ */
 const $=s=>document.querySelector(s);
@@ -555,7 +650,6 @@ let S={lessons:{},tasks:[],reading:[],files:[],inbox:[],pins:[],rep:[],drive:'',
 let MODE='none',DIRTY=0;
 const drive=()=>(S.drive||DRIVE_DEF).trim();
 const gdrive=()=>(S.gdrive||GDRIVE_DEF).trim();
-const G=()=>{S.grp=S.grp||{};S.grp.meets=S.grp.meets||[];S.grp.tasks=S.grp.tasks||[];S.grp.members=S.grp.members||[];return S.grp};
 const DEV=(()=>{try{return navigator.userAgent.includes('Mac')?'Mac':'PC'}catch(e){return'?'}})();
 
 /* ═══ GITHUB-SYNK — tokenet gemmes KUN lokalt i browseren, aldrig i repoet ═══ */
@@ -642,6 +736,7 @@ function syncBadge(){const a=$('#sy'),b=$('#syn');if(!a)return;
   b.textContent=(S.meta&&S.meta.at?`Sidst gemt ${new Date(S.meta.at).toLocaleString('da-DK',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}. `:'')+m[2]}
 document.addEventListener('visibilitychange',async()=>{
   if(document.hidden||DIRTY)return;
+  if(Date.now()-TEAT>9e5)teSync();          /* 15 minutter */
   if(ghCfg()){try{const r=await ghPull();if(!r||!r.text)return;const p=JSON.parse(r.text);
     if(p.meta&&p.meta.at&&(!S.meta.at||p.meta.at>S.meta.at)){S={...S,...p};draw();toast('Hentet nyeste version')}}
     catch(e){GHERR=e.message;MODE='gherr';syncBadge()}return}
@@ -649,39 +744,89 @@ document.addEventListener('visibilitychange',async()=>{
   const r=await Disk.get();if(!r)return;
   try{const p=JSON.parse(r);if(p.meta&&p.meta.at&&(!S.meta.at||p.meta.at>S.meta.at)){S={...S,...p};draw();toast('Hentet nyeste version')}}catch(e){}});
 
+/* ═══ TIMEEDIT — hentes direkte i browseren ═══
+   Feedet sender access-control-allow-origin: *, så boardet må selv kalde det.
+   Skemaet tjekkes ved åbning og igen når du vender tilbage til fanen. */
+const TE_DEF='https://cloud.timeedit.net/dk_ek/web/student/ri66m46Z6YZZ3QQ7675X5g695n3Y0yu5j6ZQ6g1Q0Y91Q8Z001t6365n062ko1o6d0Z648C684jDl351721jE8Q372t0Q721234CF84D785A3736F2.ics';
+const teUrl=()=>(S.teUrl===undefined?TE_DEF:S.teUrl).trim().replace(/^webcal:\/\//,'https://');
+let TEAT=0,TEERR='',TEBUSY=0;
+
+/* ═══ ENGANGSMIGRERING ═══
+   Data gemt før 7. sep 2026 hang noterne på lektionsnumre (L01, L02 …) fra det
+   gamle 54-lektions-skema. Her flyttes de én gang for alle over på datoer. */
+const MIG=['08-24','08-25','08-26','08-27','08-28','08-31','09-01','09-03','09-04','09-07','09-08','09-10','09-11','09-14','09-15','09-17','09-18','09-21','09-22','09-24','09-25','09-28','09-29','10-01','10-02','10-05','10-08','10-09','10-12','10-13','10-15','10-16','10-19','10-20','10-22','10-23','10-26','10-27','10-29','10-30','11-02','11-03','11-05','11-06','11-09','11-10','11-12','11-13','11-16','11-17','11-20','11-23','11-24','11-27'];
+function migrer(){
+  if((S.schedVer||0)>=3)return false;
+  const kort={};
+  ((S.sched&&S.sched.lessons)||[]).forEach(l=>kort[l.id]=l.date);
+  MIG.forEach((d,i)=>{const id='L'+String(i+1).padStart(2,'0');if(!kort[id])kort[id]='2026-'+d});
+  let roert=false;
+  const noter={};
+  Object.keys(S.lessons||{}).forEach(k=>{
+    if(/^L\d+$/.test(k)){const d=kort[k];if(d){noter[d]={...(noter[d]||{}),...S.lessons[k]};roert=true}}
+    else noter[k]=S.lessons[k]});
+  const filer=(S.files||[]).map(f=>{
+    if(/^L\d+$/.test(f.lesson||'')){const d=kort[f.lesson];if(d){roert=true;return{...f,lesson:d}}}
+    return{...f}});
+  S.lessons=noter;S.files=filer;delete S.lost;S.schedVer=3;
+  return roert;
+}
+
+async function teSync(manuel){
+  const u=teUrl();
+  if(!u){if(manuel)toast('Der er ikke sat noget TimeEdit-link',1);return}
+  if(TEBUSY)return; TEBUSY=1;TEERR='';if(manuel){toast('Henter fra TimeEdit…');draw()}
+  try{
+    /* Ingen cache-buster i URL'en — TimeEdit dropper CORS-headeren hvis der er en query */
+    const r=await fetch(u,{cache:'no-store'});
+    if(!r.ok)throw new Error('TimeEdit svarede '+r.status);
+    const p=parseICS(await r.text());
+    if(!p.L.length)throw new Error('Fandt ingen lektioner i kalenderen');
+    TEAT=Date.now();
+    const fp=a=>JSON.stringify((a||[]).map(l=>[l.date,l.start,l.end,l.room]));
+    if(fp(p.L)===fp(LESSONS)&&fp(p.S)===fp(SOCIAL)){
+      if(manuel)toast('Skemaet er allerede opdateret');TEBUSY=0;draw();return}
+    set(()=>{S.sched={at:Date.now(),lessons:p.L,social:p.S}},1);
+    toast('Skemaet er opdateret · '+p.L.length+' lektioner');
+  }catch(e){TEERR=e.message;if(manuel)toast(e.message,1)}
+  TEBUSY=0;draw();
+}
+
 /* ═══ AFLEDT ═══ */
+/* Har du indlæst en .ics, ligger den i S.sched og bruges frem for den oprindelige import */
+function applySched(){const q=S.sched;
+  if(q&&Array.isArray(q.lessons)&&q.lessons.length){LESSONS=q.lessons;SOCIAL=Array.isArray(q.social)?q.social:[]}
+  else{LESSONS=BASE_L;SOCIAL=BASE_S}}
 const on=ds=>[...LESSONS,...SOCIAL].filter(e=>e.date===ds);
-const L=id=>S.lessons[id]||{};
-const hasN=l=>{const x=L(l.id);return!!((x.note&&x.note.trim())||(x.key&&x.key.trim()))};
-const hasF=l=>S.files.some(f=>f.lesson===l.id);
-const hasH=l=>{const x=L(l.id);return!!(x.hw&&x.hw.trim()&&!x.hwDone)};
+/* Noter og materiale hænger på DATOEN, ikke på lektionsnummeret.
+   Datoen er stabil: skolen kan indsætte og aflyse lektioner uden at noget flytter sig.
+   Der er præcis én lektion pr. dag i skemaet, så datoen er en unik nøgle. */
+const L=k=>S.lessons[typeof k==='string'?k:k&&k.date]||{};
+const hasD=l=>{const x=L(l.date);return!!(x.doc&&x.doc.trim())};
+const hasN=l=>{const x=L(l.date);return!!((x.doc&&x.doc.trim())||(x.emne&&x.emne.trim()))};
+const hasF=l=>S.files.some(f=>f.lesson===l.date);
+
 const fagOf=ds=>{const f=(PL(ds).fag||'').trim();return /^fri$/i.test(f)?'':f};
-const emneOf=l=>((L(l.id).emne||'').trim()||fagOf(l.date));
+const emneOf=l=>((L(l.date).emne||'').trim()||fagOf(l.date));
 /* Standardnavn til materiale — indeholder emne, indhold og dato, så to filer aldrig hedder det samme */
 const fileDef=l=>[emneOf(l)||'Lektion '+l.no,indOf(l),fD(l.date)].filter(Boolean).join(' · ');
 const uniqName=(n,id)=>{let x=n,i=2;
   while(S.files.some(f=>f.lesson===id&&f.name===x))x=n+' ('+(i++)+')';return x};
-const emneEgen=l=>(L(l.id).emne||'').trim();        /* kun det du selv har skrevet */
+const emneEgen=l=>(L(l.date).emne||'').trim();        /* kun det du selv har skrevet */
 const indOf=l=>(PL(l.date).ind||'').trim();
 const whoOf=l=>(PL(l.date).who||'').trim();
 function nextL(){const t=LESSONS.find(l=>l.date===TS);if(t)return{l:t,now:1};
   const n=LESSONS.find(l=>l.date>TS);return n?{l:n,now:0}:null}
 const openT=()=>S.tasks.filter(t=>!t.done);
 function examT(){return EXAM.s.filter(s=>s[3]).map(s=>({id:'X'+s[0],title:'Eksamen – aflevering',type:'Aflevering',due:s[0],fixed:1,done:0}))}
-const gOpen=()=>G().tasks.filter(t=>!t.done);
-const meetsOn=ds=>G().meets.filter(m=>m.date===ds);
-const nextMeet=()=>G().meets.filter(m=>m.date>=TS).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''))[0];
-const livePins=()=>(S.pins||[]).filter(p=>!p.until||p.until>=TS);
-const allDue=()=>[...openT().filter(t=>t.due),
-  ...gOpen().filter(t=>t.due).map(t=>({id:t.id,title:t.text,type:'Studiegruppe',due:t.due,grp:1})),
-  ...examT()].sort((a,b)=>a.due.localeCompare(b.due));
+const allDue=()=>[...openT().filter(t=>t.due),...examT()].sort((a,b)=>a.due.localeCompare(b.due));
 function emneList(){const m={};LESSONS.forEach(l=>{const e=emneOf(l);if(e)m[e]=(m[e]||0)+1});
   return Object.entries(m).map(([e,n])=>({e,n})).sort((a,b)=>b.n-a.n||a.e.localeCompare(b.e))}
 function searchAll(q){
   if(!q||q.length<2)return null;const t=q.toLowerCase();
-  return LESSONS.map(l=>{const x=L(l.id);
-    const fields=[['emne',x.emne],['noter',x.note],['huske',x.key],['lektier',x.hw],['spørgsmål',x.q],
-      ['materiale',S.files.filter(f=>f.lesson===l.id).map(f=>f.name).join(' ')]];
+  return LESSONS.map(l=>{const x=L(l.date);
+    const fields=[['emne',x.emne],['dokument',x.doc],['noter',x.note],['huske',x.key],['lektier',x.hw],['spørgsmål',x.q],
+      ['materiale',S.files.filter(f=>f.lesson===l.date).map(f=>f.name).join(' ')]];
     const hits=fields.filter(f=>f[1]&&String(f[1]).toLowerCase().includes(t));
     if(!hits.length)return null;
     const src=hits[0][1],i=String(src).toLowerCase().indexOf(t);
@@ -692,16 +837,13 @@ const hl=(s,q)=>{if(!q)return E(s);
   return E(s.slice(0,i))+'<mark>'+E(s.slice(i,i+q.length))+'</mark>'+E(s.slice(i+q.length))};
 
 /* ═══ NAV ═══ */
-let tab='forside',wko=0,openL=null,tf='alle',nf='alle',q='',wall=0;
-const TABS=[['forside','Forside','◈'],['idag','I dag','◉'],['moodle','Moodle','▦'],['noter','Noter','✎'],
-  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],['laering','Læringsmål','◇'],
+let tab='forside',wko=0,openL=null,nf='alle',q='',mtab=TS.slice(0,7);
+const TABS=[['forside','Forside','◈'],['idag','I dag','◉'],['noter','Noter','✎'],
+  ['laering','Læringsmål','◇'],
   ['eksamen','Eksamen','◆'],['arkiv','Arkiv','⬒']];
 function nav(){
   const od=allDue().filter(t=>dd(t.due)<=7&&dd(t.due)>=0).length;
   $('#nav').innerHTML=TABS.map(t=>{let b='';
-    if(t[0]==='opgaver'){const n=openT().length;if(od)b=`<span class="bd hot">${od}</span>`;else if(n)b=`<span class="bd">${n}</span>`}
-    if(t[0]==='idag'&&S.inbox.length)b=`<span class="bd">${S.inbox.length}</span>`;
-    if(t[0]==='studiegruppe'&&gOpen().length)b=`<span class="bd">${gOpen().length}</span>`;
     return`<a href="#" data-t="${t[0]}" class="${tab===t[0]?'on':''}"><span class="ic">${t[2]}</span>${t[1]}${b}</a>`}).join('')}
 
 /* ═══ 1 · FORSIDE ═══ */
@@ -713,85 +855,56 @@ function vForside(){
   const m=mon(0),cells=[];
   for(let i=0;i<5;i++){const d=new Date(m);d.setDate(d.getDate()+i);const ds=iso(d);
     const ev=on(ds),ls=ev.find(e=>e.kind==='lesson'),so=ev.find(e=>e.kind==='social');
-    const dq=allDue().filter(t=>t.due===ds),mq=meetsOn(ds);
-    const pills=[...mq.map(m=>`<span class="tag">${m.time?E(m.time)+' ':''}studiegruppe</span>`),
-                 ...dq.map(x=>`<span class="tag cr">${E(x.title)}</span>`)].join('');
-    cells.push(`<div class="ds ${ds===TS?'now':''} ${!ls&&!so&&!dq.length&&!mq.length?'free':''}">
-      <div class="dn"><span>${DN[d.getDay()]}</span><span>${d.getDate()}/${d.getMonth()+1}</span></div>
-      ${ls?`<div class="dt">${ls.start}</div><div class="dr">${E(ls.room)}</div>
+    const dq=allDue().filter(t=>t.due===ds),nu=ds===TS;
+    const top=`<div class="dn"><span>${DF[d.getDay()]}</span>${nu?'<i>i dag</i>':`<span>${d.getDate()}/${d.getMonth()+1}</span>`}</div>`;
+    const mrk=dq.map(x=>`<span class="dq">${E(x.title)}</span>`).join('');
+    cells.push(ls
+      ?`<button class="ds ${nu?'now':''}" data-open="${ls.date}">${top}
+        <div class="dt">${ls.start}</div><span class="dr">${E(ls.room)}</span>
         ${emneOf(ls)?`<div class="de">${E(emneOf(ls))}</div>`:''}
-        ${indOf(ls)?`<div class="de" style="margin-top:4px">${E(indOf(ls))}</div>`:''}`
-        :`<div class="dz">${so?E(so.title):'fri'}</div>`}
-      ${pills?`<div class="de" style="margin-top:9px;display:flex;flex-wrap:wrap;gap:5px">${pills}</div>`:''}
-    </div>`)}
-  const due=allDue().slice(0,4);
+        ${indOf(ls)?`<div class="di">${E(indOf(ls))}</div>`:''}${mrk}</button>`
+      :`<div class="ds free ${nu?'now':''}">${top}
+        <div class="dz">${so?E(so.title):'fri'}</div>
+        ${so?`<span class="dr">${E(so.room)}</span>`:''}${mrk}</div>`)}
   const up=[...LESSONS,...SOCIAL].filter(e=>e.date>=TS).sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));
 
   return`<div class="qlink">
     <a class="btn" href="${E(MOODLE.home)}" target="_blank" rel="noopener">Åbn Moodle <span class="ar">↗</span></a>
     <a class="btn gh" href="https://github.com/${E(ghu())}?tab=repositories&sort=updated" target="_blank" rel="noopener">Wulfs GitHub <span class="ar">↗</span></a>
+    <a class="btn gh" href="${E(gdrive())}" target="_blank" rel="noopener">Gruppens mappe <span class="ar">↗</span></a>
+    <a class="btn gh" href="${E(drive())}" target="_blank" rel="noopener">Min mappe <span class="ar">↗</span></a>
   </div>
 
-  <div class="top">
-    <div class="big"><div class="lbl">Aflevering 7. december</div>
-      <div class="num">${n}</div><div class="capt">dage tilbage · ${LESSONS.length-held} lektioner endnu</div>
-      <div class="bar"><i style="width:${Math.round(gone/total*100)}%"></i></div>
-      <div class="prog"><span>24. aug</span><span>${Math.round(gone/total*100)}%</span><span>7. dec</span></div></div>
-    ${nx?`<div class="nxt"><div class="lbl">${nx.now?'Undervisning i dag':'Næste lektion'}</div>
-      <div class="tm">${nx.l.start}–${nx.l.end}</div>
-      ${emneOf(nx.l)?`<div class="em">${E(emneOf(nx.l))}</div>`:''}
-      <div class="mt">${nx.now?E(nx.l.room):fF(nx.l.date)+' · '+E(nx.l.room)}</div>
-      <div class="go"><button class="btn ${nx.now?'':'gh'}" data-t="idag">${nx.now?'Skriv noter':'Forbered'}</button></div></div>`
-     :`<div class="nxt"><div class="lbl">Undervisning slut</div><div class="tm">—</div>
-      <div class="mt">Sidste lektion var 27. november</div>
-      <div class="go"><button class="btn" data-t="eksamen">Til eksamen</button></div></div>`}
+  <div class="big solo"><div class="lbl">Aflevering 7. december</div>
+    <div class="num">${n}</div>
+    <div class="capt">dage tilbage · ${LESSONS.length-held} af ${LESSONS.length} lektioner endnu</div>
+    <div class="bar"><i style="width:${Math.round(gone/total*100)}%"></i></div>
+    <div class="prog"><span>24. aug</span><span>${Math.round(gone/total*100)}% gennemført</span><span>7. dec</span></div>
   </div>
-
-  <div class="sec"><div class="sech"><h3>Husk</h3><span class="sp"></span>
-    <span class="ct">${livePins().length?livePins().length+' fastgjort':'ingenting fastgjort'}</span></div>
-    <div class="card">
-      <div class="qa"><input class="g" id="pn-t" placeholder="Fx: næste mandag er vi i FIR.401 i stedet for 307">
-        <input class="s" id="pn-u" type="date" title="Vises til og med denne dato">
-        <button class="btn" data-a="pin">Fastgør</button></div>
-      ${(S.pins||[]).length?(S.pins||[]).slice().reverse().map(p=>{
-        const ex=p.until&&p.until<TS,n=p.until?dd(p.until):null;
-        return `<div class="li ${ex?'done':''}"><div class="bd"><div class="tt">${E(p.t)}</div>
-        <div class="mt">${p.until?`<span class="tag ${ex?'':n<=2?'cr':'yl'}">${ex?'udløbet '+fD(p.until):'til og med '+fD(p.until)}</span>`:'<span class="tag">indtil du fjerner den</span>'}</div></div>
-        <button class="x" data-del="pin:${p.id}">×</button></div>`}).join(''):
-        `<div class="emp"><b>Ingenting fastgjort</b>
-          <p>Her sætter du de beskeder der ikke må glemmes — lokaleskift, ændrede tider, noget underviseren sagde i forbifarten. Sæt en slutdato, så forsvinder de af sig selv.</p></div>`}
-    </div></div>
 
   <div class="sec"><div class="sech"><h3>Denne uge</h3></div>
     <div class="wkstrip">${cells.join('')}</div></div>
 
   <div class="sec"><div class="sech"><h3>Resten af semestret</h3><span class="sp"></span>
-    <span class="ct">${up.length} lektioner tilbage · sidste dag 27. nov</span></div>
-    <div class="card">${up.slice(0,wall?999:12).map(e=>{const isL=e.kind==='lesson';
-      return`<button class="lrow ${e.date===TS?'today':''}" ${isL?`data-open="${e.id}"`:''}>
-        <span class="dt">${fL(e.date)}</span><span class="tw2">${e.start}–${e.end}</span>
-        <span class="nm">${isL?(emneOf(e)?E(emneOf(e)):'Lektion '+e.no)+(indOf(e)?' · '+E(indOf(e)):'')
-          :'<span style="font-style:italic">'+E(e.title)+'</span>'}</span>
-        <span class="rm"><span class="tag ${e.date===TS?'so':'sc'}">${E(e.room)}</span></span>
-        <span class="cv">${isL?'›':''}</span></button>`}).join('')}</div>
-    ${up.length>12?`<div style="margin-top:12px"><button class="btn gh sm" data-a="wall">${wall?'Vis kun de næste 12':'Vis alle '+up.length}</button></div>`:''}
+    <span class="ct">${up.length} tilbage · slut ${fD(sidst())}</span></div>
+    ${(()=>{
+      const mnd=[];up.forEach(e=>{const m=e.date.slice(0,7);if(!mnd.some(x=>x.m===m))mnd.push({m,r:[]});
+        mnd.find(x=>x.m===m).r.push(e)});
+      if(!mnd.length)return `<div class="card"><div class="emp"><b>Ikke mere undervisning</b><p>Semestret er slut. Alt ligger under Noter.</p></div></div>`;
+      const valgt=mnd.some(x=>x.m===mtab)?mtab:mnd[0].m;
+      const g=mnd.find(x=>x.m===valgt);
+      return`<div class="mtabs">${mnd.map(x=>`<button data-mt="${x.m}" class="${x.m===valgt?'on':''}">
+          ${MOF[+x.m.slice(5,7)-1]}<span class="n">${x.r.filter(y=>y.kind==='lesson').length}</span></button>`).join('')}</div>
+        <div class="card">${g.r.map(e=>{const isL=e.kind==='lesson',d=P(e.date);
+          return`<button class="lrow ${e.date===TS?'today':''} ${isL?'':'soc'}" ${isL?`data-open="${e.date}"`:''}>
+            <span class="ld"><b>${d.getDate()}</b><span>${DN[d.getDay()]}</span></span>
+            <span class="lt">${e.start}<span>–${e.end}</span></span>
+            <span class="lm">${isL?`<b>${emneOf(e)?E(emneOf(e)):'Lektion '+e.no}</b>${indOf(e)?`<i>${E(indOf(e))}</i>`:''}`
+              :`<b>${E(e.title)}</b><i>frivilligt</i>`}</span>
+            <span class="lr"><span class="tag ${e.date===TS?'so':'sc'}">${E(e.room)}</span></span>
+            <span class="cv">${isL?'›':''}</span></button>`}).join('')}</div>`})()}
   </div>
 
-  <div class="sec"><div class="sech"><h3>Hele semestret</h3></div>
-    <div class="st" style="margin:0">
-      <div><b>${LESSONS.length}</b><span>lektioner i alt</span></div>
-      <div><b>${LESSONS.length-held}</b><span>tilbage</span></div>
-      <div><b>Onsdag</b><span>altid fri</span></div>
-      <div><b>27/11</b><span>sidste dag</span></div>
-    </div></div>
-
-  <div class="sec"><div class="sech"><h3>Næste deadlines</h3></div>
-    <div class="card">${due.length?due.map(t=>{const k=dd(t.due);
-      return`<div class="li">${t.fixed?'<span class="tag cr" style="margin-top:1px">fast</span>':`<button class="chk" data-tog="${t.id}"></button>`}
-        <div class="bd"><div class="tt">${E(t.title)}</div><div class="mt">
-        <span class="tag ${k<=3?'cr':k<=10?'yl':''}">${fD(t.due)} · ${rel(k)}</span>
-        ${t.type?`<span class="tag">${E(t.type)}</span>`:''}</div></div></div>`}).join(''):
-      `<div class="emp"><b>Kun eksamen står i kalenderen</b><p>Afleveringsfrister fra Moodle lægger du ind under Opgaver.</p></div>`}</div></div>
 `;
 }
 
@@ -799,9 +912,8 @@ function vForside(){
 function vIdag(){
   const nx=nextL();
   if(!nx)return`<div class="card"><div class="emp"><div class="ei">◉</div><b>Undervisningen er slut</b>
-    <p>Sidste lektion var 27. november. Alt ligger under Noter.</p></div></div>`;
-  const l=nx.l,d=L(l.id),soc=on(TS).filter(e=>e.kind==='social');
-  const hw=LESSONS.filter(x=>x.date<TS&&L(x.id).hw&&!L(x.id).hwDone).slice(-4);
+    <p>Sidste lektion var ${fF(sidst())}. Alt ligger under Noter.</p></div></div>`;
+  const l=nx.l,d=L(l.date),soc=on(TS).filter(e=>e.kind==='social');
 
   return`<div class="hero ${nx.now?'':'no'}">
     <div class="hero-t"><span class="w">${nx.now?'Lektion i dag':'Næste lektion · '+rel(dd(l.date))}</span>
@@ -814,26 +926,20 @@ function vIdag(){
         ${whoOf(l)?`<span class="tag">${E(whoOf(l))}</span>`:''}
         <span class="tag sc">fra flowplanen</span></div>`:''}
       <div style="margin-top:17px">
-        <div class="fld"><label>Hvad handler timen om?<span class="h">bruges til at finde noterne igen</span></label>
-          <input class="emne" data-l="${l.id}" data-f="emne" value="${E(d.emne||'')}" placeholder="${E(fagOf(l.date)||'Fx Programmering, SQL joins, deskriptiv statistik')}"></div>
-        <div class="fld"><label>Noter<span class="h">gemmes automatisk</span></label>
-          <textarea data-l="${l.id}" data-f="note" placeholder="Skriv løs — det behøver ikke være pænt">${E(d.note||'')}</textarea></div>
-        <div class="fr2">
-          <div class="fld"><label>Det vigtigste at huske</label>
-            <textarea class="sm" data-l="${l.id}" data-f="key" placeholder="1–3 linjer til eksamen">${E(d.key||'')}</textarea></div>
-          <div class="fld"><label>Lektier til næste gang</label>
-            <textarea class="sm" data-l="${l.id}" data-f="hw" placeholder="Hvad skal laves inden næste lektion?">${E(d.hw||'')}</textarea></div>
-        </div>
-        <div class="fld"><label>Spørgsmål jeg skal have svar på</label>
-          <textarea class="sm" data-l="${l.id}" data-f="q" placeholder="Det du ikke fik spurgt om">${E(d.q||'')}</textarea></div>
+        <div class="fld"><label>Hvad handler timen om?<span class="h">bruges til at finde dagen igen</span></label>
+          <input class="emne" data-l="${l.date}" data-f="emne" value="${E(d.emne||'')}" placeholder="${E(fagOf(l.date)||'Fx Programmering, SQL joins, deskriptiv statistik')}"></div>
+
+        <div class="fld"><label>Dine noter
+          ${d.doc?`<span class="h"><a href="${E(d.doc)}" target="_blank" rel="noopener" style="color:var(--gnd);text-decoration:none;font-weight:600">Åbn dokument ↗</a></span>`:'<span class="h">Google Docs, Word eller hvad du bruger</span>'}</label>
+          <input data-l="${l.date}" data-f="doc" value="${E(d.doc||'')}" placeholder="Sæt linket til dagens dokument ind"></div>
+
         <div class="fld"><label>PowerPoint eller materiale
-          ${drive()?`<span class="h"><a href="${E(drive())}" target="_blank" rel="noopener" style="color:var(--gnd);text-decoration:none;font-weight:600;font-size:12.5px">Åbn Drive-mappen ↗</a></span>`:''}</label>
+          ${drive()?`<span class="h"><a href="${E(drive())}" target="_blank" rel="noopener" style="color:var(--gnd);text-decoration:none;font-weight:600">Åbn Drive-mappen ↗</a></span>`:''}</label>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <input id="qf-n" style="flex:1 1 200px" value="${E(fileDef(l))}" placeholder="Navn på filen">
             <input id="qf-u" style="flex:1 1 240px" placeholder="Sæt link ind fra Drive, iCloud eller Moodle">
-            <button class="btn" data-a="qfile" data-l="${l.id}">Gem</button></div>
-          <p class="hint">Navnet er udfyldt med emne, indhold og dato — ret det til fx "Slides – logistisk regression" hvis du vil noget andet.</p></div>
-        ${files(l.id)}
+            <button class="btn" data-a="qfile" data-l="${l.date}">Gem</button></div></div>
+        ${files(l.date)}
       </div></div></div>
 
   ${soc.length?`<div class="sec" style="margin-top:22px"><div class="sech"><h3>Også i dag</h3></div>
@@ -841,22 +947,9 @@ function vIdag(){
       <div class="bd"><div class="tt">${E(s.title)}</div><div class="mt"><span class="tag">${E(s.room)}</span>
       <span class="tag">frivilligt</span></div></div></div>`).join('')}</div></div>`:''}
 
-  ${hw.length?`<div class="sec" style="margin-top:22px"><div class="sech"><h3>Lektier der mangler</h3></div>
-    <div class="card">${hw.map(x=>`<div class="li"><button class="chk" data-hwd="${x.id}"></button>
-      <div class="bd"><div class="tt">${E(L(x.id).hw)}</div><div class="mt">
-      <span class="tag">${emneOf(x)||fD(x.date)}</span>
-      <button class="btn gh sm" data-open="${x.id}">Åbn</button></div></div></div>`).join('')}</div></div>`:''}
-
-  <div class="sec" style="margin-top:22px"><div class="sech"><h3>Ufordelt</h3><span class="sp"></span>
-    <span class="ct">${S.inbox.length}</span></div>
-    ${S.inbox.length?`<div class="card">${S.inbox.slice().reverse().map(i=>`<div class="li">
-      <div class="bd"><div class="tt">${E(i.t)}</div><div class="mt"><span class="tag">${fD(i.at)}</span></div></div>
-      <button class="btn gh sm" data-mv="${i.id}">Gør til opgave</button>
-      <button class="x" data-del="inbox:${i.id}">×</button></div>`).join('')}</div>`:
-      `<div class="card"><div class="emp"><div class="ei">✓</div><b>Ingenting hænger i luften</b>
-      <p><kbd>⌘</kbd><kbd>K</kbd> eller plusset nederst når noget skal huskes midt i en time.</p></div></div>`}</div>`;
+`;
 }
-function files(id){const f=S.files.filter(x=>x.lesson===id);if(!f.length)return'';
+function files(k){const f=S.files.filter(x=>x.lesson===k);if(!f.length)return'';
   return`<div class="flist">${f.map(x=>`<div class="frow"><span class="fn">${E(x.name)}</span>
     <button class="tag" data-ren="${x.id}">omdøb</button>
     ${x.url?`<a href="${E(x.url)}" target="_blank" rel="noopener">åbn ↗</a>`:''}
@@ -869,171 +962,46 @@ function vNoter(){
   let list;
   if(res)list=res.map(r=>r.l);
   else if(nf==='alle')list=written;
-  else if(nf==='tomme')list=LESSONS.filter(l=>l.date<TS&&!hasN(l));
+  else if(nf==='tomme')list=LESSONS.filter(l=>l.date<TS&&!hasD(l));
   else if(nf==='materiale')list=LESSONS.filter(hasF);
   else list=LESSONS.filter(l=>emneOf(l)===nf);
   list=list.slice().sort((a,b)=>b.date.localeCompare(a.date));
 
-  const row=l=>{const x=L(l.id),r=res&&res.find(z=>z.l.id===l.id);
+  const row=l=>{const x=L(l.date),r=res&&res.find(z=>z.l.id===l.id);
     const e=emneOf(l);
-    return`<button class="nrow ${l.date===TS?'today':''} ${l.date>TS?'fut':''}" data-open="${l.id}">
+    return`<button class="nrow ${l.date===TS?'today':''} ${l.date>TS?'fut':''}" data-open="${l.date}">
       <div class="r1"><span class="em ${e?'':'q'}">${e?hl(e,q):'Lektion '+l.no+' · uden emne'}</span>
         <span class="dt">${fL(l.date)}</span></div>
       ${r?`<div class="sn">…${hl(r.snip,q)}…</div>`:
-        x.key&&x.key.trim()?`<div class="sn">${E(x.key)}</div>`:
-        x.note&&x.note.trim()?`<div class="sn">${E(x.note.slice(0,170))}</div>`:
         indOf(l)?`<div class="sn">${E(indOf(l))}</div>`:''}
-      <div class="r3"><span class="dots"><i class="${hasN(l)?'n':''}"></i><i class="${hasF(l)?'f':''}"></i><i class="${hasH(l)?'h':''}"></i></span>
+      <div class="r3"><span class="dots"><i class="${hasD(l)?'n':''}"></i><i class="${hasF(l)?'f':''}"></i></span>
         ${r?r.hits.map(h=>`<span class="tag yl">fundet i ${h}</span>`).join(''):''}
-        ${hasH(l)?'<span class="tag yl">lektier mangler</span>':''}
-        ${hasF(l)?`<span class="tag sc">${S.files.filter(f=>f.lesson===l.id).length} materiale</span>`:''}
+        ${hasD(l)?'<span class="tag ac">dokument</span>':''}
+        ${hasF(l)?`<span class="tag sc">${S.files.filter(f=>f.lesson===l.date).length} materiale</span>`:''}
       </div></button>`};
 
   return`<div class="srch"><span class="mg">⌕</span>
-    <input id="q" value="${E(q)}" placeholder="Søg i alle noter, emner, lektier og materiale" autocomplete="off">
+    <input id="q" value="${E(q)}" placeholder="Søg i emner, dokumenter og materiale" autocomplete="off">
     ${q?'<button class="cl" data-a="clrq">ryd</button>':''}</div>
-  ${res?`<div class="nt i"><b>${res.length} ${res.length===1?'lektion':'lektioner'} matcher "${E(q)}"</b>
-    <p>Søger på tværs af emne, noter, det vigtigste, lektier, spørgsmål og navne på materiale.</p></div>`:
+  ${res?`<div class="nt i"><b>${res.length} ${res.length===1?'dag':'dage'} matcher "${E(q)}"</b>
+    <p>Søger på tværs af emne, dokumentlink, navne på materiale og tekst du skrev i boardet tidligere.</p></div>`:
    `${em.length?`<div class="emnes">
-      <button data-nf="alle" class="${nf==='alle'?'on':''}">Alle noter<span class="c">${written.length}</span></button>
+      <button data-nf="alle" class="${nf==='alle'?'on':''}">Mine dage<span class="c">${written.length}</span></button>
       ${em.map(x=>`<button data-nf="${E(x.e)}" class="${nf===x.e?'on':''}">${E(x.e)}<span class="c">${x.n}</span></button>`).join('')}
       <button data-nf="materiale" class="${nf==='materiale'?'on':''}">Med materiale<span class="c">${LESSONS.filter(hasF).length}</span></button>
-      <button data-nf="tomme" class="${nf==='tomme'?'on':''}">Timer uden noter<span class="c">${LESSONS.filter(l=>l.date<TS&&!hasN(l)).length}</span></button>
+      <button data-nf="tomme" class="${nf==='tomme'?'on':''}">Uden dokument<span class="c">${LESSONS.filter(l=>l.date<TS&&!hasD(l)).length}</span></button>
     </div>`:''}`}
   <div class="card">${list.length?list.map(row).join(''):
-    `<div class="emp"><div class="ei">✎</div><b>${q?'Ingen noter matcher':nf==='alle'?'Ingen noter endnu':'Ingenting her'}</b>
-      <p>${q?'Prøv et andet ord — søgningen kigger i al din tekst.':
-        'Skriv noter under I dag. Giv hver time et emne, fx "Programmering" — så kan du finde dem igen ved at søge eller klikke på emnet.'}</p></div>`}
+    `<div class="emp"><div class="ei">✎</div><b>${q?'Ingen dage matcher':nf==='alle'?'Ingenting udfyldt endnu':'Ingenting her'}</b>
+      <p>${q?'Prøv et andet ord — søgningen kigger i emner, dokumentlinks og filnavne.':
+        'Under I dag giver du timen et navn og sætter linket til dagens dokument ind. Så kan du finde dagen igen herfra — ved at søge, eller ved at klikke på faget.'}</p></div>`}
   </div>
-  ${!res&&em.length?'<p class="hint">Grøn prik = noter · blå = materiale · gul = lektier ikke lavet</p>':''}`;
+  ${!res&&em.length?'<p class="hint">Grøn prik = dokument · blå = materiale</p>':''}`;
 }
 
-/* ═══ 4 · OPGAVER ═══ */
-function vOpgaver(){
-  const all=[...S.tasks,...examT()];
-  const c={alle:all.filter(t=>!t.done).length,
-    uge:all.filter(t=>!t.done&&t.due&&dd(t.due)>=0&&dd(t.due)<=7).length,
-    over:all.filter(t=>!t.done&&t.due&&dd(t.due)<0).length,
-    ingen:S.tasks.filter(t=>!t.done&&!t.due).length,
-    done:S.tasks.filter(t=>t.done).length};
-  let list=all.slice();
-  if(tf==='alle')list=list.filter(t=>!t.done);
-  if(tf==='uge')list=list.filter(t=>!t.done&&t.due&&dd(t.due)>=0&&dd(t.due)<=7);
-  if(tf==='over')list=list.filter(t=>!t.done&&t.due&&dd(t.due)<0);
-  if(tf==='ingen')list=list.filter(t=>!t.done&&!t.due);
-  if(tf==='done')list=list.filter(t=>t.done);
-  list.sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
-  const F=[['alle','Åbne'],['uge','Denne uge'],['over','Overskredet'],['ingen','Uden dato'],['done','Færdige']];
-  return`<div class="card" style="margin-bottom:18px"><div class="qa">
-      <input class="g" id="t-t" placeholder="Hvad skal laves?">
-      <select id="t-k"><option>Opgave</option><option>Aflevering</option><option>Læsning</option><option>Gruppearbejde</option></select>
-      <input class="s" id="t-d" type="date"><button class="btn" data-a="task">Tilføj</button></div>
-    <div style="padding:11px 18px;font-size:11.5px;color:var(--i3)">Afleveringsfrister fra Moodle skal ind her. Eksamen ligger der allerede.</div></div>
-  <div class="fil">${F.map(f=>`<button data-tf="${f[0]}" class="${tf===f[0]?'on':''}">${f[1]}<span class="n">${c[f[0]]||0}</span></button>`).join('')}</div>
-  <div class="card">${list.length?list.map(t=>{const n=t.due?dd(t.due):null;
-    return`<div class="li ${t.done?'done':''}">
-      ${t.fixed?'<span class="tag cr" style="margin-top:1px">fast</span>':`<button class="chk ${t.done?'on':''}" data-tog="${t.id}">${t.done?'✓':''}</button>`}
-      <div class="bd"><div class="tt">${E(t.title)}</div><div class="mt">
-      ${t.type?`<span class="tag ${t.type==='Aflevering'?'cr':t.type==='Læsning'?'sc':''}">${E(t.type)}</span>`:''}
-      ${t.due?`<span class="tag ${n<0?'cr':n<=3?'yl':''}">${fD(t.due)} · ${rel(n)}</span>`:'<span class="tag">ingen dato</span>'}</div></div>
-      ${t.fixed?'':`<button class="x" data-del="task:${t.id}">×</button>`}</div>`}).join(''):
-    `<div class="emp"><div class="ei">✓</div><b>Ingenting her</b><p>${tf==='alle'?'Alt er lukket.':'Skift filter.'}</p></div>`}</div>`;
-}
-
-/* ═══ STUDIEGRUPPE ═══ */
-function vGruppe(){
-  const g=G(),nm=nextMeet();
-  const meets=g.meets.slice().sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));
-  const open=g.tasks.filter(t=>!t.done),done=g.tasks.filter(t=>t.done);
-
-  const tRow=t=>{const n=t.due?dd(t.due):null;
-    return `<div class="li ${t.done?'done':''}">
-      <button class="chk ${t.done?'on':''}" data-togg="${t.id}">${t.done?'✓':''}</button>
-      <div class="bd"><div class="tt">${E(t.text)}</div><div class="mt">
-        ${t.who?`<span class="tag">${E(t.who)}</span>`:'<span class="tag">ingen ansvarlig</span>'}
-        ${t.due?`<span class="tag ${n<0?'cr':n<=3?'yl':''}">${fD(t.due)} · ${rel(n)}</span>`:''}
-      </div></div><button class="x" data-del="gt:${t.id}">×</button></div>`};
-
-  return `<div class="nt"><b>Gruppens mappe</b>
-    <p>Alt I laver sammen — noter, opgaver, oplæg — hører herind, så ingen sidder med sin egen version.</p>
-    <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap">
-      <a class="btn" href="${E(gdrive())}" target="_blank" rel="noopener" style="text-decoration:none">Åbn gruppens mappe ↗</a>
-      <a class="btn gh" href="${E(drive())}" target="_blank" rel="noopener" style="text-decoration:none">Min egen mappe ↗</a>
-    </div></div>
-
-  ${nm?`<div class="top" style="grid-template-columns:1fr">
-    <div class="big grp"><div class="lbl">Næste gang vi mødes</div>
-      <div class="num" style="font-size:56px">${fF(nm.date).replace(/^./,c=>c.toUpperCase())}</div>
-      <div class="capt">${nm.time?'Kl. '+E(nm.time)+' · ':''}${nm.place?E(nm.place):'sted ikke aftalt'} · ${rel(dd(nm.date))}
-        ${nm.note?'<br>'+E(nm.note):''}</div></div></div>`:''}
-
-  <div class="sec"><div class="sech"><h3>Mødeaftaler</h3><span class="sp"></span>
-    <span class="ct">${meets.filter(m=>m.date>=TS).length} kommende</span></div>
-    <div class="card">
-      <div class="qa"><input class="s" id="gm-d" type="date"><input class="s" id="gm-c" placeholder="Kl.">
-        <input class="g" id="gm-p" placeholder="Hvor? Fx bibliotek, FIR.304, online">
-        <input class="g" id="gm-n" placeholder="Hvad skal vi nå? (valgfrit)">
-        <button class="btn" data-a="gmeet">Aftal</button></div>
-      ${meets.length?meets.map(m=>{const past=m.date<TS,nx=nm&&nm.id===m.id;
-        return `<div class="li ${past?'done':''}" ${nx?'style="background:var(--or)"':''}>
-          <div class="bd"><div class="tt" style="font:600 18px var(--d);letter-spacing:-.015em">${fF(m.date)}${m.time?' kl. '+E(m.time):''}</div>
-          <div class="mt">${m.place?`<span class="tag" ${nx?'style="background:rgba(0,0,0,.12)"':''}>${E(m.place)}</span>`:''}
-            ${nx?'<span class="tag" style="background:var(--bk);color:var(--wh)">næste</span>':past?'<span class="tag">overstået</span>':`<span class="tag">${rel(dd(m.date))}</span>`}</div>
-          ${m.note?`<div style="font-size:14px;color:${nx?'var(--bk)':'var(--i2)'};margin-top:7px">${E(m.note)}</div>`:''}</div>
-          <button class="x" data-del="gm:${m.id}">×</button></div>`}).join(''):
-        `<div class="emp"><b>Ingen aftaler endnu</b><p>Læg de dage ind hvor I mødes. Den næste bliver fremhævet, og de vises også i ugen på forsiden.</p></div>`}
-    </div></div>
-
-  <div class="sec"><div class="sech"><h3>Hvad skal laves</h3><span class="sp"></span>
-    <span class="ct">${open.length} åbne</span></div>
-    <div class="card">
-      <div class="qa"><input class="g" id="gt-t" placeholder="Hvad skal der laves?">
-        <input class="s" id="gt-w" placeholder="Hvem?"><input class="s" id="gt-d" type="date">
-        <button class="btn" data-a="gtask">Tilføj</button></div>
-      ${open.length?open.sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')).map(tRow).join(''):
-        `<div class="emp"><b>Ingen åbne opgaver</b><p>Skriv hvem der gør hvad, mens I sidder sammen. Opgaver med dato dukker også op under Næste deadlines på forsiden.</p></div>`}
-    </div></div>
-
-  ${done.length?`<div class="sec"><div class="sech"><h3>Klaret</h3><span class="sp"></span><span class="ct">${done.length}</span></div>
-    <div class="card">${done.map(tRow).join('')}</div></div>`:''}
-
-  <div class="sec"><div class="sech"><h3>Gruppen</h3><span class="sp"></span><span class="ct">${g.members.length}</span></div>
-    <div class="card">
-      <div class="qa"><input class="g" id="gp-n" placeholder="Navn"><input class="g" id="gp-c" placeholder="Mobil eller mail">
-        <button class="btn" data-a="gmem">Tilføj</button></div>
-      ${g.members.length?g.members.map(m=>`<div class="li">
-        <div class="bd"><div class="tt">${E(m.name)}</div>
-        ${m.c?`<div class="mt"><span class="tag">${E(m.c)}</span>
-          <span class="tag ac">${g.tasks.filter(t=>!t.done&&t.who&&t.who.toLowerCase()===m.name.toLowerCase().split(' ')[0]).length} opgaver</span></div>`:''}</div>
-        <button class="x" data-del="gp:${m.id}">×</button></div>`).join(''):
-        `<div class="emp"><b>Ingen navne endnu</b><p>Skriv navn og nummer på dem du er i gruppe med. Så kan du sætte navn på opgaverne ovenfor.</p></div>`}
-    </div></div>
-
-  <div class="sec"><div class="sech"><h3>Skift mappe</h3></div>
-    <div class="card pad"><div class="fld" style="margin-bottom:0"><label>Link til gruppens mappe</label>
-      <div style="display:flex;gap:9px"><input id="gd-u" value="${E(S.gdrive||GDRIVE_DEF)}" placeholder="Link til Drive- eller iCloud-mappe">
-        <button class="btn gh" data-a="gdrive">Gem</button></div></div></div></div>`;
-}
-
-/* ═══ MOODLE + FLOWPLAN ═══ */
+/* ═══ MOODLE ═══ */
 const WULF={navn:'Thorbjørn Wulf',user:'cphstud'};
 const ghu=()=>((S.ghUser||WULF.user).trim().replace(/^.*github\.com\//,'').replace(/\/.*$/,''));
-
-function vMoodle(){
-  return`<div class="nt"><b>${E(MOODLE.hold)}</b>
-    <p>Moodle er hovedmenuen i studiet — materiale, flowplaner og afleveringsfoldere. Boardet her holder dine egne noter og opgaver.</p>
-    <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap;align-items:center">
-      <a class="btn" href="${E(MOODLE.home)}" target="_blank" rel="noopener" style="text-decoration:none">Åbn Moodle ↗</a>
-      <button class="btn gh" data-copy="${E(MOODLE.home)}">Kopiér link</button>
-    </div>
-    <p class="hint">Siger Moodle "Du skal angive kursus-id", har deres login smidt <code>?id=17822</code> væk. Kopiér linket og sæt det ind i adresselinjen — så virker det.</p></div>
-
-  <div class="nt"><b>${E(WULF.navn)}</b>
-    <p>Undervisernes kode ændres løbende, så boardet henter ikke noget ned. Linkene går direkte til GitHub, hvor du altid ser nyeste version.</p>
-    <div style="margin-top:18px">
-      <a class="btn" href="https://github.com/${E(ghu())}?tab=repositories&sort=updated" target="_blank" rel="noopener" style="text-decoration:none">github.com/${E(ghu())} ↗</a>
-    </div></div>`;
-}
 
 /* ═══ LÆRINGSMÅL ═══ */
 function vLaering(){
@@ -1070,11 +1038,11 @@ function vLaering(){
 
 /* ═══ 7 · EKSAMEN ═══ */
 function vEksamen(){
-  const n=dd(DL),gap=Math.round((P(DL)-P(LAST))/864e5);
-  const keys=LESSONS.filter(l=>{const x=L(l.id);return x.key&&x.key.trim()});
+  const n=dd(DL),gap=Math.round((P(DL)-P(sidst()))/864e5);
+  const keys=LESSONS.filter(l=>{const x=L(l.date);return x.key&&x.key.trim()});
   return`<div class="nt i"><b>Sådan hænger den sammen</b>
     <p>Du afleverer den skriftlige opgave <code>7. december kl. 12:00</code>. Derefter — 14. december — får du udleveret en ny opgave, som du forsvarer mundtligt 15.–16. december. Den kan ikke forberedes på forhånd, kun trænes.</p>
-    <p style="margin-top:7px">Du har <code>${gap} dage</code> fra sidste undervisningsdag til afleveringen.</p></div>
+    <p style="margin-top:7px">Sidste undervisningsdag er <code>${fF(sidst())}</code>${gap>0?' — '+gap+' dage før afleveringen':gap<0?' — altså '+Math.abs(gap)+' dage EFTER afleveringsfristen':', samme dag som afleveringen'}.</p></div>
   <div class="st">
     <div><b style="color:var(--ink)">${n}</b><span>dage til aflevering</span></div>
     <div><b>30</b><span>min mundtlig</span></div>
@@ -1095,15 +1063,15 @@ function vEksamen(){
           <p>Læringsmålene står i studieordningen. Læg dem ind, så bliver repetitionen en liste i stedet for en følelse.</p></div>`}</div></div>
   ${keys.length?`<div class="sec"><div class="sech"><h3>Alt du har markeret som vigtigt</h3><span class="sp"></span><span class="ct">${keys.length}</span></div>
     <div class="card">${keys.map(l=>`<div class="li"><div class="bd">
-      <div class="tt" style="white-space:pre-wrap">${E(L(l.id).key)}</div>
+      <div class="tt" style="white-space:pre-wrap">${E(L(l.date).key)}</div>
       <div class="mt"><span class="tag sc">${E(emneOf(l)||'Lektion '+l.no)}</span><span class="tag">${fD(l.date)}</span></div></div>
-      <button class="btn gh sm" data-open="${l.id}">Åbn</button></div>`).join('')}</div></div>`:''}
+      <button class="btn gh sm" data-open="${l.date}">Åbn</button></div>`).join('')}</div></div>`:''}
   <p class="hint">Planen er markeret som foreløbig af Cphbusiness. Dit personlige tidspunkt til den mundtlige står under "Mine eksamener" og i WISEflow.</p>`;
 }
 
 /* ═══ 8 · ARKIV ═══ */
 function vArkiv(){
-  const cnt=S.tasks.length+S.reading.length+S.files.length+S.inbox.length+Object.keys(S.lessons).length+(S.rep||[]).length;
+  const cnt=S.files.length+Object.keys(S.lessons).length+(S.rep||[]).length;
   const c=ghCfg();
   return`<div class="sec"><div class="sech"><h3>Synk mellem computere</h3><span class="sp"></span>
     <span class="ct">${c?'forbundet':'ikke sat op'}</span></div>
@@ -1129,13 +1097,15 @@ function vArkiv(){
         <p class="hint">Tokenet skal være et fine-grained token med adgang til <b>kun</b> dette ene repo, og med <b>Contents: Read and write</b>. Det sendes udelukkende til github.com.</p>`}
     </div></div>
 
-  <div class="sec"><div class="sech"><h3>Materialemappe</h3></div>
+  <div class="sec"><div class="sech"><h3>Mapper</h3></div>
     <div class="card pad">
-      ${drive()?`<a href="${E(drive())}" target="_blank" rel="noopener" class="btn" style="text-decoration:none;display:inline-block;margin-bottom:13px">Åbn mappen i Drive ↗</a>`:''}
-      <div class="fld" style="margin-bottom:0"><label>Link til mappen</label>
-        <div style="display:flex;gap:8px"><input id="dr-u" value="${E(S.drive||DRIVE_DEF)}" placeholder="Sæt link til din Drive- eller iCloud-mappe ind">
+      <div class="fld"><label>Min egen mappe</label>
+        <div style="display:flex;gap:8px"><input id="dr-u" value="${E(S.drive||DRIVE_DEF)}" placeholder="Link til din Drive- eller iCloud-mappe">
           <button class="btn gh" data-a="drive">Gem</button></div></div>
-      <p class="hint">Mappen ligger som genvej nede i venstre side, så du kan komme til den fra alle sider. Skifter du mappe, retter du linket her.</p></div></div>
+      <div class="fld" style="margin-bottom:0"><label>Gruppens mappe</label>
+        <div style="display:flex;gap:8px"><input id="gd-u" value="${E(S.gdrive||GDRIVE_DEF)}" placeholder="Link til gruppens fælles mappe">
+          <button class="btn gh" data-a="gdrive">Gem</button></div></div>
+      <p class="hint">Begge ligger som knapper øverst på forsiden. Skifter I mappe, retter du linket her.</p></div></div>
   <div class="sec"><div class="sech"><h3>Gemning</h3></div>
     <div class="card pad">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -1166,21 +1136,44 @@ function vArkiv(){
     <div class="card"><div class="qa"><input class="g" id="f-n" placeholder="Navn">
       <input class="g" id="f-u" placeholder="Link">
       <select id="f-l"><option value="">Ingen lektion</option>
-        ${LESSONS.map(l=>`<option value="${l.id}">L${l.no} · ${fD(l.date)}${emneOf(l)?' · '+E(emneOf(l)):''}</option>`).join('')}</select>
+        ${LESSONS.map(l=>`<option value="${l.date}">L${l.no} · ${fD(l.date)}${emneOf(l)?' · '+E(emneOf(l)):''}</option>`).join('')}</select>
       <button class="btn" data-a="file">Tilføj</button></div>
     ${S.files.length?`<div class="tw"><table><thead><tr><th>Navn</th><th>Lektion</th><th>Link</th><th></th></tr></thead><tbody>
-      ${S.files.slice().reverse().map(f=>{const l=LESSONS.find(x=>x.id===f.lesson);
+      ${S.files.slice().reverse().map(f=>{const l=LESSONS.find(x=>x.date===f.lesson);
       return`<tr><td>${E(f.name)} <button class="tag" data-ren="${f.id}" style="margin-left:6px">omdøb</button></td>
       <td class="m">${l?(emneOf(l)||'L'+l.no)+' · '+fD(l.date):'—'}</td>
       <td>${f.url?`<a href="${E(f.url)}" target="_blank" rel="noopener" style="color:var(--gnd);font-weight:600;font-size:13px;text-decoration:none">åbn ↗</a>`:'<span class="m">—</span>'}</td>
       <td style="text-align:right"><button class="btn gh sm" data-del="file:${f.id}">Slet</button></td></tr>`}).join('')}
     </tbody></table></div>`:`<div class="emp"><div class="ei">⬒</div><b>Intet materiale endnu</b>
       <p>Boardet kan ikke rumme selve filerne — kun links. Læg PowerPoints i Drive eller iCloud og gem linket på lektionen.</p></div>`}</div></div>
-  <div class="sec"><div class="sech"><h3>Opdatér skemaet</h3></div>
-    <div class="card pad"><p style="font-size:13px;margin-bottom:11px">Hent .ics-filen fra TimeEdit igen og sæt indholdet ind her.</p>
+  <div class="sec"><div class="sech"><h3>Skema fra TimeEdit</h3><span class="sp"></span>
+    <span class="ct">${TEBUSY?'henter…':TEAT?'tjekket '+new Date(TEAT).toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'}):'ikke tjekket'}</span></div>
+    <div class="card pad">
+      <p style="font-size:15px;margin-bottom:16px">Boardet henter dit TimeEdit-link automatisk, når du åbner det og når du vender tilbage til fanen. Ændrer skolen skemaet, opdaterer det sig selv — og dine noter flytter med efter dato.</p>
+      ${TEERR?`<p style="font-size:15px;color:var(--aps);margin-bottom:14px">Seneste tjek fejlede: ${E(TEERR)}</p>`:''}
+      <div class="fld"><label>Link til din kalender<span class="h">webcal:// virker også</span></label>
+        <div style="display:flex;gap:8px"><input id="te-u" value="${E(S.teUrl===undefined?TE_DEF:S.teUrl)}" placeholder="https://cloud.timeedit.net/…ics">
+          <button class="btn gh" data-a="teSave">Gem</button></div></div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button class="btn" data-a="teNow">${TEBUSY?'Henter…':'Hent skemaet nu'}</button></div>
+      <p class="hint">Dine noter hænger på <b>datoen</b>, ikke på lektionsnummeret. Skolen kan indsætte og aflyse lektioner uden at noget flytter sig.</p>
+      ${(()=>{const u=Object.keys(S.lessons||{}).filter(d=>!LESSONS.some(l=>l.date===d)
+          &&Object.values(S.lessons[d]||{}).some(x=>String(x||'').trim()));
+        return u.length?`<p class="hint" style="color:var(--aps)">${u.length} dag(e) med noter ligger uden for skemaet: ${u.sort().map(d=>fD(d)).join(', ')}. Noterne er gemt og vises igen hvis dagen kommer tilbage.</p>`:''})()}
+    </div></div>
+
+  <div class="sec"><div class="sech"><h3>Indsæt .ics manuelt</h3></div>
+    <div class="card pad"><p style="font-size:13px;margin-bottom:11px">Virker linket ikke, kan du hente filen fra TimeEdit og sætte indholdet ind her.</p>
       <textarea class="raw" id="ics" placeholder="BEGIN:VCALENDAR…"></textarea>
       <div style="margin-top:9px"><button class="btn" data-a="ics">Indlæs</button></div>
-      <p class="hint">Boardet kan ikke hente linket selv — browsere blokerer kald til andres servere. Noterne følger lektionsnumrene, så de bliver hvor de er.</p></div></div>
+      <p class="hint">Noterne hænger på datoen, så de bliver liggende hvor de hører til.</p>
+      <div class="nt ${S.sched&&S.sched.at?'':'w'}" style="margin:16px 0 0">
+        <b>Skema i brug</b>
+        <p>${S.sched&&S.sched.at
+          ?'Indlæst '+new Date(S.sched.at).toLocaleString('da-DK')+' · '+LESSONS.length+' lektioner.'
+          :'Den oprindelige import · '+LESSONS.length+' lektioner. Har skolen ændret skemaet siden da, passer boardet ikke — hent en ny .ics fra TimeEdit og sæt den ind ovenfor.'}</p>
+        ${S.sched&&S.sched.at?'<div style="margin-top:14px"><button class="btn gh" data-a="icsReset">Tilbage til oprindeligt skema</button></div>':''}
+      </div></div></div>
   <div class="sec"><div class="sech"><h3>Nulstil</h3></div>
     <div class="card pad"><p style="font-size:13px;margin-bottom:12px">Sletter alle noter, opgaver, pensum og links.</p>
       <button class="btn gh" data-a="wipe">Slet alt mit indhold</button></div></div>`;
@@ -1189,8 +1182,8 @@ function vArkiv(){
 /* ═══ PANEL ═══ */
 function panel(){
   if(!openL)return'';
-  const l=LESSONS.find(x=>x.id===openL);if(!l)return'';
-  const d=L(l.id),n=dd(l.date);
+  const l=LESSONS.find(x=>x.date===openL);if(!l)return'';
+  const d=L(l.date),n=dd(l.date);
   return`<div class="det" id="det"><div class="det-p">
     <div class="det-h"><div class="r1"><h4>${E(emneOf(l)||'Lektion '+l.no)}</h4><button class="cl" data-close="1">×</button></div>
       <div class="r2"><span class="tag">${fF(l.date)}</span><span class="tag">${l.start}–${l.end}</span>
@@ -1198,34 +1191,27 @@ function panel(){
         ${indOf(l)?`<span class="tag yl">${E(indOf(l))}</span>`:''}
         ${whoOf(l)?`<span class="tag">${E(whoOf(l))}</span>`:''}</div></div>
     <div class="det-b">
-      <div class="fld"><label>Emne<span class="h">gør noterne søgbare</span></label>
-        <input class="emne" data-l="${l.id}" data-f="emne" value="${E(d.emne||'')}" placeholder="Fx Programmering, SQL joins"></div>
-      <div class="fld"><label>Noter</label>
-        <textarea data-l="${l.id}" data-f="note" style="min-height:200px" placeholder="Noter fra timen">${E(d.note||'')}</textarea></div>
-      <div class="fld"><label>Det vigtigste at huske</label>
-        <textarea class="sm" data-l="${l.id}" data-f="key" placeholder="Samles på Eksamen-siden">${E(d.key||'')}</textarea></div>
-      <div class="fld"><label>Lektier${d.hw?`<span class="h"><button class="btn gh sm" data-hwd="${l.id}">${d.hwDone?'Ikke lavet endnu':'Marker som lavet'}</button></span>`:''}</label>
-        <textarea class="sm" data-l="${l.id}" data-f="hw" placeholder="Hvad skal laves inden næste gang?">${E(d.hw||'')}</textarea>
-        ${d.hwDone?'<p class="hint" style="color:var(--gnd)">✓ Lavet</p>':''}</div>
-      <div class="fld"><label>Spørgsmål til underviseren</label>
-        <textarea class="sm" data-l="${l.id}" data-f="q" placeholder="Det du ikke fik spurgt om">${E(d.q||'')}</textarea></div>
+      <div class="fld"><label>Hvad handler timen om?<span class="h">gør dagen søgbar</span></label>
+        <input class="emne" data-l="${l.date}" data-f="emne" value="${E(d.emne||'')}" placeholder="${E(fagOf(l.date)||'Fx Programmering, SQL joins')}"></div>
+      <div class="fld"><label>Dine noter
+        ${d.doc?`<span class="h"><a href="${E(d.doc)}" target="_blank" rel="noopener" style="color:var(--gnd);text-decoration:none;font-weight:600">Åbn dokument ↗</a></span>`:'<span class="h">link til dit dokument</span>'}</label>
+        <input data-l="${l.date}" data-f="doc" value="${E(d.doc||'')}" placeholder="Sæt linket til dagens dokument ind"></div>
       <div class="fld"><label>Materiale</label>
         <div style="display:flex;gap:8px;margin-bottom:9px">
           <input id="pf-n" value="${E(fileDef(l))}" placeholder="Navn" style="flex:1">
           <input id="pf-u" placeholder="Link" style="flex:1.4">
-          <button class="btn" data-a="pfile" data-l="${l.id}">Gem</button></div>
-        ${files(l.id)||'<p class="hint">Læg PowerPointen i Drive eller iCloud og gem linket her.</p>'}</div>
+          <button class="btn" data-a="pfile" data-l="${l.date}">Gem</button></div>
+        ${files(l.date)||'<p class="hint">Læg PowerPointen i Drive eller iCloud og gem linket her.</p>'}</div>
     </div></div></div>`;
 }
 
 /* ═══ RENDER ═══ */
-const V={forside:vForside,idag:vIdag,moodle:vMoodle,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,laering:vLaering,eksamen:vEksamen,arkiv:vArkiv};
+const V={forside:vForside,idag:vIdag,noter:vNoter,laering:vLaering,eksamen:vEksamen,arkiv:vArkiv};
 const H={forside:['Forside',null],idag:['I dag',null],
-  moodle:['Moodle','Hovedmenu, flowplan og undervisernes kode'],noter:['Noter','Søg på tværs af hele semestret'],
-  opgaver:['Opgaver','Alt du skal lave'],studiegruppe:['Studiegruppe','Aftaler, opgaver og mappe'],
+  noter:['Noter','Søg på tværs af hele semestret'],
   laering:['Læringsmål','Viden, færdigheder og kompetencer'],eksamen:['Eksamen','1. semesterprøve'],arkiv:['Arkiv','Materiale, backup og skema']};
 function draw(){
-  nav();const[t,s]=H[tab];let sub=s;
+  applySched();nav();const[t,s]=H[tab];let sub=s;
   if(tab==='forside')sub=fF(TS)+(TS<START?' · semestret starter '+rel(dd(START)):'');
   if(tab==='idag'){const nx=nextL();sub=nx?(nx.now?fF(TS):'Næste lektion '+rel(dd(nx.l.date))):''}
   $('#main').innerHTML=`<div class="ph"><div><h2>${t}</h2><div class="sub">${E(sub||'')}</div></div></div>${V[tab]()}`;
@@ -1244,7 +1230,8 @@ function parseICS(txt){
     const e=g(/DTEND:(\d{8}T\d{6}Z)/);
     const sum=g(/SUMMARY:([^\n]*)/).replace(/\\,/g,',').replace(/\\n/g,' ');
     if(/^Note:/.test(sum))return;
-    const loc=g(/LOCATION:([^\n]*)/).replace(/Lokale:\s*/,'').replace(/\\,/g,' + ');
+    const loc=g(/LOCATION:([^\n]*)/).replace(/Lokale:\s*/,'')
+      .replace(/\\n/g,' + ').replace(/\\,/g,' + ').replace(/\s+/g,' ').replace(/\s*\+\s*/g,' + ').trim();
     const cv=z=>{const d=new Date(Date.UTC(+z.slice(0,4),+z.slice(4,6)-1,+z.slice(6,8),+z.slice(9,11),+z.slice(11,13)));
       return{d:iso(d),t:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}};
     const A=cv(a),B=e?cv(e):A;
@@ -1261,24 +1248,9 @@ let tt;
 function toast(m,bad){const e=$('#toast');e.textContent=m;e.className='toast on'+(bad?' bad':'');
   clearTimeout(tt);tt=setTimeout(()=>e.className='toast',1900)}
 const v=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
-function capture(){if($('#cap'))return;
-  document.body.insertAdjacentHTML('beforeend',`<div class="cap" id="cap"><div class="cap-b">
-    <input id="cap-i" placeholder="Hvad skal huskes?" autocomplete="off">
-    <div class="cap-f"><button class="btn" data-a="capS">Gem i Ufordelt</button>
-      <button class="btn gh" data-a="capT">Gem som opgave</button><span class="kb"><kbd>esc</kbd> luk</span></div></div></div>`);
-  setTimeout(()=>{const i=$('#cap-i');if(i)i.focus()},30)}
-const capX=()=>{const c=$('#cap');if(c)c.remove()};
-
 document.addEventListener('click',ev=>{
-  if($('#cap')&&!ev.target.closest('.cap-b')){capX();return}
   if($('#det')&&ev.target.id==='det'){openL=null;draw();return}
   const b=ev.target.closest('button,a');if(!b)return;const D=b.dataset;
-  if(D.copy!==undefined){ev.preventDefault();
-    const t=D.copy;const ok=()=>toast('Kopieret: '+(t.length>40?t.slice(0,40)+'…':t));
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>toast('Kunne ikke kopiere',1));
-    else{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();
-      try{document.execCommand('copy');ok()}catch(e){toast('Kunne ikke kopiere',1)}x.remove()}
-    return}
   if(D.t){ev.preventDefault();tab=D.t;wko=0;openL=null;q='';draw();window.scrollTo(0,0);return}
   if(D.close){openL=null;draw();return}
   if(D.open){openL=D.open;draw();return}
@@ -1286,37 +1258,25 @@ document.addEventListener('click',ev=>{
     const n=prompt('Nyt navn på materialet',f.name);
     if(n===null||!n.trim()||n.trim()===f.name)return;
     set(()=>{f.name=n.trim()},1);toast('Omdøbt');return}
-  if(D.tf){tf=D.tf;draw();return}
   if(D.nf){nf=D.nf;q='';draw();return}
+  if(D.mt){mtab=D.mt;draw();return}
   if(D.lm){set(()=>{S.lm=S.lm||{};S.lm[D.lm]?delete S.lm[D.lm]:S.lm[D.lm]=1});return}
   if(D.tog){set(()=>{const t=S.tasks.find(x=>x.id===D.tog);if(t)t.done=!t.done});return}
   if(D.togp){set(()=>{const r=S.rep.find(x=>x.id===D.togp);if(r)r.done=!r.done});return}
-  if(D.togg){set(()=>{const t=G().tasks.find(x=>x.id===D.togg);if(t)t.done=!t.done});return}
-  if(D.hwd){set(()=>{S.lessons[D.hwd]=S.lessons[D.hwd]||{};S.lessons[D.hwd].hwDone=!S.lessons[D.hwd].hwDone});return}
-  if(D.mv){set(()=>{const i=S.inbox.find(x=>x.id===D.mv);
-    S.tasks.push({id:uid(),title:i.t,type:'Opgave',due:'',done:false});S.inbox=S.inbox.filter(x=>x.id!==D.mv)});
-    toast('Flyttet til Opgaver');return}
   if(D.del){const[k,id]=D.del.split(':');
-    if(k==='gm'||k==='gt'||k==='gp'){const F={gm:'meets',gt:'tasks',gp:'members'}[k];
-      set(()=>{G()[F]=G()[F].filter(x=>x.id!==id)});return}
-    const M={task:'tasks',file:'files',inbox:'inbox',rep:'rep',pin:'pins'};
+    const M={task:'tasks',file:'files',inbox:'inbox',rep:'rep',};
     set(()=>{S[M[k]]=(S[M[k]]||[]).filter(x=>x.id!==id)});return}
   const a=D.a;if(!a)return;
   if(a==='clrq'){q='';draw();setTimeout(()=>{const e=$('#q');if(e)e.focus()},20)}
-  if(a==='task'){const x=v('t-t');if(!x)return toast('Skriv en opgave',1);
-    set(()=>S.tasks.push({id:uid(),title:x,type:v('t-k')||'Opgave',due:v('t-d'),done:false}),1)}
   if(a==='rep'){const x=v('p-t');if(!x)return;set(()=>{S.rep=S.rep||[];S.rep.push({id:uid(),title:x,done:false})},1)}
   if(a==='file'){const x=v('f-n');if(!x)return toast('Giv den et navn',1);
     set(()=>S.files.push({id:uid(),name:x,url:v('f-u'),lesson:v('f-l')}),1)}
   if(a==='qfile'){const u=v('qf-u');if(!u)return toast('Sæt et link ind',1);
-    const l=LESSONS.find(x=>x.id===D.l),nm=uniqName(v('qf-n')||fileDef(l),D.l);
+    const l=LESSONS.find(x=>x.date===D.l),nm=uniqName(v('qf-n')||fileDef(l),D.l);
     set(()=>S.files.push({id:uid(),name:nm,url:u,lesson:D.l}),1);toast('Gemt som "'+nm+'"')}
   if(a==='pfile'){const u=v('pf-u');if(!u)return toast('Sæt et link ind',1);
-    const l=LESSONS.find(x=>x.id===D.l),nm=uniqName(v('pf-n')||fileDef(l),D.l);
+    const l=LESSONS.find(x=>x.date===D.l),nm=uniqName(v('pf-n')||fileDef(l),D.l);
     set(()=>S.files.push({id:uid(),name:nm,url:u,lesson:D.l}),1);toast('Gemt som "'+nm+'"')}
-  if(a==='capS'){const x=v('cap-i');if(!x)return capX();set(()=>S.inbox.push({id:uid(),t:x,at:TS}),1);capX();toast('Gemt')}
-  if(a==='capT'){const x=v('cap-i');if(!x)return capX();
-    set(()=>S.tasks.push({id:uid(),title:x,type:'Opgave',due:'',done:false}),1);capX();toast('Gemt som opgave')}
   if(a==='export'){const bl=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
     const u=URL.createObjectURL(bl),el=document.createElement('a');
     el.href=u;el.download='studieboard-backup-'+TS+'.json';el.click();URL.revokeObjectURL(u);toast('Backup hentet')}
@@ -1341,15 +1301,6 @@ document.addEventListener('click',ev=>{
   if(a==='ghConf'){const t=localStorage.getItem(K+':konflikt');if(!t)return;
     if(!confirm('Erstat det du har nu med den gemte kopi?'))return;
     try{S={...S,...JSON.parse(t)};localStorage.removeItem(K+':konflikt');save(1);toast('Kopi hentet ind')}catch(e){toast('Kopien kunne ikke læses',1)}}
-  if(a==='wall'){wall=wall?0:1;draw()}
-  if(a==='pin'){const x=v('pn-t');if(!x)return toast('Skriv hvad du skal huske',1);
-    set(()=>{S.pins=S.pins||[];S.pins.push({id:uid(),t:x,until:v('pn-u')})},1);toast('Fastgjort')}
-  if(a==='gmeet'){const d=v('gm-d');if(!d)return toast('Vælg en dato',1);
-    set(()=>G().meets.push({id:uid(),date:d,time:v('gm-c'),place:v('gm-p'),note:v('gm-n')}),1);toast('Aftale gemt')}
-  if(a==='gtask'){const x=v('gt-t');if(!x)return toast('Skriv en opgave',1);
-    set(()=>G().tasks.push({id:uid(),text:x,who:v('gt-w'),due:v('gt-d'),done:false}),1)}
-  if(a==='gmem'){const x=v('gp-n');if(!x)return toast('Skriv et navn',1);
-    set(()=>G().members.push({id:uid(),name:x,c:v('gp-c')}),1)}
   if(a==='gdrive'){const u=v('gd-u');set(()=>{S.gdrive=u},1);toast(u?'Mappe gemt':'Mappe fjernet')}
   if(a==='drive'){const u=v('dr-u');set(()=>{S.drive=u},1);toast(u?'Mappe gemt':'Mappe fjernet')}
   if(a==='impUI'){$('#impbox').style.display='block';$('#imp').focus()}
@@ -1359,23 +1310,27 @@ document.addEventListener('click',ev=>{
     set(()=>{S={...S,...p}},1);toast('Gendannet')}catch(e){toast('Filen kunne ikke læses',1)}}
   if(a==='ics'){const r=v('ics');if(!r.includes('BEGIN:VEVENT'))return toast('Det ligner ikke en .ics-fil',1);
     const p=parseICS(r);if(!p.L.length)return toast('Fandt ingen lektioner',1);
-    LESSONS=p.L;SOCIAL=p.S;toast(p.L.length+' lektioner indlæst');draw()}
+    if(!confirm('Indlæs '+p.L.length+' lektioner og erstat det nuværende skema?'))return;
+    set(()=>{S.sched={at:Date.now(),lessons:p.L,social:p.S}},1);
+    toast(p.L.length+' lektioner indlæst og gemt')}
+  if(a==='teSave'){set(()=>{S.teUrl=v('te-u')},1);TEERR='';toast('Link gemt');teSync(1)}
+  if(a==='teNow'){teSync(1)}
+  if(a==='icsReset'){if(!confirm('Gå tilbage til det oprindelige skema?'))return;
+    set(()=>{delete S.sched},1);location.reload()}
   if(a==='wipe'){if(!confirm('Slet alt dit indhold? Hent evt. en backup først.'))return;
     set(()=>{S={lessons:{},tasks:[],reading:[],files:[],inbox:[],pins:[],rep:[],drive:S.drive,gdrive:S.gdrive,
       grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}}},1);toast('Nulstillet')}
 });
 
-$('#fab').addEventListener('click',capture);
 document.addEventListener('keydown',e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();capture();return}
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='f'&&tab!=='noter'){e.preventDefault();tab='noter';draw();
     setTimeout(()=>{const x=$('#q');if(x)x.focus()},40);return}
-  if(e.key==='Escape'){if($('#cap'))return capX();if(q){q='';draw();return}if(openL){openL=null;draw()}return}
+  if(e.key==='Escape'){if(q){q='';draw();return}if(openL){openL=null;draw()}return}
   if(e.key!=='Enter')return;const id=e.target.id;if(!id)return;
-  const M={'cap-i':'capS','t-t':'task','t-d':'task','p-t':'rep',
-    'f-n':'file','f-u':'file','pf-u':'pfile','pf-n':'pfile','qf-u':'qfile','dr-u':'drive',
-    'pn-t':'pin','pn-u':'pin','gm-p':'gmeet','gm-n':'gmeet','gm-c':'gmeet','gt-t':'gtask','gt-w':'gtask','gt-d':'gtask',
-    'gp-n':'gmem','gp-c':'gmem','gd-u':'gdrive','gh-t':'ghOn','gh-r':'ghOn','gh-o':'ghOn'};
+  const M={'p-t':'rep',
+    'f-n':'file','f-u':'file','pf-u':'pfile','pf-n':'pfile','qf-u':'qfile','qf-n':'qfile',
+    'dr-u':'drive','gd-u':'gdrive',
+    'gh-t':'ghOn','gh-r':'ghOn','gh-o':'ghOn','te-u':'teSave'};
   if(M[id]){e.preventDefault();const b=document.querySelector(`[data-a="${M[id]}"]`);if(b)b.click()}
 });
 
@@ -1390,7 +1345,11 @@ document.addEventListener('input',e=>{
   DIRTY=1;clearTimeout(it);it=setTimeout(()=>{save(1);nav()},800);
 });
 window.addEventListener('beforeunload',()=>{if(DIRTY)save(1)});
-(async()=>{await load();draw()})();
+(async()=>{await load();
+  if(migrer())save(1);
+  draw();
+  teSync();                      /* tjek TimeEdit ved åbning */
+})();
 
 </script>
 </body>
