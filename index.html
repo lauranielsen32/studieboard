@@ -511,6 +511,25 @@ const MOODLE={
 
 const DRIVE_DEF='https://drive.google.com/drive/folders/16C6MqBW8WPv1fzcYq-l8dEWkY80Hi9_v';
 const GDRIVE_DEF='https://drive.google.com/drive/folders/1mQMS803OrUGcnCdsnnHppv_6c7xCYcT0';
+
+/* ═══ LÆRINGSMÅL — Moodle, pr. flow ═══
+   Flow 1–5 er ikke lagt op endnu; tomme lister giver automatisk en placeholder. */
+const LM=[
+ {id:'intro',navn:'Introforløb',und:'Uge 35 og 36',
+  v:['Kendskab til datatyper og funktioner i R',
+     'Kendskab til lineær regression'],
+  f:['Kunne løse små programmeringsopgaver',
+     'Kunne lave plots af forskellige variabeltyper'],
+  k:['Du er i stand til at navigere i udviklermiljøet RStudio']},
+ {id:'f1',navn:'Flow 1',und:'Forretningsforståelse gennem data',v:[],f:[],k:[]},
+ {id:'f2',navn:'Flow 2',und:'Forretningsbeslutning og beslutningsstøtte',v:[],f:[],k:[]},
+ {id:'f3',navn:'Flow 3',und:'',v:[],f:[],k:[]},
+ {id:'f4',navn:'Flow 4',und:'',v:[],f:[],k:[]},
+ {id:'f5',navn:'Flow 5',und:'',v:[],f:[],k:[]}];
+const LMK=[['v','Viden','sc'],['f','Færdigheder',''],['k','Kompetencer','ac']];
+const lmAll=f=>LMK.flatMap(([k,navn,farve])=>f[k].map((t,i)=>({id:f.id+':'+k+':'+i,t,navn,farve})));
+const lmDone=id=>!!(S.lm||{})[id];
+const lmTal=f=>{const a=lmAll(f);return{i:a.length,n:a.filter(x=>lmDone(x.id)).length}};
 const DN=['søn','man','tir','ons','tor','fre','lør'],DF=['Søndag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag'];
 const MO=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
 
@@ -531,7 +550,7 @@ const rel=n=>n===0?'i dag':n===1?'i morgen':n===-1?'i går':n<0?Math.abs(n)+' da
 
 const K='studieboard:v3';
 let S={lessons:{},tasks:[],reading:[],files:[],inbox:[],pins:[],rep:[],drive:'',gdrive:'',
-  ghUser:'',grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}};
+  ghUser:'',lm:{},grp:{meets:[],tasks:[],members:[]},focus:['','',''],meta:{}};
 let MODE='none',DIRTY=0;
 const drive=()=>(S.drive||DRIVE_DEF).trim();
 const gdrive=()=>(S.gdrive||GDRIVE_DEF).trim();
@@ -674,7 +693,7 @@ const hl=(s,q)=>{if(!q)return E(s);
 /* ═══ NAV ═══ */
 let tab='forside',wko=0,openL=null,tf='alle',nf='alle',q='',wall=0;
 const TABS=[['forside','Forside','◈'],['idag','I dag','◉'],['moodle','Moodle','▦'],['noter','Noter','✎'],
-  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],
+  ['opgaver','Opgaver','✓'],['studiegruppe','Studiegruppe','◎'],['laering','Læringsmål','◇'],
   ['eksamen','Eksamen','◆'],['arkiv','Arkiv','⬒']];
 function nav(){
   const od=allDue().filter(t=>dd(t.due)<=7&&dd(t.due)>=0).length;
@@ -1015,6 +1034,39 @@ function vMoodle(){
     </div></div>`;
 }
 
+/* ═══ LÆRINGSMÅL ═══ */
+function vLaering(){
+  const klar=LM.filter(f=>lmAll(f).length);
+  const i=klar.reduce((a,f)=>a+lmTal(f).i,0),n=klar.reduce((a,f)=>a+lmTal(f).n,0);
+  const pct=i?Math.round(n/i*100):0;
+
+  const blok=f=>{const a=lmAll(f),t=lmTal(f);
+    return`<div class="sec"><div class="sech"><h3>${E(f.navn)}</h3><span class="sp"></span>
+      <span class="ct">${a.length?t.n+' af '+t.i+' markeret':'ikke lagt op endnu'}</span></div>
+      ${f.und?`<p class="hint" style="margin:-6px 0 12px">${E(f.und)}</p>`:''}
+      <div class="card">${a.length?a.map(x=>{const d=lmDone(x.id);
+        return`<div class="li ${d?'done':''}">
+          <button class="chk ${d?'on':''}" data-lm="${x.id}">${d?'✓':''}</button>
+          <div class="bd"><div class="tt">${E(x.t)}</div>
+          <div class="mt"><span class="tag ${x.farve}">${E(x.navn)}</span></div></div></div>`}).join('')
+        :`<div class="emp"><b>Læringsmålene mangler</b>
+          <p>De bliver lagt op i Moodle når flowet starter. Så snart de er der, siger du til — så kommer de ind her.</p></div>`}
+      </div></div>`};
+
+  return`<div class="top" style="grid-template-columns:1fr">
+    <div class="big"><div class="lbl">Læringsmål du har styr på</div>
+      <div class="num">${n} / ${i}</div>
+      <div class="capt">${i?'fra introforløbet · '+(LM.length-klar.length)+' flows mangler at blive lagt op':'ingen læringsmål lagt op endnu'}</div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="prog"><span>markeret</span><span>${pct}%</span><span>alle mål</span></div></div></div>
+
+  <div class="nt" style="margin:14px 0 28px"><b>Sådan bruger du dem</b>
+    <p>Sæt flueben når du kan forklare målet for en anden — ikke når du har læst om det. De umarkerede er din repetitionsliste til eksamen.</p>
+    <div style="margin-top:16px"><a class="btn gh" href="${E(MOODLE.home)}" target="_blank" rel="noopener" style="text-decoration:none">Se dem i Moodle ↗</a></div></div>
+
+  ${LM.map(blok).join('')}`;
+}
+
 /* ═══ 7 · EKSAMEN ═══ */
 function vEksamen(){
   const n=dd(DL),gap=Math.round((P(DL)-P(LAST))/864e5);
@@ -1166,11 +1218,11 @@ function panel(){
 }
 
 /* ═══ RENDER ═══ */
-const V={forside:vForside,idag:vIdag,moodle:vMoodle,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,eksamen:vEksamen,arkiv:vArkiv};
+const V={forside:vForside,idag:vIdag,moodle:vMoodle,noter:vNoter,opgaver:vOpgaver,studiegruppe:vGruppe,laering:vLaering,eksamen:vEksamen,arkiv:vArkiv};
 const H={forside:['Forside',null],idag:['I dag',null],
   moodle:['Moodle','Hovedmenu, flowplan og undervisernes kode'],noter:['Noter','Søg på tværs af hele semestret'],
   opgaver:['Opgaver','Alt du skal lave'],studiegruppe:['Studiegruppe','Aftaler, opgaver og mappe'],
-  eksamen:['Eksamen','1. semesterprøve'],arkiv:['Arkiv','Materiale, backup og skema']};
+  laering:['Læringsmål','Viden, færdigheder og kompetencer'],eksamen:['Eksamen','1. semesterprøve'],arkiv:['Arkiv','Materiale, backup og skema']};
 function draw(){
   nav();const[t,s]=H[tab];let sub=s;
   if(tab==='forside')sub=fF(TS)+(TS<START?' · semestret starter '+rel(dd(START)):'');
@@ -1235,6 +1287,7 @@ document.addEventListener('click',ev=>{
     set(()=>{f.name=n.trim()},1);toast('Omdøbt');return}
   if(D.tf){tf=D.tf;draw();return}
   if(D.nf){nf=D.nf;q='';draw();return}
+  if(D.lm){set(()=>{S.lm=S.lm||{};S.lm[D.lm]?delete S.lm[D.lm]:S.lm[D.lm]=1});return}
   if(D.tog){set(()=>{const t=S.tasks.find(x=>x.id===D.tog);if(t)t.done=!t.done});return}
   if(D.togp){set(()=>{const r=S.rep.find(x=>x.id===D.togp);if(r)r.done=!r.done});return}
   if(D.togg){set(()=>{const t=G().tasks.find(x=>x.id===D.togg);if(t)t.done=!t.done});return}
