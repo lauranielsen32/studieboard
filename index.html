@@ -379,7 +379,8 @@ button.ds:hover{border-color:var(--bk)}
 
 .nt{border-radius:var(--rl);padding:30px 34px;margin-bottom:28px;font:400 16px/1.5 var(--b);background:var(--bl)}
 .nt.w{background:var(--ap)}
-.nt b{display:block;font:700 28px/1.2 var(--d);margin-bottom:14px;letter-spacing:-.02em}
+.nt>b{display:block;font:700 28px/1.2 var(--d);margin-bottom:14px;letter-spacing:-.02em}
+.nt p b{font-weight:600}   /* fremhævning inde i teksten skal ikke blive en overskrift */
 .nt p{font:400 17px/1.45 var(--b);max-width:64ch}
 .nt code{background:var(--ap);padding:2px 11px;border-radius:100px;font:500 15px var(--b)}
 .nt.w code{background:var(--wh)}
@@ -1043,10 +1044,6 @@ function vLaering(){
       <div class="bar"><i style="width:${pct}%"></i></div>
       <div class="prog"><span>markeret</span><span>${pct}%</span><span>alle mål</span></div></div></div>
 
-  <div class="nt" style="margin:14px 0 28px"><b>Sådan bruger du dem</b>
-    <p>Sæt flueben når du kan forklare målet for en anden — ikke når du har læst om det. De umarkerede er din repetitionsliste til eksamen.</p>
-    <div style="margin-top:16px"><a class="btn gh" href="${E(MOODLE.home)}" target="_blank" rel="noopener" style="text-decoration:none">Se dem i Moodle ↗</a></div></div>
-
   ${LM.map(blok).join('')}`;
 }
 
@@ -1054,9 +1051,9 @@ function vLaering(){
 function vEksamen(){
   const n=dd(DL),gap=Math.round((P(DL)-P(sidst()))/864e5);
   const keys=LESSONS.filter(l=>{const x=L(l.date);return x.key&&x.key.trim()});
-  return`<div class="nt i"><b>Sådan hænger den sammen</b>
-    <p>Du afleverer den skriftlige opgave <code>7. december kl. 12:00</code>. Derefter — 14. december — får du udleveret en ny opgave, som du forsvarer mundtligt 15.–16. december. Den kan ikke forberedes på forhånd, kun trænes.</p>
-    <p style="margin-top:7px">Sidste undervisningsdag er <code>${fF(sidst())}</code>${gap>0?' — '+gap+' dage før afleveringen':gap<0?' — altså '+Math.abs(gap)+' dage EFTER afleveringsfristen':', samme dag som afleveringen'}.</p></div>
+  return`<div class="nt i"><b>To prøver, to opgaver</b>
+    <p>Den skriftlige opgave afleveres <code>7. dec kl. 12:00</code>. Til den mundtlige får du en <b>ny</b> opgave udleveret 14. dec — den kan ikke forberedes, kun trænes.</p>
+    <p style="margin-top:7px">Undervisningen slutter ${fD(sidst())}${gap<0?', '+Math.abs(gap)+' dage efter afleveringen':gap>0?', '+gap+' dage før afleveringen':', samme dag som afleveringen'}.</p></div>
   <div class="st">
     <div><b style="color:var(--ink)">${n}</b><span>dage til aflevering</span></div>
     <div><b>30</b><span>min mundtlig</span></div>
