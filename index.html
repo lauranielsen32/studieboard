@@ -155,6 +155,7 @@ main{max-width:1120px;margin:0 auto}
 .li .bd{flex:1;min-width:0}
 .li .tt{font:400 16px/1.45 var(--b);word-break:break-word}
 .li.done .tt{text-decoration:line-through;text-decoration-thickness:1.5px}
+.li.lm.done .tt{text-decoration:none}   /* læringsmål streges ikke ud — fluebenet er nok */
 .li .mt{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px;align-items:center}
 .tag{font:400 13px var(--b);padding:3px 13px;border-radius:100px;background:var(--bl);color:var(--bk);white-space:nowrap}
 .tag.cr{background:var(--aps)}
@@ -1045,7 +1046,7 @@ function vLaering(){
       <span class="ct">${a.length?t.n+' af '+t.i+' markeret':'ikke lagt op endnu'}</span></div>
       ${f.und?`<p class="hint" style="margin:-6px 0 12px">${E(f.und)}</p>`:''}
       <div class="card">${a.length?a.map(x=>{const d=lmDone(x.id);
-        return`<div class="li ${d?'done':''}">
+        return`<div class="li lm ${d?'done':''}">
           <button class="chk ${d?'on':''}" data-lm="${x.id}">${d?'✓':''}</button>
           <div class="bd"><div class="tt">${E(x.t)}</div>
           <div class="mt"><span class="tag ${x.farve}">${E(x.navn)}</span></div></div></div>`}).join('')
