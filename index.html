@@ -2,7 +2,16 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- Hjemmeskærm på iPhone: åbner uden Safari-linjer, med eget ikon og navn -->
+<meta name="theme-color" content="#1BC866">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Studieboard">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="manifest" href="manifest.json">
 <title>Studieboard · Dataanalyse</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +46,11 @@ button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0}
 :focus-visible{outline:2.5px solid var(--bk);outline-offset:2px;border-radius:4px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* plads til iPhonens statusbjælke og hjemmeindikator når appen kører fra hjemmeskærmen */
+@supports(padding:env(safe-area-inset-top)){
+  .rail{padding-top:env(safe-area-inset-top)}
+  .wrap{padding-bottom:calc(130px + env(safe-area-inset-bottom))}
+}
 mark{background:var(--ap);color:var(--bk);padding:1px 3px}
 .num,.tm,.dt,.hero-time,.st b,.stp .sd{font-variant-numeric:tabular-nums}
 
